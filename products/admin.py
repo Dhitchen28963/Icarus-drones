@@ -16,6 +16,7 @@ class ProductAdmin(admin.ModelAdmin):
         'warranty', 'compatibility', 'package_contents', 
         'drones_included', 'drone_model', 'accessories_included'
     )
+    ordering = ('sku',)
     list_filter = ('category', 'color', 'camera', 'gps')
     search_fields = ('name', 'sku', 'category__name')
     list_editable = ('price', 'rating', 'color')
