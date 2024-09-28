@@ -1,30 +1,33 @@
 <div class="collapse navbar-collapse" id="main-nav">
     <ul class="navbar-nav w-auto mx-auto">
+        <!-- All Products Dropdown -->
         <li class="nav-item dropdown">
             <a class="logo-font font-weight-bold nav-link text-black mr-5" href="#" id="all-products-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 All Products
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="all-products-link">
                 <a href="{% url 'products' %}" class="dropdown-item">All Products</a>
-                <a href="" class="dropdown-item">All Drones</a>
-                <a href="" class="dropdown-item">By Price</a>
-                <a href="" class="dropdown-item">By Rating</a>
-                <a href="" class="dropdown-item">By Type</a>
+                <a href="{% url 'products' %}?category=drones" class="dropdown-item">All Drones</a>
+                <a href="{% url 'products' %}?sort=price" class="dropdown-item">By Price</a>
+                <a href="{% url 'products' %}?sort=rating" class="dropdown-item">By Rating</a>
+                <a href="{% url 'products' %}?category=type" class="dropdown-item">By Type</a>
             </div>
         </li>
 
+        <!-- Accessories Dropdown -->
         <li class="nav-item dropdown">
             <a class="logo-font font-weight-bold nav-link text-black mr-5" href="#" id="accessories-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Accessories
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="accessories-link">
-                <a href="" class="dropdown-item">Carry Cases</a>
-                <a href="" class="dropdown-item">Batteries & Chargers</a>
-                <a href="" class="dropdown-item">Propellers & Blades</a>
-                <a href="" class="dropdown-item">All Accessories</a>
+                <a href="{% url 'products' %}?category=carry_cases" class="dropdown-item">Carry Cases</a>
+                <a href="{% url 'products' %}?category=battery_packs" class="dropdown-item">Batteries & Chargers</a>
+                <a href="{% url 'products' %}?category=propellors_blades" class="dropdown-item">Propellers & Blades</a>
+                <a href="{% url 'products' %}?category=carry_cases,battery_packs,propellors_blades,remotes,cameras,lenses,vr_goggles,drone_spare_parts" class="dropdown-item">All Accessories</a>
             </div>
         </li>
 
+        <!-- Services Dropdown -->
         <li class="nav-item dropdown">
             <a class="logo-font font-weight-bold nav-link text-black mr-5" href="#" id="services-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Services
@@ -36,15 +39,16 @@
             </div>
         </li>
 
+        <!-- Special Offers Dropdown -->
         <li class="nav-item dropdown">
             <a class="logo-font font-weight-bold nav-link text-black" href="#" id="specials-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Special Offers
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="specials-link">
-                <a href="" class="dropdown-item">New Drones</a>
-                <a href="" class="dropdown-item">Discounts & Deals</a>
-                <a href="" class="dropdown-item">Bundles</a>
-                <a href="" class="dropdown-item">All Offers</a>
+                <a href="{% url 'products' %}?category=new_arrivals" class="dropdown-item">New Arrivals</a>
+                <a href="{% url 'products' %}?category=deals" class="dropdown-item">Discounts & Deals</a>
+                <a href="{% url 'products' %}?category=bundles" class="dropdown-item">Bundles</a>
+                <a href="{% url 'products' %}?category=special_offers" class="dropdown-item">All Offers</a>
             </div>
         </li>
     </ul>

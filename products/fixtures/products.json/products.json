@@ -614,7 +614,7 @@
         "fields": {
             "sku": "drn10022",
             "name": "DJI Air 2S Fly More Combo",
-            "description": "The DJI Air 2S Fly More Combo includes all the accessories you need for professional drone operation. With a 20 MP camera and 5.4K video, this drone excels in both image quality and advanced obstacle avoidance, making it a top pick for aerial photography and videography enthusiasts.",
+            "description": "The DJI Air 2S Fly More with a 20 MP camera and 5.4K video, this drone excels in both image quality and advanced obstacle avoidance, making it a top pick for aerial photography and videography enthusiasts.",
             "price": 1399.99,
             "category": 1,
             "rating": 4.9,
@@ -4993,7 +4993,7 @@
         "fields": {
             "sku": "drn10173",
             "name": "Black Falcon Drone",
-            "description": "A budget-friendly drone with basic flight functionality, ideal for beginners. The drone is equipped with GPS and obstacle avoidance but lacks a camera.",
+            "description": "A budget-friendly drone with basic flight functionality, ideal for beginners. The drone is equipped with GPS and obstacle avoidance",
             "price": 299.99,
             "category": 1,
             "rating": 4.0,
@@ -5075,10 +5075,10 @@
         "model": "products.product",
         "fields": {
             "sku": "bndwht177",
-            "name": "Ultimate Bundle",
-            "description": "An all-in-one bundle containing a remote, two batteries, a remote battery pack, and eight spare blades.",
-            "price": "499.99",
-            "category": 11,
+            "name": "Ultimate Accessories Pack",
+            "description": "An all-in-one accessories pack containing a remote, two batteries, a remote battery pack, and eight spare blades.",
+            "price": "199.99",
+            "category": 2,
             "rating": "5.0",
             "image": "accessories4.webp",
             "color": "White",
@@ -7032,6 +7032,158 @@
             "warranty": "Yes",
             "compatibility": "MiniFly series",
             "package_contents": "Drone, remote, batteries, carry case"
+        }
+    },
+    {
+        "pk": 271,
+        "model": "products.product",
+        "fields": {
+            "sku": "deal001",
+            "name": "White Camera",
+            "description": "A high-quality white camera designed for photography with advanced features.",
+            "price": 499.99,
+            "category": 13,
+            "rating": 4.7,
+            "image": "deals1.webp",
+            "drones_included": 0,
+            "drone_model": "",
+            "accessories_included": "Camera",
+            "warranty": "Yes",
+            "compatibility": "Compatible with various drone models",
+            "package_contents": "Camera"
+        }
+    },
+    {
+        "pk": 272,
+        "model": "products.product",
+        "fields": {
+            "sku": "deal002",
+            "name": "White Remote & Drone Combo",
+            "description": "A white remote with built-in screen and drone featuring a 4K camera.",
+            "price": 1499.99,
+            "category": 13,
+            "rating": 4.8,
+            "image": "deals2.webp",
+            "drones_included": 1,
+            "drone_model": "Falcon Pro",
+            "accessories_included": "Remote with screen, drone with 4K camera, charger",
+            "warranty": "Yes",
+            "compatibility": "Compatible with Falcon Pro series",
+            "package_contents": "Remote, drone, charger"
+        }
+    },
+    {
+        "pk": 273,
+        "model": "products.product",
+        "fields": {
+            "sku": "deal003",
+            "name": "Black Drone with Camera",
+            "description": "A black drone equipped with a high-quality 8K camera for advanced aerial photography.",
+            "price": 1799.99,
+            "category": 13,
+            "rating": 4.9,
+            "image": "deals3.webp",
+            "drones_included": 1,
+            "drone_model": "Stealth Pro",
+            "accessories_included": "Drone and camera",
+            "warranty": "Yes",
+            "compatibility": "Compatible with Stealth series",
+            "package_contents": "Drone and camera"
+        }
+    },
+    {
+        "pk": 274,
+        "model": "products.product",
+        "fields": {
+            "sku": "deal004",
+            "name": "Black and Grey Drone Duo",
+            "description": "A bundle featuring two drones, one black and the other grey, ideal for professionals.",
+            "price": 2599.99,
+            "category": 13,
+            "rating": 5.0,
+            "image": "deals4.webp",
+            "drones_included": 2,
+            "drone_model": "Explorer Duo",
+            "accessories_included": "Two drones",
+            "warranty": "Yes",
+            "compatibility": "Compatible with Explorer series",
+            "package_contents": "Two drones"
+        }
+    },
+    {
+        "pk": 275,
+        "model": "products.product",
+        "fields": {
+            "sku": "new001",
+            "name": "Black Drone",
+            "description": "A sleek black drone equipped with advanced flight capabilities.",
+            "price": 1599.99,
+            "category": 12,
+            "rating": 4.8,
+            "image": "new-arrivals1.webp",
+            "drones_included": 1,
+            "drone_model": "Black Hawk",
+            "accessories_included": "Drone, remote, charger",
+            "warranty": "Yes",
+            "compatibility": "Compatible with Black Hawk series",
+            "package_contents": "Drone"
+        }
+    },
+    {
+        "pk": 276,
+        "model": "products.product",
+        "fields": {
+            "sku": "new002",
+            "name": "Orange Drone",
+            "description": "A vibrant orange drone perfect for outdoor photography and videography.",
+            "price": 1799.99,
+            "category": 12,
+            "rating": 4.7,
+            "image": "new-arrivals2.webp",
+            "drones_included": 1,
+            "drone_model": "Sunbird Pro",
+            "accessories_included": "Drone, remote, charger",
+            "warranty": "Yes",
+            "compatibility": "Compatible with Sunbird series",
+            "package_contents": "Drone"
+        }
+    },
+    {
+        "pk": 277,
+        "model": "products.product",
+        "fields": {
+            "sku": "new003",
+            "name": "Advanced Drone",
+            "description": "An advanced drone with the latest flight technology and features.",
+            "price": 2499.99,
+            "category": 12,
+            "rating": 5.0,
+            "image": "new-arrivals3.webp",
+            "drones_included": 1,
+            "drone_model": "Falcon X",
+            "accessories_included": "Drone",
+            "warranty": "Yes",
+            "compatibility": "Compatible with Falcon X series",
+            "package_contents": "Drone"
+        }
+    },
+    {
+        "pk": 278,
+        "model": "products.product",
+        "fields": {
+            "sku": "new004",
+            "name": "Custom Built Drone",
+            "description": "A custom-built drone tailored for specific high-performance tasks.",
+            "price": 2999.99,
+            "category": 12,
+            "rating": 5.0,
+            "image": "new-arrivals4.webp",
+            "drones_included": 1,
+            "drone_model": "CustomTech X",
+            "accessories_included": "Drone",
+            "warranty": "Yes",
+            "compatibility": "Customizable",
+            "package_contents": "Drone"
         }
     }
 ]
