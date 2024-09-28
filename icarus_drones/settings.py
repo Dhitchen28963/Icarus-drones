@@ -82,6 +82,7 @@ TEMPLATES = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
+    'http://localhost:8000',
 ]
 
 AUTHENTICATION_BACKENDS = [

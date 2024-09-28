@@ -46,7 +46,7 @@
                         </div>
 
                         <!-- All Color Radio Buttons (centered) -->
-                        <div class="color-selector d-flex justify-content-center mx-3 flex-wrap align-items-center" id="color-carousel">
+                        <div class="color-selector d-flex justify-content-center mx-3 flex-wrap" id="color-carousel">
                             <label class="color-option" style="background-color: black;">
                                 <input type="radio" name="color" value="black" checked>
                             </label>
@@ -101,9 +101,21 @@
             function updateDroneImage() {
                 const selectedType = droneTypeSelect.value;
                 const selectedColor = document.querySelector('input[name="color"]:checked').value;
+
+                // Construct the image URL based on the selected type and color
                 const newImageUrl = `/media/${selectedType}-${selectedColor}.webp`;
+
+                // Update the image source
                 droneImage.src = newImageUrl;
             }
+
+            // Add event listener to color radio buttons
+            colorOptions.forEach(option => {
+                option.addEventListener('change', updateDroneImage);
+            });
+
+            // Add event listener to the drone type dropdown
+            droneTypeSelect.addEventListener('change', updateDroneImage);  // Update image when drone type changes
 
             leftArrow.addEventListener('click', function() {
                 currentColorIndex = (currentColorIndex === 0) ? colorItems.length - 1 : currentColorIndex - 1;
@@ -117,7 +129,7 @@
                 updateDroneImage();
             });
 
-            // Initialize the first color
+            // Initialize the first color and image
             updateDroneImage();
         });
     </script>
