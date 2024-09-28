@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col text-center mt-3">
+                <h2 class="logo-font">Customize Your Drone</h2>
+                <hr class="w-50 mb-1">
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Image Section on the left -->
+            <div class="col-12 col-md-6">
+                <div class="image-preview">
+                    <img id="drone-image" class="card-img-top img-fluid" src="/media/custom1-black.webp" alt="Custom Drone">
+                </div>
+            </div>
+
+            <!-- Customization options on the right -->
+            <div class="col-12 col-md-6">
+                <div class="customization-container my-5">
+                    <!-- Drone Type Selection -->
+                    <label for="drone-type" class="form-label">Drone Type:</label>
+                    <select id="drone-type" class="form-control mb-3">
+                        <option value="custom1">Custom 1</option>
+                        <option value="custom2">Custom 2</option>
+                        <option value="custom3">Custom 3</option>
+                    </select>
+
+                    <!-- Color Selection with navigation arrows -->
+                    <div class="d-flex align-items-center justify-content-center my-3">
+                        <!-- Left Arrow -->
+                        <div class="arrow arrow-left" id="left-arrow">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+
+                        <!-- All Color Radio Buttons (centered) -->
+                        <div class="color-selector d-flex justify-content-center mx-3 flex-wrap align-items-center" id="color-carousel">
+                            <label class="color-option" style="background-color: black;">
+                                <input type="radio" name="color" value="black" checked>
+                            </label>
+                            <label class="color-option" style="background-color: white;">
+                                <input type="radio" name="color" value="white">
+                            </label>
+                            <label class="color-option" style="background-color: blue;">
+                                <input type="radio" name="color" value="blue">
+                            </label>
+                            <label class="color-option" style="background-color: green;">
+                                <input type="radio" name="color" value="green">
+                            </label>
+                            <label class="color-option" style="background-color: pink;">
+                                <input type="radio" name="color" value="pink">
+                            </label>
+                            <label class="color-option" style="background-color: purple;">
+                                <input type="radio" name="color" value="purple">
+                            </label>
+                            <label class="color-option" style="background-color: red;">
+                                <input type="radio" name="color" value="red">
+                            </label>
+                            <label class="color-option" style="background-color: yellow;">
+                                <input type="radio" name="color" value="yellow">
+                            </label>
+                            <label class="color-option" style="background-color: orange;">
+                                <input type="radio" name="color" value="orange">
+                            </label>
+                        </div>
+
+                        <!-- Right Arrow -->
+                        <div class="arrow arrow-right" id="right-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Dynamic Image Updates and Carousel -->
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const droneImage = document.getElementById('drone-image');
+            const droneTypeSelect = document.getElementById('drone-type');
+            const colorOptions = document.querySelectorAll('input[name="color"]');
+            const leftArrow = document.getElementById('left-arrow');
+            const rightArrow = document.getElementById('right-arrow');
+            let currentColorIndex = 0;
+
+            const colorItems = Array.from(document.querySelectorAll('.color-option'));
+
+            function updateDroneImage() {
+                const selectedType = droneTypeSelect.value;
+                const selectedColor = document.querySelector('input[name="color"]:checked').value;
+                const newImageUrl = `/media/${selectedType}-${selectedColor}.webp`;
+                droneImage.src = newImageUrl;
+            }
+
+            leftArrow.addEventListener('click', function() {
+                currentColorIndex = (currentColorIndex === 0) ? colorItems.length - 1 : currentColorIndex - 1;
+                colorItems[currentColorIndex].querySelector('input[type="radio"]').checked = true;
+                updateDroneImage();
+            });
+
+            rightArrow.addEventListener('click', function() {
+                currentColorIndex = (currentColorIndex === colorItems.length - 1) ? 0 : currentColorIndex + 1;
+                colorItems[currentColorIndex].querySelector('input[type="radio"]').checked = true;
+                updateDroneImage();
+            });
+
+            // Initialize the first color
+            updateDroneImage();
+        });
+    </script>
+{% endblock %}

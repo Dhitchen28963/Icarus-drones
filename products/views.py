@@ -68,3 +68,7 @@ def product_detail(request, product_id):
     }
 
     return render(request, 'products/product_detail.html', context)
+
+# View renders the custom_product.html template for customising drones
+def custom_product(request):
+    return render(request, 'products/custom_product.html')
