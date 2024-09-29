@@ -302,3 +302,10 @@ a.category-badge > span.badge:hover {
         height: calc(100vh - 116px);
     }
 }
+
+/* Move the image down for screen sizes between 768px and 1004px */
+@media (min-width: 768px) and (max-width: 1004px) {
+    .image-preview {
+        margin-top: 0.2rem;
+    }
+}
