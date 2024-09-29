@@ -61,50 +61,74 @@ body {
 }
 
 .overlay {
-	height: 100%;
-	width: 100%;
-	top: 0;
-	left: 0;
-	position: fixed;
-	background: white;
-	z-index: -1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background: white;
+    z-index: -1;
 }
-
 
 a.category-badge > span.badge:hover {
     background: #212529 !important;
     color: #fff !important;
 }
 
-/* Custom_product.html css */
-.color-option {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #333;
-    cursor: pointer;
-    margin: 0 15px;
+/* Custom Product page */
+.image-preview {
+    margin-top: 0; /* Default margin for larger screens */
     position: relative;
+    z-index: 0; /* Keep image behind other content */
 }
 
+/* Color option container */
+.color-option {
+    display: inline-block;
+    width: 30px; /* Size for larger screens */
+    height: 30px;
+    border-radius: 50%;
+    background-color: #000;
+    position: relative;
+    cursor: pointer;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #333;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.color-option:hover {
+    transform: scale(1.2);  /* Slightly enlarge on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);  /* Add a subtle shadow */
+    border-color: #555;  /* Slight border color change on hover */
+}
+
+.color-option.active {
+    border: 3px solid #007bff;  /* Blue border for the active color */
+    transform: scale(1.1);  /* Slightly enlarge the active option */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);  /* Add shadow to make the active option stand out */
+}
+
+/* Radio button inside color option */
 .color-option input[type="radio"] {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     opacity: 0;
     cursor: pointer;
 }
 
+/* Styling for selected radio button */
 .color-option input[type="radio"]:checked {
-    border: 3px solid #555;
+    border-color: #333;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
 /* Arrows for navigation */
 .arrow {
-    font-size: 24px;
+    font-size: 30px;
     cursor: pointer;
     padding: 10px;
     background-color: #f0f0f0;
@@ -112,21 +136,145 @@ a.category-badge > span.badge:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin: 0 10px;
 }
 
 .arrow:hover {
     background-color: #ddd;
 }
 
-/* Flexbox for alignment */
+/* Flexbox for aligning color options */
 .color-selector {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: 100%;
+    gap: 20px;
+}
+
+/* Adjust alignment of arrow icons */
+.arrow-left i,
+.arrow-right i {
+    padding: 0;
+    line-height: 1;
 }
 
 /* -------------------------------- Media Queries */
+
+/* Three rows of three circles on small screens */
+@media (max-width: 768px) {
+    .color-option {
+        width: 25px; /* Smaller size for medium screens */
+        height: 25px;
+    }
+
+    .color-selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+        justify-items: center;
+        gap: 10px;
+    }
+}
+
+/* Customization container: closer to image on screens up to 767px */
+@media (max-width: 469px) {
+    h2.logo-font {
+        margin-top: 20px;  /* Adjust this value as needed */
+    }
+
+    .custom-margin {
+        margin-top: -2rem;  /* Move the customization container closer to the image */
+        margin-bottom: 1rem;  /* Reduce bottom margin for smaller screens */
+    }
+
+    .image-preview {
+        margin-top: 1rem; /* Slightly move the image up without overlap */
+        margin-bottom: 1rem; /* Ensure the bottom has space */
+        z-index: -1;  /* Keep the image behind content */
+    }
+
+    h2.logo-font {
+        margin-bottom: 1rem; /* Ensure there's space for the title to prevent overlap */
+    }
+}
+
+/* Two rows on very small screens (320px - 480px) */
+@media (max-width: 480px) {
+    .color-option {
+        width: 20px; /* Even smaller size for very small screens */
+        height: 20px;
+    }
+
+    .color-selector {
+        grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+        gap: 8px;
+    }
+}
+
+@media (max-width: 380px) {
+    /* Target the search input and icon */
+    #topnav .input-group .form-control, 
+    #topnav .input-group-append .btn .icon {
+        font-size: 12px; /* Reduce font size */
+        padding: 0.25rem 0.5rem; /* Adjust padding */
+    }
+
+    #topnav .input-group-append .btn .icon i {
+        font-size: 14px; /* Reduce the size of the search icon */
+    }
+
+    /* Target the My Account text and icon */
+    #topnav .list-inline-item .nav-link div i, 
+    #topnav .list-inline-item .nav-link div p {
+        font-size: 12px; /* Reduce the size of both icon and text */
+    }
+
+    #topnav .list-inline-item .nav-link div i {
+        font-size: 16px; /* Further adjust the size of the My Account icon */
+    }
+
+    /* Target the shopping bag icon and text */
+    #topnav .list-inline-item .nav-link div i.fa-shopping-bag,
+    #topnav .list-inline-item .nav-link div p {
+        font-size: 12px; /* Adjust font size for both icon and text */
+    }
+
+    #topnav .list-inline-item .nav-link div i.fa-shopping-bag {
+        font-size: 16px; /* Adjust icon size */
+    }
+
+    /* Reduce size for the mobile search icon and text */
+    #mobile-search .fas.fa-search {
+        font-size: 16px; /* Adjust search icon size */
+    }
+    #mobile-search p {
+        font-size: 12px; /* Adjust search text size */
+    }
+
+    /* Reduce size for the My Account icon and text in mobile view */
+    #user-options .fas.fa-user {
+        font-size: 16px; /* Adjust My Account icon size */
+    }
+    #user-options p {
+        font-size: 12px; /* Adjust My Account text size */
+    }
+
+    /* Reduce size for the Shopping Bag icon and text in mobile view */
+    .fas.fa-shopping-bag + p.my-0 {
+        font-size: 12px; /* Adjust font size for both icon and text */
+    }
+
+    .fas.fa-shopping-bag {
+        font-size: 16px; /* Adjust the icon size independently */
+    }
+
+    /* Reduce padding for .nav-link */
+    .nav-link {
+        padding: 0.25rem 0.5rem; /* Reduce padding to be smaller */
+    }
+}
+
 
 /* Slightly larger container on xl screens */
 @media (min-width: 1200px) {
@@ -151,7 +299,6 @@ a.category-badge > span.badge:hover {
 }
 
 /* pad the top a bit when navbar is collapsed on mobile */
-
 @media (max-width: 991px) {
     .header-container {
         padding-top: 116px;

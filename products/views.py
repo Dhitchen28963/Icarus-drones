@@ -71,4 +71,20 @@ def product_detail(request, product_id):
 
 # View renders the custom_product.html template for customising drones
 def custom_product(request):
-    return render(request, 'products/custom_product.html')
+    colors = [
+        ('#000000', 'black'),
+        ('#FFFFFF', 'white'),
+        ('#0000FF', 'blue'),
+        ('#00FF00', 'green'),
+        ('#FFC0CB', 'pink'),
+        ('#800080', 'purple'),
+        ('#FF0000', 'red'),
+        ('#FFFF00', 'yellow'),
+        ('#FFA500', 'orange'),
+    ]
+
+    context = {
+        'colors': colors,
+    }
+
+    return render(request, 'products/custom_product.html', context)

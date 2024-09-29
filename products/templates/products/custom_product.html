@@ -29,23 +29,23 @@
 
             <!-- Customization options on the right -->
             <div class="col-12 col-md-6">
-                <div class="customization-container my-5">
+                <div class="customization-container custom-margin">
                     <!-- Drone Type Selection -->
                     <label for="drone-type" class="form-label">Drone Type:</label>
                     <select id="drone-type" class="form-control mb-3">
-                        <option value="custom1">Custom 1</option>
-                        <option value="custom2">Custom 2</option>
-                        <option value="custom3">Custom 3</option>
+                        <option value="custom1">Falcon X</option>
+                        <option value="custom2">Sky Hawk</option>
+                        <option value="custom3">Phantom Vortex</option>
                     </select>
 
-                    <!-- Color Selection with navigation arrows -->
-                    <div class="d-flex align-items-center justify-content-center my-3">
+                    <!-- Color Selection -->
+                    <div class="d-flex align-items-center justify-content-center my-3 color-selector-wrapper">
                         <!-- Left Arrow -->
                         <div class="arrow arrow-left" id="left-arrow">
                             <i class="fas fa-chevron-left"></i>
                         </div>
 
-                        <!-- All Color Radio Buttons (centered) -->
+                        <!-- All Color Radio Buttons (grid layout for 3x3) -->
                         <div class="color-selector d-flex justify-content-center mx-3 flex-wrap" id="color-carousel">
                             <label class="color-option" style="background-color: black;">
                                 <input type="radio" name="color" value="black" checked>
@@ -107,6 +107,10 @@
 
                 // Update the image source
                 droneImage.src = newImageUrl;
+
+                // Add active class to selected color option
+                colorItems.forEach(item => item.classList.remove('active'));
+                colorItems[currentColorIndex].classList.add('active');
             }
 
             // Add event listener to color radio buttons
