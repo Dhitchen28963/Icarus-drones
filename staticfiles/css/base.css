@@ -38,6 +38,19 @@ body {
     color: white;
 }
 
+.btn-outline-black {
+    background: white;
+    color: black !important;
+    border: 1px solid black;
+}
+
+.btn-outline-black:hover,
+.btn-outline-black:active,
+.btn-outline-black:focus {
+    background: black;
+    color: white !important;
+}
+
 .shop-now-button:hover,
 .shop-now-button:active,
 .shop-now-button:focus,
@@ -75,17 +88,32 @@ a.category-badge > span.badge:hover {
     color: #fff !important;
 }
 
+.btt-button {
+    height: 42px;
+    width: 42px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+.btt-link,
+.update-link,
+.remove-item {
+    cursor: pointer;
+}
+
 /* Custom Product page */
 .image-preview {
-    margin-top: 0; /* Default margin for larger screens */
+    margin-top: -4.5rem;
+    margin-bottom: 1rem; 
+    z-index: -1;
     position: relative;
-    z-index: 0; /* Keep image behind other content */
 }
 
 /* Color option container */
 .color-option {
     display: inline-block;
-    width: 30px; /* Size for larger screens */
+    width: 30px;
     height: 30px;
     border-radius: 50%;
     background-color: #000;
@@ -100,15 +128,15 @@ a.category-badge > span.badge:hover {
 }
 
 .color-option:hover {
-    transform: scale(1.2);  /* Slightly enlarge on hover */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);  /* Add a subtle shadow */
-    border-color: #555;  /* Slight border color change on hover */
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-color: #555;
 }
 
 .color-option.active {
-    border: 3px solid #007bff;  /* Blue border for the active color */
-    transform: scale(1.1);  /* Slightly enlarge the active option */
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);  /* Add shadow to make the active option stand out */
+    border: 3px solid #007bff;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
 /* Radio button inside color option */
@@ -145,7 +173,6 @@ a.category-badge > span.badge:hover {
     background-color: #ddd;
 }
 
-/* Flexbox for aligning color options */
 .color-selector {
     display: flex;
     flex-wrap: wrap;
@@ -153,7 +180,6 @@ a.category-badge > span.badge:hover {
     gap: 20px;
 }
 
-/* Adjust alignment of arrow icons */
 .arrow-left i,
 .arrow-right i {
     padding: 0;
@@ -180,101 +206,96 @@ a.category-badge > span.badge:hover {
 /* Customization container: closer to image on screens up to 767px */
 @media (max-width: 469px) {
     h2.logo-font {
-        margin-top: 20px;  /* Adjust this value as needed */
+        margin-top: 20px;
     }
 
     .custom-margin {
-        margin-top: -2rem;  /* Move the customization container closer to the image */
-        margin-bottom: 1rem;  /* Reduce bottom margin for smaller screens */
+        margin-top: -2rem;
+        margin-bottom: 1rem;
     }
 
     .image-preview {
-        margin-top: 1rem; /* Slightly move the image up without overlap */
-        margin-bottom: 1rem; /* Ensure the bottom has space */
-        z-index: -1;  /* Keep the image behind content */
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        z-index: -1;
     }
 
     h2.logo-font {
-        margin-bottom: 1rem; /* Ensure there's space for the title to prevent overlap */
+        margin-bottom: 1rem;
     }
 }
 
 /* Two rows on very small screens (320px - 480px) */
 @media (max-width: 480px) {
     .color-option {
-        width: 20px; /* Even smaller size for very small screens */
+        width: 20px;
         height: 20px;
     }
 
     .color-selector {
-        grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
     }
 }
 
 @media (max-width: 380px) {
-    /* Target the search input and icon */
     #topnav .input-group .form-control, 
     #topnav .input-group-append .btn .icon {
-        font-size: 12px; /* Reduce font size */
-        padding: 0.25rem 0.5rem; /* Adjust padding */
+        font-size: 12px;
+        padding: 0.25rem 0.5rem;
     }
 
     #topnav .input-group-append .btn .icon i {
-        font-size: 14px; /* Reduce the size of the search icon */
+        font-size: 14px;
     }
 
     /* Target the My Account text and icon */
     #topnav .list-inline-item .nav-link div i, 
     #topnav .list-inline-item .nav-link div p {
-        font-size: 12px; /* Reduce the size of both icon and text */
+        font-size: 12px;
     }
 
     #topnav .list-inline-item .nav-link div i {
-        font-size: 16px; /* Further adjust the size of the My Account icon */
+        font-size: 16px;
     }
 
     /* Target the shopping bag icon and text */
     #topnav .list-inline-item .nav-link div i.fa-shopping-bag,
     #topnav .list-inline-item .nav-link div p {
-        font-size: 12px; /* Adjust font size for both icon and text */
+        font-size: 12px;
     }
 
     #topnav .list-inline-item .nav-link div i.fa-shopping-bag {
-        font-size: 16px; /* Adjust icon size */
+        font-size: 16px;
     }
 
     /* Reduce size for the mobile search icon and text */
     #mobile-search .fas.fa-search {
-        font-size: 16px; /* Adjust search icon size */
+        font-size: 16px;
     }
     #mobile-search p {
-        font-size: 12px; /* Adjust search text size */
+        font-size: 12px;
     }
 
-    /* Reduce size for the My Account icon and text in mobile view */
     #user-options .fas.fa-user {
-        font-size: 16px; /* Adjust My Account icon size */
+        font-size: 16px;
     }
     #user-options p {
-        font-size: 12px; /* Adjust My Account text size */
+        font-size: 12px;
     }
 
-    /* Reduce size for the Shopping Bag icon and text in mobile view */
     .fas.fa-shopping-bag + p.my-0 {
-        font-size: 12px; /* Adjust font size for both icon and text */
+        font-size: 12px;
     }
 
     .fas.fa-shopping-bag {
-        font-size: 16px; /* Adjust the icon size independently */
+        font-size: 16px;
     }
 
-    /* Reduce padding for .nav-link */
     .nav-link {
-        padding: 0.25rem 0.5rem; /* Reduce padding to be smaller */
+        padding: 0.25rem 0.5rem;
     }
 }
-
 
 /* Slightly larger container on xl screens */
 @media (min-width: 1200px) {
@@ -306,5 +327,12 @@ a.category-badge > span.badge:hover {
 
     body {
         height: calc(100vh - 116px);
+    }
+}
+
+/* Move the image down for screen sizes between 768px and 1004px */
+@media (min-width: 768px) and (max-width: 1004px) {
+    .image-preview {
+        margin-top: 0.2rem;
     }
 }

@@ -1,19 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{% block head_title %}{% endblock %}</title>
+{% extends "base.html" %}
+
+{% block extra_title %}
+    {% block head_title %}{% endblock %}
+{% endblock %}
+
+{% block extra_meta %}
     {% block extra_head %}
     {% endblock %}
-  </head>
-  <body>
-    {% block body %}
+{% endblock %}
 
+{% block content %}
+    {% block body %}
+    
     {% if messages %}
     <div>
       <strong>Messages:</strong>
       <ul>
         {% for message in messages %}
-        <li>{{message}}</li>
+        <li>{{ message }}</li>
         {% endfor %}
       </ul>
     </div>
@@ -31,10 +35,14 @@
         {% endif %}
       </ul>
     </div>
+
     {% block content %}
     {% endblock %}
+    
     {% endblock %}
+{% endblock %}
+
+{% block extra_js %}
     {% block extra_body %}
     {% endblock %}
-  </body>
-</html>
+{% endblock %}

@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.http import HttpResponse
 from products.models import Product
 
 def view_bag(request):
@@ -24,23 +25,15 @@ def add_to_bag(request, item_id):
 
 def add_custom_drone_to_bag(request):
     """ Add a custom drone to the shopping bag """
-    # Get the SKU from the form
     sku = request.POST.get('sku')
     quantity = int(request.POST.get('quantity'))
 
-    # Get any selected attachments
     attachments = request.POST.getlist('attachments')
-
-    # Find the matching product based on the SKU
     product = get_object_or_404(Product, sku=sku)
-
-    # Get the shopping bag from the session
     bag = request.session.get('bag', {})
 
-    # Create a unique key for the custom drone in the bag (product ID + attachments)
     custom_key = f"{product.id}-{'-'.join(attachments)}" if attachments else str(product.id)
 
-    # Calculate the additional cost for attachments
     extra_cost = 0
     if 'camera' in attachments:
         extra_cost += 299
@@ -55,22 +48,48 @@ def add_custom_drone_to_bag(request):
     if 'insurance' in attachments:
         extra_cost += 149
 
-    # Calculate the final price by converting product.price (Decimal) to float
     final_price = float(product.price) + extra_cost
 
-    # Add or update the custom drone in the bag
     if custom_key in bag:
         bag[custom_key]['quantity'] += quantity
     else:
         bag[custom_key] = {
             'quantity': quantity,
-            'price': final_price,  # Storing as a float to avoid Decimal issues
+            'price': final_price,
             'attachments': attachments,
             'sku': sku,
         }
 
-    # Save the updated bag to the session
     request.session['bag'] = bag
-
-    # Redirect to the bag view
     return redirect('view_bag')
+
+
+def adjust_bag(request, item_id):
+    """Adjust the quantity of the specified product to the specified amount"""
+
+    quantity = int(request.POST.get('quantity'))
+    bag = request.session.get('bag', {})
+
+    if quantity > 0:
+        bag[item_id] = quantity
+    else:
+        bag.pop(item_id)
+
+    request.session['bag'] = bag
+    return redirect(reverse('view_bag'))
+
+
+def remove_from_bag(request, item_id):
+    """Remove the item from the shopping bag"""
+
+    try:
+        bag = request.session.get('bag', {})
+
+        # Remove the item directly without checking for sizes
+        bag.pop(item_id)
+
+        request.session['bag'] = bag
+        return HttpResponse(status=200)
+
+    except Exception as e:
+        return HttpResponse(status=500)
