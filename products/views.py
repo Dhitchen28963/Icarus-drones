@@ -7,7 +7,6 @@ from .models import Product, Category
 # View to show all products, including sorting and search queries
 def all_products(request):
     """ A view to show all products, including sorting and search queries """
-
     products = Product.objects.all()
     query = None
     categories = None
@@ -29,7 +28,7 @@ def all_products(request):
                 if direction == 'desc':
                     sortkey = f'-{sortkey}'
             products = products.order_by(sortkey)
-            
+
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
             if 'drones' in categories:
@@ -42,7 +41,7 @@ def all_products(request):
             if not query:
                 messages.error(request, "You didn't enter any search criteria!")
                 return redirect(reverse('products'))
-            
+
             queries = Q(name__icontains=query) | Q(description__icontains=query)
             products = products.filter(queries)
 
@@ -60,7 +59,6 @@ def all_products(request):
 # View to show individual product details
 def product_detail(request, product_id):
     """ A view to show individual product details """
-    
     product = get_object_or_404(Product, pk=product_id)
 
     context = {
@@ -69,21 +67,30 @@ def product_detail(request, product_id):
 
     return render(request, 'products/product_detail.html', context)
 
-# View renders the custom_product.html template for customising drones
+# View renders the custom_product.html template for customizing specific drones
 def custom_product(request):
+    # Define the three specific drone models with SKU format
+    drones = [
+        {'name': 'Falcon X', 'value': 'falcon-x-10001'},
+        {'name': 'Sky Hawk', 'value': 'sky-hawk-10002'},
+        {'name': 'Phantom Vortex', 'value': 'phantom-vortex-10003'},
+    ]
+
+    # Available color options
     colors = [
-        ('#000000', 'black'),
-        ('#FFFFFF', 'white'),
-        ('#0000FF', 'blue'),
-        ('#00FF00', 'green'),
-        ('#FFC0CB', 'pink'),
-        ('#800080', 'purple'),
-        ('#FF0000', 'red'),
-        ('#FFFF00', 'yellow'),
-        ('#FFA500', 'orange'),
+        ('black', 'Black'),
+        ('white', 'White'),
+        ('blue', 'Blue'),
+        ('green', 'Green'),
+        ('pink', 'Pink'),
+        ('purple', 'Purple'),
+        ('red', 'Red'),
+        ('yellow', 'Yellow'),
+        ('orange', 'Orange'),
     ]
 
     context = {
+        'drones': drones,
         'colors': colors,
     }
 
