@@ -19,7 +19,6 @@ def add_to_bag(request, item_id):
         bag[item_id] = quantity
 
     request.session['bag'] = bag
-    print(request.session['bag'])  # Debugging print statement to see the contents of the bag
     return redirect(redirect_url)
 
 
@@ -72,9 +71,6 @@ def add_custom_drone_to_bag(request):
 
     # Save the updated bag to the session
     request.session['bag'] = bag
-
-    # Debugging print statement to check the final contents of the bag
-    print(f"Bag contents: {request.session['bag']}")
 
     # Redirect to the bag view
     return redirect('view_bag')
