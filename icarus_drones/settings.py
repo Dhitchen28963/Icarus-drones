@@ -80,6 +80,8 @@ TEMPLATES = [
     },
 ]
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
     'http://localhost:8000',

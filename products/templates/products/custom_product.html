@@ -20,10 +20,9 @@
         </div>
 
         <div class="row">
-            <!-- Image Section on the left -->
             <div class="col-12 col-md-6">
                 <div class="image-preview">
-                    <img id="drone-image" class="card-img-top img-fluid" src="{% static 'custom1-black.webp' %}" alt="Custom Drone">
+                    <img id="drone-image" class="card-img-top img-fluid" src="{{ MEDIA_URL }}custom1-black.webp" alt="Custom Drone">
                 </div>
             </div>
 
@@ -33,9 +32,9 @@
                     <!-- Drone Type Selection -->
                     <label for="drone-type" class="form-label">Drone Type:</label>
                     <select id="drone-type" name="drone_type" class="form-control mb-3">
-                        <option value="custom1">Falcon X</option>
-                        <option value="custom2">Sky Hawk</option>
-                        <option value="custom3">Phantom Vortex</option>
+                        {% for drone in drones %}
+                            <option value="{{ drone.value }}">{{ drone.name }}</option>
+                        {% endfor %}
                     </select>
 
                     <!-- Color Selection -->
@@ -43,68 +42,17 @@
                         <div class="arrow arrow-left" id="left-arrow">
                             <i class="fas fa-chevron-left"></i>
                         </div>
-
+                    
                         <div class="color-selector d-flex justify-content-center mx-3 flex-wrap" id="color-carousel">
-                            <label class="color-option" style="background-color: black;">
-                                <input type="radio" name="color" value="black" checked>
+                            {% for color_value, color_name in colors %}
+                            <label class="color-option {{ color_value }}-color">
+                                <input type="radio" name="color" value="{{ color_value }}" {% if forloop.first %}checked{% endif %}>
                             </label>
-                            <label class="color-option" style="background-color: white;">
-                                <input type="radio" name="color" value="white">
-                            </label>
-                            <label class="color-option" style="background-color: blue;">
-                                <input type="radio" name="color" value="blue">
-                            </label>
-                            <label class="color-option" style="background-color: green;">
-                                <input type="radio" name="color" value="green">
-                            </label>
-                            <label class="color-option" style="background-color: pink;">
-                                <input type="radio" name="color" value="pink">
-                            </label>
-                            <label class="color-option" style="background-color: purple;">
-                                <input type="radio" name="color" value="purple">
-                            </label>
-                            <label class="color-option" style="background-color: red;">
-                                <input type="radio" name="color" value="red">
-                            </label>
-                            <label class="color-option" style="background-color: yellow;">
-                                <input type="radio" name="color" value="yellow">
-                            </label>
-                            <label class="color-option" style="background-color: orange;">
-                                <input type="radio" name="color" value="orange">
-                            </label>
+                            {% endfor %}
                         </div>
-
+                    
                         <div class="arrow arrow-right" id="right-arrow">
                             <i class="fas fa-chevron-right"></i>
-                        </div>
-                    </div>
-
-                    <!-- Add Attachments -->
-                    <div class="attachments mt-4">
-                        <label class="form-label">Attachments:</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="attachments" value="camera" id="camera">
-                            <label class="form-check-label" for="camera">Advanced Camera (+ $299)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="attachments" value="vr-goggles" id="vr-goggles">
-                            <label class="form-check-label" for="vr-goggles">VR Goggles (+ $199)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="attachments" value="carry-case" id="carry-case">
-                            <label class="form-check-label" for="carry-case">Carry Case (+ $49)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="attachments" value="extra-battery" id="extra-battery">
-                            <label class="form-check-label" for="extra-battery">Extra Battery (+ $99)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="attachments" value="extra-propellers" id="extra-propellers">
-                            <label class="form-check-label" for="extra-propellers">Extra Propellers (+ $29)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="attachments" value="insurance" id="insurance">
-                            <label class="form-check-label" for="insurance">Insurance (+ $149)</label>
                         </div>
                     </div>
 
@@ -113,6 +61,15 @@
                         {% csrf_token %}
                         <input type="hidden" name="sku" id="selected-drone-sku" value="falcon-x-10001-black">
                         <input type="hidden" name="quantity" value="1">
+                        <input type="hidden" name="color" id="selected-drone-color" value="black">
+
+                        <!-- Attachments Checkboxes -->
+                        {% for attachment in ATTACHMENTS %}
+                            <div>
+                                <input type="checkbox" name="attachments" value="{{ attachment.sku }}" id="{{ attachment.sku }}">
+                                <label for="{{ attachment.sku }}">{{ attachment.name }} (+${{ attachment.price }})</label>
+                            </div>
+                        {% endfor %}
 
                         <!-- Add to Bag Button -->
                         <div class="col-12">
@@ -123,44 +80,43 @@
                             <input type="submit" class="btn btn-black rounded-0 text-uppercase" value="Add to Bag">
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript for Dynamic Image Updates and Attachments -->
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             const droneImage = document.getElementById('drone-image');
             const droneTypeSelect = document.getElementById('drone-type');
             const colorOptions = document.querySelectorAll('input[name="color"]');
+            const selectedColorInput = document.getElementById('selected-drone-color');
             const selectedSkuInput = document.getElementById('selected-drone-sku');
             const leftArrow = document.getElementById('left-arrow');
             const rightArrow = document.getElementById('right-arrow');
             let currentColorIndex = 0;
 
-            const colorItems = Array.from(document.querySelectorAll('.color-option'));
+            const skuMap = {
+                'falcon-x-10001': 'custom1',
+                'sky-hawk-10002': 'custom2',
+                'phantom-vortex-10003': 'custom3'
+            };
+
+            const colorItems = Array.from(colorOptions);
 
             function updateDroneImage() {
-                const selectedType = droneTypeSelect.value; // 'custom1', 'custom2', or 'custom3'
-                const selectedColor = document.querySelector('input[name="color"]:checked').value; // color selected by user
+                const selectedType = droneTypeSelect.value;
+                const selectedColor = document.querySelector('input[name="color"]:checked').value;
+                selectedColorInput.value = selectedColor;
 
-                // Set SKU based on selection
-                const skuMap = {
-                    'custom1': 'falcon-x-10001',
-                    'custom2': 'sky-hawk-10002',
-                    'custom3': 'phantom-vortex-10003'
-                };
-                const selectedSku = skuMap[selectedType];
+                if (selectedType && selectedColor) {
+                    const newSku = `${selectedType}-${selectedColor}`;
+                    selectedSkuInput.value = newSku;
 
-                selectedSkuInput.value = `${selectedSku}-${selectedColor}`; // Set SKU for the hidden input
-
-                // Construct the image URL based on the type and color
-                const newImageUrl = `/media/${selectedType}-${selectedColor}.webp`;
-                droneImage.src = newImageUrl; // Update image source
-
-                colorItems.forEach(item => item.classList.remove('active'));
-                colorItems[currentColorIndex].classList.add('active');
+                    const newImageUrl = "{{ MEDIA_URL }}" + `${skuMap[selectedType]}-${selectedColor}.webp`;
+                    droneImage.src = newImageUrl;
+                }
             }
 
             colorOptions.forEach(option => {
@@ -169,19 +125,20 @@
 
             droneTypeSelect.addEventListener('change', updateDroneImage);
 
+            // Arrow functionality for scrolling through colors
             leftArrow.addEventListener('click', function() {
                 currentColorIndex = (currentColorIndex === 0) ? colorItems.length - 1 : currentColorIndex - 1;
-                colorItems[currentColorIndex].querySelector('input[type="radio"]').checked = true;
+                colorItems[currentColorIndex].checked = true;
                 updateDroneImage();
             });
 
             rightArrow.addEventListener('click', function() {
                 currentColorIndex = (currentColorIndex === colorItems.length - 1) ? 0 : currentColorIndex + 1;
-                colorItems[currentColorIndex].querySelector('input[type="radio"]').checked = true;
+                colorItems[currentColorIndex].checked = true;
                 updateDroneImage();
             });
 
-            updateDroneImage(); // Initialize the image on page load
+            updateDroneImage();
         });
     </script>
 {% endblock %}
