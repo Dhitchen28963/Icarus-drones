@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.functions import Lower
+from products.constants import ATTACHMENTS
 from .models import Product, Category
 
 # View to show all products, including sorting and search queries
@@ -92,6 +94,8 @@ def custom_product(request):
     context = {
         'drones': drones,
         'colors': colors,
+        'ATTACHMENTS': ATTACHMENTS,
+        'MEDIA_URL': settings.MEDIA_URL,
     }
 
     return render(request, 'products/custom_product.html', context)
