@@ -154,6 +154,42 @@ a.category-badge > span.badge:hover {
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
+.black-color {
+    background-color: black;
+}
+
+.white-color {
+    background-color: white;
+}
+
+.blue-color {
+    background-color: blue;
+}
+
+.green-color {
+    background-color: green;
+}
+
+.pink-color {
+    background-color: pink;
+}
+
+.purple-color {
+    background-color: purple;
+}
+
+.red-color {
+    background-color: red;
+}
+
+.yellow-color {
+    background-color: yellow;
+}
+
+.orange-color {
+    background-color: orange;
+}
+
 /* Arrows for navigation */
 .arrow {
     font-size: 30px;
@@ -184,6 +220,23 @@ a.category-badge > span.badge:hover {
 .arrow-right i {
     padding: 0;
     line-height: 1;
+}
+
+/* ------------------------------- bootstrap toasts */
+
+.message-container {
+    position: fixed;
+    top: 72px;
+    right: 15px;
+    z-index: 99999999999;
+}
+
+.custom-toast {
+    overflow: visible;
+}
+
+.toast-capper {
+    height: 2px;
 }
 
 /* -------------------------------- Media Queries */
@@ -236,6 +289,34 @@ a.category-badge > span.badge:hover {
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
     }
+
+    /* Add the padding and spacing adjustments for 408px and below */
+    #topnav .input-group .form-control, 
+    #topnav .input-group-append .btn .icon,
+    #topnav .list-inline-item .nav-link {
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+    }
+
+    /* Icon and text size adjustments */
+    #topnav .input-group-append .btn .icon i {
+        font-size: 14px;
+    }
+
+    #topnav .list-inline-item .nav-link div i, 
+    #topnav .list-inline-item .nav-link div p {
+        font-size: 12px;
+    }
+
+    #topnav .list-inline-item .nav-link div i.fa-shopping-bag,
+    #topnav .list-inline-item .nav-link div p {
+        font-size: 12px;
+    }
+
+    .navbar-toggler {
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+    }
 }
 
 @media (max-width: 380px) {
@@ -249,7 +330,6 @@ a.category-badge > span.badge:hover {
         font-size: 14px;
     }
 
-    /* Target the My Account text and icon */
     #topnav .list-inline-item .nav-link div i, 
     #topnav .list-inline-item .nav-link div p {
         font-size: 12px;
