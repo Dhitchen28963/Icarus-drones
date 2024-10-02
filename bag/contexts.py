@@ -13,34 +13,36 @@ def bag_contents(request):
     print(f"Bag Contents: {bag}")
 
     for item_id, item_data in bag.items():
-        try:
-            # If it's a regular product (with ID)
-            if item_id.isdigit():
-                product = get_object_or_404(Product, pk=item_id)
-                price = item_data['price']
-            else:
-                # For custom products with SKU and attachments
-                sku = item_data.get('sku')
-                if not sku:
-                    continue
-                product = get_object_or_404(Product, sku=sku)
-                price = item_data['price']
+        if isinstance(item_data, dict):  # Ensure item_data is a dictionary
+            try:
+                # If it's a regular product (with ID)
+                if item_id.isdigit():
+                    product = get_object_or_404(Product, pk=item_id)
+                    price = item_data['price']
+                else:
+                    # For custom products with SKU and attachments
+                    sku = item_data.get('sku')
+                    if not sku:
+                        continue
+                    product = get_object_or_404(Product, sku=sku)
+                    price = item_data['price']
 
-            quantity = item_data['quantity']
-            total += quantity * price
-            product_count += quantity
+                quantity = item_data['quantity']
+                total += quantity * price
+                product_count += quantity
 
-            bag_items.append({
-                'item_id': item_id,
-                'quantity': quantity,
-                'product': product,
-                'attachments': item_data.get('attachments', []),
-                'price': price,
-            })
-
-        except Product.DoesNotExist:
-            print(f"Product not found for item_id: {item_id}")
-            continue
+                bag_items.append({
+                    'item_id': item_id,
+                    'quantity': quantity,
+                    'product': product,
+                    'attachments': item_data.get('attachments', []),
+                    'price': price,
+                })
+            except Product.DoesNotExist:
+                print(f"Product not found for item_id: {item_id}")
+                continue
+        else:
+            print(f"Invalid item in bag: {item_id} -> {item_data}")
 
     # Calculate delivery and grand total
     if total < settings.FREE_DELIVERY_THRESHOLD:
