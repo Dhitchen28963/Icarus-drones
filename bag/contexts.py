@@ -4,9 +4,18 @@ from django.shortcuts import get_object_or_404
 from products.models import Product
 from products.constants import ATTACHMENTS
 
+
+def get_attachment_name_by_sku(sku):
+    """ Helper function to return the human-readable name of an attachment given its SKU """
+    for attachment in ATTACHMENTS:
+        if attachment['sku'] == sku:
+            return attachment['name']
+    return sku  # If SKU is not found, return the SKU itself
+    
+
 def bag_contents(request):
     bag_items = []
-    total = 0
+    total = Decimal(0)  # Ensure total is a Decimal
     product_count = 0
     bag = request.session.get('bag', {})
 
@@ -18,24 +27,28 @@ def bag_contents(request):
                 # If it's a regular product (with ID)
                 if item_id.isdigit():
                     product = get_object_or_404(Product, pk=item_id)
-                    price = item_data['price']
+                    price = Decimal(str(item_data['price']))  # Ensure price is converted to Decimal
                 else:
                     # For custom products with SKU and attachments
                     sku = item_data.get('sku')
                     if not sku:
                         continue
                     product = get_object_or_404(Product, sku=sku)
-                    price = item_data['price']
+                    price = Decimal(str(item_data['price']))  # Ensure price is converted to Decimal
 
                 quantity = item_data['quantity']
-                total += quantity * price
+                total += quantity * price  # Keep total as Decimal
                 product_count += quantity
+
+                # Convert attachment SKUs to human-readable names
+                attachments = item_data.get('attachments', [])
+                attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
 
                 bag_items.append({
                     'item_id': item_id,
                     'quantity': quantity,
                     'product': product,
-                    'attachments': item_data.get('attachments', []),
+                    'attachments': attachment_names,  # Use human-readable names
                     'price': price,
                 })
             except Product.DoesNotExist:
@@ -45,12 +58,13 @@ def bag_contents(request):
             print(f"Invalid item in bag: {item_id} -> {item_data}")
 
     # Calculate delivery and grand total
-    if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
-        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
+    free_delivery_threshold = Decimal(str(settings.FREE_DELIVERY_THRESHOLD))
+    if total < free_delivery_threshold:
+        delivery = total * Decimal(str(settings.STANDARD_DELIVERY_PERCENTAGE)) / 100
+        free_delivery_delta = free_delivery_threshold - total
     else:
-        delivery = 0
-        free_delivery_delta = 0
+        delivery = Decimal(0)
+        free_delivery_delta = Decimal(0)
 
     grand_total = delivery + total
 
@@ -60,7 +74,7 @@ def bag_contents(request):
         'product_count': product_count,
         'delivery': delivery,
         'free_delivery_delta': free_delivery_delta,
-        'free_delivery_threshold': settings.FREE_DELIVERY_THRESHOLD,
+        'free_delivery_threshold': free_delivery_threshold,
         'grand_total': grand_total,
     }
 

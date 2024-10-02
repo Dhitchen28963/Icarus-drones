@@ -44,6 +44,16 @@
                                     <td class="py-3">
                                         <p class="my-0"><strong>{{ item.product.name }}</strong></p>
                                         <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
+                                        
+                                        <!-- Display attachments if available -->
+                                        {% if item.attachments %}
+                                            <p class="my-0"><strong>Attachments:</strong></p>
+                                            <ul class="list-unstyled">
+                                                {% for attachment in item.attachments %}
+                                                    <li class="small">{{ attachment }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
                                     </td>
                                     <td class="py-3">
                                         <p class="my-0">${{ item.product.price }}</p>
