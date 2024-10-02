@@ -51,6 +51,11 @@ class Order(models.Model):
         self.loyalty_points = int(self.grand_total / 10)
         self.save()
 
+    def loyalty_points_earned(self):
+        """ Calculate loyalty points as a percentage of the grand total """
+        # 1 loyalty point for every $10 spent
+        return int(self.grand_total / 10)
+
     def save(self, *args, **kwargs):
         """
         Override the original save method to set the order number
