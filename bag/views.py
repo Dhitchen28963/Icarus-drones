@@ -38,11 +38,10 @@ def add_to_bag(request, item_id):
 def add_custom_drone_to_bag(request):
     """Add a custom drone to the shopping bag"""
     if request.method == 'POST':
-        sku = request.POST.get('sku')  # The SKU should include the color
+        sku = request.POST.get('sku')
         quantity = int(request.POST.get('quantity', 1))
         attachments = request.POST.getlist('attachments')
 
-        # Fetch the product using SKU
         try:
             product = Product.objects.get(sku=sku)
         except Product.DoesNotExist:
@@ -60,7 +59,6 @@ def add_custom_drone_to_bag(request):
         extra_cost = sum(float(att['price']) for att in ATTACHMENTS if att['sku'] in attachments)
         final_price = float(product.price) + extra_cost  # Base price + attachment costs
 
-        # Add or update the custom drone in the bag
         if custom_key in bag:
             bag[custom_key]['quantity'] += quantity
             attachment_names = [get_attachment_name_by_sku(att) for att in attachments]

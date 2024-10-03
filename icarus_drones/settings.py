@@ -177,10 +177,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Stripe 
 FREE_DELIVERY_THRESHOLD = 200
 STANDARD_DELIVERY_PERCENTAGE = 10
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
+STRIPE_CURRENCY = 'usd'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

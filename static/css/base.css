@@ -190,7 +190,6 @@ a.category-badge > span.badge:hover {
     background-color: orange;
 }
 
-/* Arrows for navigation */
 .arrow {
     font-size: 30px;
     cursor: pointer;
@@ -291,22 +290,20 @@ a.category-badge > span.badge:hover {
 
 /* -------------------------------- Media Queries */
 
-/* Three rows of three circles on small screens */
 @media (max-width: 768px) {
     .color-option {
-        width: 25px; /* Smaller size for medium screens */
+        width: 25px;
         height: 25px;
     }
 
     .color-selector {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+        grid-template-columns: repeat(3, 1fr);
         justify-items: center;
         gap: 10px;
     }
 }
 
-/* Customization container: closer to image on screens up to 767px */
 @media (max-width: 469px) {
     h2.logo-font {
         margin-top: 20px;
@@ -328,7 +325,6 @@ a.category-badge > span.badge:hover {
     }
 }
 
-/* Two rows on very small screens (320px - 480px) */
 @media (max-width: 480px) {
     .color-option {
         width: 20px;
@@ -340,7 +336,6 @@ a.category-badge > span.badge:hover {
         gap: 8px;
     }
 
-    /* Add the padding and spacing adjustments for 408px and below */
     #topnav .input-group .form-control, 
     #topnav .input-group-append .btn .icon,
     #topnav .list-inline-item .nav-link {
@@ -348,7 +343,6 @@ a.category-badge > span.badge:hover {
         padding-right: 0.1rem;
     }
 
-    /* Icon and text size adjustments */
     #topnav .input-group-append .btn .icon i {
         font-size: 14px;
     }
@@ -389,7 +383,6 @@ a.category-badge > span.badge:hover {
         font-size: 16px;
     }
 
-    /* Target the shopping bag icon and text */
     #topnav .list-inline-item .nav-link div i.fa-shopping-bag,
     #topnav .list-inline-item .nav-link div p {
         font-size: 12px;
@@ -399,7 +392,6 @@ a.category-badge > span.badge:hover {
         font-size: 16px;
     }
 
-    /* Reduce size for the mobile search icon and text */
     #mobile-search .fas.fa-search {
         font-size: 16px;
     }
@@ -449,7 +441,6 @@ a.category-badge > span.badge:hover {
     }
 }
 
-/* pad the top a bit when navbar is collapsed on mobile */
 @media (max-width: 991px) {
     .header-container {
         padding-top: 116px;
@@ -460,7 +451,6 @@ a.category-badge > span.badge:hover {
     }
 }
 
-/* Move the image down for screen sizes between 768px and 1004px */
 @media (min-width: 768px) and (max-width: 1004px) {
     .image-preview {
         margin-top: 0.2rem;

@@ -10,34 +10,33 @@ def get_attachment_name_by_sku(sku):
     for attachment in ATTACHMENTS:
         if attachment['sku'] == sku:
             return attachment['name']
-    return sku  # If SKU is not found, return the SKU itself
+    return sku
     
 
 def bag_contents(request):
     bag_items = []
-    total = Decimal(0)  # Ensure total is a Decimal
+    total = Decimal(0)
     product_count = 0
     bag = request.session.get('bag', {})
 
     print(f"Bag Contents: {bag}")
 
     for item_id, item_data in bag.items():
-        if isinstance(item_data, dict):  # Ensure item_data is a dictionary
+        if isinstance(item_data, dict):
             try:
-                # If it's a regular product (with ID)
                 if item_id.isdigit():
                     product = get_object_or_404(Product, pk=item_id)
-                    price = Decimal(str(item_data['price']))  # Ensure price is converted to Decimal
+                    price = Decimal(str(item_data['price']))
                 else:
                     # For custom products with SKU and attachments
                     sku = item_data.get('sku')
                     if not sku:
                         continue
                     product = get_object_or_404(Product, sku=sku)
-                    price = Decimal(str(item_data['price']))  # Ensure price is converted to Decimal
+                    price = Decimal(str(item_data['price']))
 
                 quantity = item_data['quantity']
-                total += quantity * price  # Keep total as Decimal
+                total += quantity * price
                 product_count += quantity
 
                 # Convert attachment SKUs to human-readable names

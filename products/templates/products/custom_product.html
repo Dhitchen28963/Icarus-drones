@@ -26,7 +26,6 @@
                 </div>
             </div>
 
-            <!-- Customization options on the right -->
             <div class="col-12 col-md-6">
                 <div class="customization-container custom-margin">
                     <!-- Drone Type Selection -->
@@ -56,14 +55,12 @@
                         </div>
                     </div>
 
-                    <!-- Add to Bag Form -->
                     <form class="form mt-5" action="{% url 'add_custom_drone_to_bag' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="sku" id="selected-drone-sku" value="falcon-x-10001-black">
                         <input type="hidden" name="quantity" value="1">
                         <input type="hidden" name="color" id="selected-drone-color" value="black">
 
-                        <!-- Attachments Checkboxes -->
                         {% for attachment in ATTACHMENTS %}
                             <div>
                                 <input type="checkbox" name="attachments" value="{{ attachment.sku }}" id="{{ attachment.sku }}">
@@ -71,7 +68,6 @@
                             </div>
                         {% endfor %}
 
-                        <!-- Add to Bag Button -->
                         <div class="col-12">
                             <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0">
                                 <span class="icon"><i class="fas fa-chevron-left"></i></span>
@@ -125,7 +121,6 @@
 
             droneTypeSelect.addEventListener('change', updateDroneImage);
 
-            // Arrow functionality for scrolling through colors
             leftArrow.addEventListener('click', function() {
                 currentColorIndex = (currentColorIndex === 0) ? colorItems.length - 1 : currentColorIndex - 1;
                 colorItems[currentColorIndex].checked = true;
