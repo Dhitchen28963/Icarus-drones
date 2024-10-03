@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from decimal import Decimal
 from .forms import OrderForm
-from products.models import Product  # Import Product to handle image fetching
-from products.constants import ATTACHMENTS  # Assuming you are using ATTACHMENTS in your project
+from products.models import Product
+from products.constants import ATTACHMENTS
 
 def get_attachment_name_by_sku(sku):
     """ Helper function to return the human-readable name of an attachment given its SKU """
@@ -58,24 +58,24 @@ def checkout(request):
 
         bag_items.append(item_data)
 
-    # Delivery fee (example: free delivery over 100, otherwise 10)
+    # Delivery fee
     delivery = Decimal(10) if total < 100 else Decimal(0)
     grand_total = total + delivery
 
     # Loyalty points calculation
     loyalty_points_earned = int(total // 10)
 
-    # Render the form
     order_form = OrderForm()
 
     context = {
         'order_form': order_form,
-        'bag_items': bag_items,  # Use the prepared bag_items
+        'bag_items': bag_items,
         'total': total,
         'delivery': delivery,
         'grand_total': grand_total,
         'loyalty_points_earned': loyalty_points_earned,
-        'product_count': sum(item['quantity'] for item in bag.values()),  # Number of products in the bag
+        'product_count': sum(item['quantity'] for item in bag.values()),
+        'stripe_public_key': 'pk_live_51Q0MMPRxTofVsr1TxwjhGHRxqqJdI940nHdGhLWUOmj8ivBhintvq71tjyzZiQpt1PiBpgD5yk6lbmMbYMJpOrHI00SDZ7Ue4d',
     }
 
     print(f"Bag items in checkout: {context['bag_items']}")
