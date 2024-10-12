@@ -4,8 +4,14 @@ from .models import Order, OrderLineItem
 
 class OrderLineItemAdminInline(admin.TabularInline):
     model = OrderLineItem
-    readonly_fields = ('lineitem_total',)
+    readonly_fields = ('lineitem_total', 'get_readable_attachments',)
     extra = 0
+    fields = ('product', 'quantity', 'get_readable_attachments', 'lineitem_total')
+
+    # Use human-readable names for attachments
+    def get_readable_attachments(self, obj):
+        return obj.get_readable_attachments()
+    get_readable_attachments.short_description = 'Attachments'
 
 
 class OrderAdmin(admin.ModelAdmin):

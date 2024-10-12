@@ -47,7 +47,7 @@ def bag_contents(request):
                     'item_id': item_id,
                     'quantity': quantity,
                     'product': product,
-                    'attachments': attachment_names,  # Use human-readable names
+                    'attachments': attachment_names,
                     'price': price,
                 })
             except Product.DoesNotExist:

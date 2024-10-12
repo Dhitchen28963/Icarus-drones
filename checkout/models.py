@@ -1,13 +1,12 @@
 import uuid
-
 from django.db import models
 from django.db.models import Sum
 from django.conf import settings
-
+from decimal import Decimal
 from django_countries.fields import CountryField
-
 from products.models import Product
 from profiles.models import UserProfile
+from products.constants import ATTACHMENTS
 
 
 class Order(models.Model):
@@ -53,7 +52,6 @@ class Order(models.Model):
 
     def loyalty_points_earned(self):
         """ Calculate loyalty points as a percentage of the grand total """
-        # 1 loyalty point for every $10 spent
         return int(self.grand_total / 10)
 
     def save(self, *args, **kwargs):
@@ -74,7 +72,21 @@ class OrderLineItem(models.Model):
     product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False, default=0)
     attachments = models.TextField(null=True, blank=True)
-    lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
+    lineitem_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False, editable=False)
+
+    def get_attachment_price(self):
+        """
+        Calculate the total price of the attachments.
+        The 'attachments' field contains a list of attachment SKUs.
+        """
+        total_attachment_price = Decimal(0)
+        if self.attachments:
+            attachment_skus = self.attachments.split(',')
+            for attachment_sku in attachment_skus:
+                for attachment in ATTACHMENTS:
+                    if attachment['sku'] == attachment_sku:
+                        total_attachment_price += Decimal(attachment['price'])
+        return total_attachment_price
 
     def save(self, *args, **kwargs):
         """
@@ -82,7 +94,25 @@ class OrderLineItem(models.Model):
         and update the order total.
         """
         self.lineitem_total = self.product.price * self.quantity
+
+        attachment_total = self.get_attachment_price()
+        self.lineitem_total += attachment_total * self.quantity
+
         super().save(*args, **kwargs)
+        self.order.update_total()
+
+    def get_readable_attachments(self):
+        """
+        Return a human-readable list of attachment names.
+        """
+        attachment_names = []
+        if self.attachments:
+            attachment_skus = self.attachments.split(',')
+            for sku in attachment_skus:
+                for attachment in ATTACHMENTS:
+                    if attachment['sku'] == sku:
+                        attachment_names.append(attachment['name'])
+        return ', '.join(attachment_names)
 
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'
