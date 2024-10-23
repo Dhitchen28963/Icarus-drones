@@ -118,7 +118,7 @@
                         {{ order_form.county | as_crispy_field }}
                         <div class="form-check form-check-inline float-right mr-0">
                             {% if user.is_authenticated %}
-                                <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
+                                <label class="form-check-label" for="id-save-info">Save this delivery information</label>
                                 <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info" checked>
                             {% else %}
                                 <label class="form-check-label" for="id-save-info">
@@ -159,6 +159,13 @@
                 </form>
             </div>
         </div>
+    </div>
+    <div id="loading-overlay"></div>
+        <h1 class="text-light logo-font loading-spinner">
+            <span class="icon">
+                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+            </span>
+        </h1>
     </div>
 {% endblock %}
 

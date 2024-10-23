@@ -102,12 +102,6 @@ a.category-badge > span.badge:hover {
     cursor: pointer;
 }
 
-select, input {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
 /* Custom Product page */
 .image-preview {
     margin-top: -4.5rem;
