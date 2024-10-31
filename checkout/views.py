@@ -33,8 +33,8 @@ def cache_checkout_data(request):
             pid = client_secret.split('_secret')[0]
             stripe.api_key = settings.STRIPE_SECRET_KEY
 
-            # Simplify the bag metadata for Stripe
-            simplified_bag = {
+            # Condense metadata for Stripe
+            condensed_bag = {
                 item_id: {
                     "quantity": item_data.get("quantity"),
                     "sku": item_data.get("sku", "N/A")
@@ -42,9 +42,19 @@ def cache_checkout_data(request):
                 for item_id, item_data in request.session.get('bag', {}).items()
             }
 
-            # Send simplified metadata to Stripe
+            # Convert to JSON and check size
+            bag_metadata = json.dumps(condensed_bag)
+            if len(bag_metadata) > 500:
+                for item_id in list(condensed_bag):
+                    # Remove items until within the 500-character limit
+                    condensed_bag.pop(item_id)
+                    bag_metadata = json.dumps(condensed_bag)
+                    if len(bag_metadata) <= 500:
+                        break
+
+            # Send condensed metadata to Stripe
             stripe.PaymentIntent.modify(pid, metadata={
-                'bag': json.dumps(simplified_bag),
+                'bag': bag_metadata,
                 'save_info': request.POST.get('save_info'),
                 'username': str(request.user),
             })

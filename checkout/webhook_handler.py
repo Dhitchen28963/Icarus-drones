@@ -77,22 +77,31 @@ class StripeWH_Handler:
                     stripe_pid=pid,
                 )
                 for item_id, item_data in json.loads(bag).items():
-                    product = Product.objects.get(id=item_id)
-                    if isinstance(item_data, int):
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            product=product,
-                            quantity=item_data,
-                        )
-                        order_line_item.save()
-                    else:
+                    try:
+                        # Check if item_id is numeric or a custom SKU
+                        if item_id.isdigit():
+                            # Regular product lookup by ID
+                            product = Product.objects.get(id=item_id)
+                        else:
+                            # Custom drone lookup by SKU
+                            product = Product.objects.get(sku=item_data['sku'])
+
                         quantity = item_data.get('quantity', 0)
+                        attachments = ','.join(item_data.get('attachments', []))
+
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
                             quantity=quantity,
+                            attachments=attachments
                         )
                         order_line_item.save()
+                    except Product.DoesNotExist as e:
+                        if order:
+                            order.delete()
+                        return HttpResponse(
+                            content=f'Webhook received: {event["type"]} | ERROR: {e}',
+                            status=500)
             except Exception as e:
                 if order:
                     order.delete()

@@ -41,7 +41,7 @@ var form = document.getElementById('payment-form');
 
 form.addEventListener('submit', function(ev) {
     ev.preventDefault();
-    card.update({ 'disabled': true});
+    card.update({ 'disabled': true });
     $('#submit-button').attr('disabled', true);
     $('#payment-form').fadeToggle(100);
     $('#loading-overlay').fadeToggle(100);
@@ -64,7 +64,7 @@ form.addEventListener('submit', function(ev) {
                     name: $.trim(form.full_name.value),
                     phone: $.trim(form.phone_number.value),
                     email: $.trim(form.email.value),
-                    address:{
+                    address: {
                         line1: $.trim(form.street_address1.value),
                         line2: $.trim(form.street_address2.value),
                         city: $.trim(form.town_or_city.value),
@@ -96,7 +96,7 @@ form.addEventListener('submit', function(ev) {
                 $(errorDiv).html(html);
                 $('#payment-form').fadeToggle(100);
                 $('#loading-overlay').fadeToggle(100);
-                card.update({ 'disabled': false});
+                card.update({ 'disabled': false });
                 $('#submit-button').attr('disabled', false);
             } else {
                 if (result.paymentIntent.status === 'succeeded') {
@@ -105,7 +105,7 @@ form.addEventListener('submit', function(ev) {
             }
         });
     }).fail(function () {
-        // just reload the page, the error will be in django messages
+        // Reload the page if caching fails; Django messages will display the error
         location.reload();
-    })
+    });
 });
