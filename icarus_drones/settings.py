@@ -30,7 +30,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')  # Fallback in case e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net']
+ALLOWED_HOSTS = [
+    '8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
+    'localhost',
+]
 
 # Application definition
 

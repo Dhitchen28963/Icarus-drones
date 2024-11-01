@@ -288,6 +288,25 @@ a.category-badge > span.badge:hover {
     overflow-y: auto;
 }
 
+/* All auth styles */
+
+.logout-page {
+    padding-top: 160px;
+}
+
+.auth-page {
+    padding-top: 180px;
+}
+
+.auth-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+
 /* -------------------------------- Media Queries */
 
 @media (max-width: 768px) {
