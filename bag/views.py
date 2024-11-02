@@ -1,3 +1,4 @@
+from decimal import Decimal 
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
@@ -13,8 +14,24 @@ def get_attachment_name_by_sku(sku):
 
 
 def view_bag(request):
-    """ A view that renders the bag contents page """
-    return render(request, 'bag/bag.html')
+    """ A view that renders the bag contents page with loyalty points """
+    bag = request.session.get('bag', {})
+    total = Decimal(0)
+
+    # Calculate total amount in the bag
+    for item_id, item_data in bag.items():
+        total += Decimal(item_data['price']) * item_data['quantity']
+
+    # Calculate loyalty points (assuming 1 point per $10 spent)
+    loyalty_points_earned = int(total // 10)
+
+    context = {
+        'bag': bag,
+        'total': total,
+        'loyalty_points_earned': loyalty_points_earned,
+    }
+
+    return render(request, 'bag/bag.html', context)
 
 
 def add_to_bag(request, item_id):

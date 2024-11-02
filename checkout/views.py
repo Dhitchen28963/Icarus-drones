@@ -9,6 +9,8 @@ import os
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 from products.models import Product
+from profiles.models import UserProfile
+from profiles.forms import UserProfileForm
 from products.constants import ATTACHMENTS
 from bag.contexts import bag_contents
 
@@ -46,7 +48,6 @@ def cache_checkout_data(request):
             bag_metadata = json.dumps(condensed_bag)
             if len(bag_metadata) > 500:
                 for item_id in list(condensed_bag):
-                    # Remove items until within the 500-character limit
                     condensed_bag.pop(item_id)
                     bag_metadata = json.dumps(condensed_bag)
                     if len(bag_metadata) <= 500:
@@ -67,7 +68,6 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
-    # Serialize bag contents to ensure JSON compatibility
     bag = request.session.get('bag', {})
     serialized_bag = {}
     for item_id, item_data in bag.items():
@@ -206,7 +206,25 @@ def checkout(request):
         loyalty_points_earned = int(total // 10)
         product_count = sum(item['quantity'] for item in bag.values())
 
-        order_form = OrderForm()
+        # Attempt to prefill the form with profile information if authenticated
+        if request.user.is_authenticated:
+            try:
+                profile = UserProfile.objects.get(user=request.user)
+                order_form = OrderForm(initial={
+                    'full_name': profile.full_name,
+                    'email': request.user.email,
+                    'phone_number': profile.default_phone_number,
+                    'country': profile.default_country,
+                    'postcode': profile.default_postcode,
+                    'town_or_city': profile.default_town_or_city,
+                    'street_address1': profile.default_street_address1,
+                    'street_address2': profile.default_street_address2,
+                    'county': profile.default_county,
+                })
+            except UserProfile.DoesNotExist:
+                order_form = OrderForm()
+        else:
+            order_form = OrderForm()
 
         if not stripe_public_key:
             messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
@@ -233,8 +251,33 @@ def checkout_success(request, order_number):
     if 'bag' in request.session:
         del request.session['bag']
 
+    # If user is authenticated, update profile and loyalty points
+    loyalty_points_earned = 0
+    if request.user.is_authenticated:
+        profile = UserProfile.objects.get(user=request.user)
+        order.user_profile = profile
+        order.save()
+
+        # Calculate and add loyalty points
+        total_amount = Decimal(order.grand_total)
+        loyalty_points_earned = int(total_amount // 10)
+        profile.loyalty_points += loyalty_points_earned
+        profile.save()
+
+        # Save user profile info if 'save_info' option was selected
+        if save_info:
+            profile.default_phone_number = order.phone_number
+            profile.default_country = order.country
+            profile.default_postcode = order.postcode
+            profile.default_town_or_city = order.town_or_city
+            profile.default_street_address1 = order.street_address1
+            profile.default_street_address2 = order.street_address2
+            profile.default_county = order.county
+            profile.save()
+
     template = 'checkout/checkout_success.html'
     context = {
         'order': order,
+        'loyalty_points_earned': loyalty_points_earned,
     }
     return render(request, template, context)
