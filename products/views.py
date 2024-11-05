@@ -121,3 +121,37 @@ def add_product(request):
     }
 
     return render(request, template, context)
+
+
+from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.contrib import messages
+from .models import Product
+from .forms import ProductForm
+
+def edit_product(request, product_id):
+    """ Edit a product in the store """
+    product = get_object_or_404(Product, pk=product_id)
+    
+    # Check if the product is a customizable drone
+    is_custom_drone = product.category.name == "Customizable Drones"  # Adjust as per your custom drone category/identifier
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Successfully updated product!')
+            return redirect(reverse('product_detail', args=[product.id]))
+        else:
+            messages.error(request, 'Failed to update product. Please ensure the form is valid.')
+    else:
+        form = ProductForm(instance=product)
+        messages.info(request, f'You are editing {product.name}')
+
+    template = 'products/edit_product.html'
+    context = {
+        'form': form,
+        'product': product,
+        'is_custom_drone': is_custom_drone,
+    }
+
+    return render(request, template, context)
