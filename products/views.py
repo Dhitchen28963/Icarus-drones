@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.db.models.functions import Lower
 from products.constants import ATTACHMENTS
 from .models import Product, Category
+from .forms import ProductForm
 
 # View to show all products, including sorting and search queries
 def all_products(request):
@@ -99,3 +100,14 @@ def custom_product(request):
     }
 
     return render(request, 'products/custom_product.html', context)
+
+
+def add_product(request):
+    """ Add a product to the store """
+    form = ProductForm()
+    template = 'products/add_product.html'
+    context = {
+        'form': form,
+    }
+
+    return render(request, template, context)
