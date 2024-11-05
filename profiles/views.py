@@ -13,13 +13,15 @@ def profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
-
-    form = UserProfileForm(instance=profile)
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        form = UserProfileForm(instance=profile)
     
     # Retrieve orders and calculate loyalty points for each
     orders = profile.orders.all()
     for order in orders:
-        order.loyalty_points_earned = int(order.grand_total // 10)  # Assuming 1 point per $10 spent
+        order.loyalty_points_earned = int(order.grand_total // 10)
 
     template = 'profiles/profile.html'
     context = {
