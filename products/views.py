@@ -34,8 +34,6 @@ def all_products(request):
 
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
-            if 'drones' in categories:
-                categories += ['deals', 'new_arrivals', 'bundles']
             products = products.filter(category__name__in=categories)
             categories = Category.objects.filter(name__in=categories)
 
@@ -72,14 +70,16 @@ def product_detail(request, product_id):
 
 # View renders the custom_product.html template for customizing specific drones
 def custom_product(request):
-    # Define the three specific drone models with SKU format
+    """ A view to render the custom product page with customizable options """
+    custom_drones = Product.objects.filter(category__name="custom_drones")
+    product = custom_drones.first() if custom_drones.exists() else None
+
     drones = [
         {'name': 'Falcon X', 'value': 'falcon-x-10001'},
         {'name': 'Sky Hawk', 'value': 'sky-hawk-10002'},
         {'name': 'Phantom Vortex', 'value': 'phantom-vortex-10003'},
     ]
 
-    # Available color options
     colors = [
         ('black', 'Black'),
         ('white', 'White'),
@@ -93,6 +93,7 @@ def custom_product(request):
     ]
 
     context = {
+        'product': product,
         'drones': drones,
         'colors': colors,
         'ATTACHMENTS': ATTACHMENTS,
@@ -101,40 +102,28 @@ def custom_product(request):
 
     return render(request, 'products/custom_product.html', context)
 
-
 def add_product(request):
     """ Add a product to the store """
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            product = form.save()
             messages.success(request, 'Successfully added product!')
-            return redirect(reverse('add_product'))
+            return redirect(reverse('product_detail', args=[product.id]))
         else:
             messages.error(request, 'Failed to add product. Please ensure the form is valid.')
     else:
         form = ProductForm()
         
-    template = 'products/add_product.html'
     context = {
         'form': form,
     }
-
-    return render(request, template, context)
-
-
-from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.contrib import messages
-from .models import Product
-from .forms import ProductForm
+    return render(request, 'products/add_product.html', context)
 
 def edit_product(request, product_id):
     """ Edit a product in the store """
     product = get_object_or_404(Product, pk=product_id)
     
-    # Check if the product is a customizable drone
-    is_custom_drone = product.category.name == "Customizable Drones"  # Adjust as per your custom drone category/identifier
-
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
@@ -147,11 +136,78 @@ def edit_product(request, product_id):
         form = ProductForm(instance=product)
         messages.info(request, f'You are editing {product.name}')
 
-    template = 'products/edit_product.html'
     context = {
         'form': form,
         'product': product,
-        'is_custom_drone': is_custom_drone,
     }
 
-    return render(request, template, context)
+    return render(request, 'products/edit_product.html', context)
+
+
+def delete_product(request, product_id):
+    """ Delete a product from the store """
+    product = get_object_or_404(Product, pk=product_id)
+    product.delete()
+    messages.success(request, 'Product deleted!')
+    return redirect(reverse('products'))
+
+
+def edit_custom_product(request, product_id):
+    """ Edit a custom drone with proper toast messages """
+    product = get_object_or_404(Product, pk=product_id)
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Successfully updated {product.name}!')
+            return redirect(reverse('edit_custom_product', args=[product.id]))
+        else:
+            messages.error(request, 'Failed to update the custom drone. Please ensure the form is valid.')
+    else:
+        form = ProductForm(instance=product)
+        messages.info(request, f'You are editing {product.name}')
+
+    # Extract type and color from SKU
+    sku_parts = product.sku.split('-')
+    product_type = sku_parts[0]
+    product_color = sku_parts[-1]
+
+    # Check if there are URL parameters for type and color
+    if 'drone_type' in request.GET and 'drone_color' in request.GET:
+        product_type = request.GET['drone_type']
+        product_color = request.GET['drone_color']
+
+    context = {
+        'form': form,
+        'product': product,
+        'product_type': product_type,
+        'product_color': product_color,
+        'drones': [
+            {'name': 'Falcon X', 'value': 'custom1'},
+            {'name': 'Sky Hawk', 'value': 'custom2'},
+            {'name': 'Phantom Vortex', 'value': 'custom3'},
+        ],
+        'colors': [
+            ('black', 'Black'),
+            ('white', 'White'),
+            ('blue', 'Blue'),
+            ('green', 'Green'),
+            ('pink', 'Pink'),
+            ('purple', 'Purple'),
+            ('red', 'Red'),
+            ('yellow', 'Yellow'),
+            ('orange', 'Orange'),
+        ],
+    }
+
+    return render(request, 'products/edit_custom_drone.html', context)
+
+
+def delete_custom_product(request, product_id):
+    """ Delete a custom drone and redirect to the products page """
+    product = get_object_or_404(Product, pk=product_id)
+    product_name = product.name  # Store the product name for the success message
+    product.delete()
+    messages.success(request, f'Custom drone "{product_name}" deleted successfully!')  # Include the product name in the message
+    return redirect(reverse('products'))

@@ -2,138 +2,257 @@
 {% load static %}
 
 {% block page_header %}
-    <div class="container header-container">
-        <div class="row">
-            <div class="col"></div>
-        </div>
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
     </div>
+</div>
 {% endblock %}
 
 {% block content %}
-    <div class="overlay"></div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col text-center mt-3">
-                <h2 class="logo-font">Customize Your Drone</h2>
-                <hr class="w-50 mb-1">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="image-preview">
-                    <img id="drone-image" class="card-img-top img-fluid" src="{{ MEDIA_URL }}custom1-black.webp" alt="Custom Drone">
+<div class="overlay"></div>
+<div class="container-fluid">
+    <!-- Custom Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-
-            <div class="col-12 col-md-6">
-                <div class="customization-container custom-margin">
-                    <!-- Drone Type Selection -->
-                    <label for="drone-type" class="form-label">Drone Type:</label>
-                    <select id="drone-type" name="drone_type" class="form-control mb-3">
-                        {% for drone in drones %}
-                            <option value="{{ drone.value }}">{{ drone.name }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <!-- Color Selection -->
-                    <div class="d-flex align-items-center justify-content-center my-3 color-selector-wrapper">
-                        <div class="arrow arrow-left" id="left-arrow">
-                            <i class="fas fa-chevron-left"></i>
-                        </div>
-                    
-                        <div class="color-selector d-flex justify-content-center mx-3 flex-wrap" id="color-carousel">
-                            {% for color_value, color_name in colors %}
-                            <label class="color-option {{ color_value }}-color">
-                                <input type="radio" name="color" value="{{ color_value }}" {% if forloop.first %}checked{% endif %}>
-                            </label>
-                            {% endfor %}
-                        </div>
-                    
-                        <div class="arrow arrow-right" id="right-arrow">
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-                    </div>
-
-                    <form class="form mt-5" action="{% url 'add_custom_drone_to_bag' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="sku" id="selected-drone-sku" value="falcon-x-10001-black">
-                        <input type="hidden" name="quantity" value="1">
-                        <input type="hidden" name="color" id="selected-drone-color" value="black">
-
-                        {% for attachment in ATTACHMENTS %}
-                            <div>
-                                <input type="checkbox" name="attachments" value="{{ attachment.sku }}" id="{{ attachment.sku }}">
-                                <label for="{{ attachment.sku }}">{{ attachment.name }} (+${{ attachment.price }})</label>
-                            </div>
-                        {% endfor %}
-
-                        <div class="col-12">
-                            <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0">
-                                <span class="icon"><i class="fas fa-chevron-left"></i></span>
-                                <span class="text-uppercase">Keep Shopping</span>
-                            </a>
-                            <input type="submit" class="btn btn-black rounded-0 text-uppercase" value="Add to Bag">
-                        </div>
-                    </form>
-
+                <div class="modal-body">
+                    Are you sure you want to delete this custom product?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            const droneImage = document.getElementById('drone-image');
-            const droneTypeSelect = document.getElementById('drone-type');
-            const colorOptions = document.querySelectorAll('input[name="color"]');
-            const selectedColorInput = document.getElementById('selected-drone-color');
-            const selectedSkuInput = document.getElementById('selected-drone-sku');
-            const leftArrow = document.getElementById('left-arrow');
-            const rightArrow = document.getElementById('right-arrow');
-            let currentColorIndex = 0;
+    <!-- Customization Content -->
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="image-preview">
+                <img id="drone-image" class="card-img-top img-fluid" src="{{ MEDIA_URL }}custom1-black.webp" alt="Custom Drone">
+            </div>
+        </div>
 
-            const skuMap = {
-                'falcon-x-10001': 'custom1',
-                'sky-hawk-10002': 'custom2',
-                'phantom-vortex-10003': 'custom3'
-            };
+        <div class="col-12 col-md-6">
+            <div class="customization-container custom-margin">
+                <!-- Drone Type Selection -->
+                <label for="drone-type" class="form-label">Drone Type:</label>
+                <select id="drone-type" name="drone_type" class="form-control mb-3">
+                    {% for drone in drones %}
+                        <option value="{{ drone.value }}">{{ drone.name }}</option>
+                    {% endfor %}
+                </select>
 
-            const colorItems = Array.from(colorOptions);
+                <!-- Color Selection -->
+                <div class="d-flex align-items-center justify-content-center my-3 color-selector-wrapper">
+                    <div class="arrow arrow-left" id="left-arrow">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
 
-            function updateDroneImage() {
-                const selectedType = droneTypeSelect.value;
-                const selectedColor = document.querySelector('input[name="color"]:checked').value;
-                selectedColorInput.value = selectedColor;
+                    <div class="color-selector d-flex justify-content-center mx-3 flex-wrap" id="color-carousel">
+                        {% for color_value, color_name in colors %}
+                            <label class="color-option {{ color_value }}-color">
+                                <input type="radio" name="color" value="{{ color_value }}" {% if forloop.first %}checked{% endif %}>
+                            </label>
+                        {% endfor %}
+                    </div>
 
-                if (selectedType && selectedColor) {
-                    const newSku = `${selectedType}-${selectedColor}`;
-                    selectedSkuInput.value = newSku;
+                    <div class="arrow arrow-right" id="right-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
 
-                    const newImageUrl = "{{ MEDIA_URL }}" + `${skuMap[selectedType]}-${selectedColor}.webp`;
-                    droneImage.src = newImageUrl;
+                <form class="form mt-5" action="{% url 'add_custom_drone_to_bag' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="sku" id="selected-drone-sku" value="falcon-x-10001-black">
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="color" id="selected-drone-color" value="black">
+
+                    {% for attachment in ATTACHMENTS %}
+                        <div>
+                            <input type="checkbox" name="attachments" value="{{ attachment.sku }}" id="{{ attachment.sku }}">
+                            <label for="{{ attachment.sku }}">{{ attachment.name }} (+${{ attachment.price }})</label>
+                        </div>
+                    {% endfor %}
+
+                    <div class="col-12">
+                        <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0">
+                            <span class="icon"><i class="fas fa-chevron-left"></i></span>
+                            <span class="text-uppercase">Keep Shopping</span>
+                        </a>
+                        <input type="submit" class="btn btn-black rounded-0 text-uppercase" value="Add to Bag">
+                    </div>
+                </form>
+
+                {% if request.user.is_superuser %}
+                    <div class="col-12 mt-3">
+                        {% if product %}
+                            <a href="#" class="btn btn-primary" id="editCustomProductButton">Edit</a>
+                            <button type="button" class="btn btn-danger" id="deleteCustomProductButton">Delete</button>
+                        {% else %}
+                            <span>No product available for editing.</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const droneImage = document.getElementById('drone-image');
+        const droneTypeSelect = document.getElementById('drone-type');
+        const colorOptions = document.querySelectorAll('input[name="color"]');
+        const selectedColorInput = document.getElementById('selected-drone-color');
+        const selectedSkuInput = document.getElementById('selected-drone-sku');
+        const editButton = document.getElementById('editCustomProductButton');
+        const leftArrow = document.getElementById('left-arrow');
+        const rightArrow = document.getElementById('right-arrow');
+        let currentColorIndex = 0;
+
+        // Map to relate SKU with image prefix
+        const skuMap = {
+            'falcon-x-10001': 'custom1',
+            'sky-hawk-10002': 'custom2',
+            'phantom-vortex-10003': 'custom3'
+        };
+
+        // Create an array of all color options for easy navigation
+        const colorItems = Array.from(colorOptions);
+
+        // Function to update the drone image based on selected type and color
+        function updateDroneImage() {
+            let selectedType = droneTypeSelect.value;
+            let selectedColor = document.querySelector('input[name="color"]:checked').value;
+            selectedColorInput.value = selectedColor;
+
+            if (selectedType && selectedColor) {
+                // Construct SKU and update hidden input
+                const newSku = `${selectedType}-${selectedColor}`;
+                selectedSkuInput.value = newSku;
+
+                // Construct new image URL and update the image source
+                const newImageUrl = "{{ MEDIA_URL }}" + `${skuMap[selectedType]}-${selectedColor}.webp`;
+                droneImage.src = newImageUrl;
+            }
+        }
+
+        // Function to display a toast message with the current selections
+        function showToast() {
+            const selectedTypeName = droneTypeSelect.options[droneTypeSelect.selectedIndex].text;
+            const selectedColorName = document.querySelector('input[name="color"]:checked').value;
+
+            // Update toast content
+            document.querySelector('.toast-body').innerHTML = `You are editing ${selectedTypeName} - ${selectedColorName} custom drone!`;
+            document.querySelector('.toast-header strong').innerHTML = 'Info';
+
+            // Show the toast
+            const toastElement = document.getElementById('infoToast');
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            console.log(`Toast displayed for: ${selectedTypeName} - ${selectedColorName}`); // Debug log
+        }
+
+        // Set initial state and show initial toast
+        function setInitialState() {
+            const currentImageSrc = droneImage ? droneImage.src : '';
+            if (currentImageSrc) {
+                const imageParts = currentImageSrc.split('/').pop().split('-');
+                const currentType = imageParts[0];
+                const currentColor = imageParts[1].split('.')[0];
+
+                // Select the matching type in the dropdown
+                for (let i = 0; i < droneTypeSelect.options.length; i++) {
+                    if (skuMap[droneTypeSelect.options[i].value] === currentType) {
+                        droneTypeSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+
+                // Check the matching color radio input
+                for (let i = 0; i < colorOptions.length; i++) {
+                    if (colorOptions[i].value === currentColor) {
+                        colorOptions[i].checked = true;
+                        break;
+                    }
                 }
             }
+        }
 
-            colorOptions.forEach(option => {
-                option.addEventListener('change', updateDroneImage);
-            });
-
-            droneTypeSelect.addEventListener('change', updateDroneImage);
-
-            leftArrow.addEventListener('click', function() {
-                currentColorIndex = (currentColorIndex === 0) ? colorItems.length - 1 : currentColorIndex - 1;
-                colorItems[currentColorIndex].checked = true;
-                updateDroneImage();
-            });
-
-            rightArrow.addEventListener('click', function() {
-                currentColorIndex = (currentColorIndex === colorItems.length - 1) ? 0 : currentColorIndex + 1;
-                colorItems[currentColorIndex].checked = true;
-                updateDroneImage();
-            });
-
+        // Event listeners for left and right arrow clicks to navigate color options
+        leftArrow.addEventListener('click', function() {
+            currentColorIndex = (currentColorIndex === 0) ? colorItems.length - 1 : currentColorIndex - 1;
+            colorItems[currentColorIndex].checked = true;
             updateDroneImage();
         });
-    </script>
+
+        rightArrow.addEventListener('click', function() {
+            currentColorIndex = (currentColorIndex === colorItems.length - 1) ? 0 : currentColorIndex + 1;
+            colorItems[currentColorIndex].checked = true;
+            updateDroneImage();
+        });
+
+        // Event listener for real-time updates when color is selected
+        colorOptions.forEach(option => {
+            option.addEventListener('change', updateDroneImage);
+        });
+
+        // Event listener for drone type changes
+        droneTypeSelect.addEventListener('change', updateDroneImage);
+
+        setInitialState(); // Set initial state on page load
+
+        // Event listener for Edit button to show toast on click
+        editButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default action
+            const selectedType = droneTypeSelect.value;
+            const selectedColor = document.querySelector('input[name="color"]:checked').value;
+
+            // Redirect to the edit page with the selected type and color as URL parameters
+            window.location.href = `{% url 'edit_custom_product' product.id %}?drone_type=${selectedType}&drone_color=${selectedColor}&show_toast=true`;
+        });
+
+
+        // Event listener for delete button to show confirmation modal
+        document.getElementById('deleteCustomProductButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('deleteConfirmationModal').modal('show');
+        });
+
+        // Event listener for confirming deletion
+        document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+            fetch("{% url 'delete_custom_product' product.id %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById('deleteConfirmationModal').modal('hide');
+                    // Show info toast for deletion confirmation
+                    document.querySelector('.toast-body').innerHTML = 'Product deleted!';
+                    const infoToast = new bootstrap.Toast(document.getElementById('infoToast'));
+                    infoToast.show(); // Show the info toast for deletion
+                    setTimeout(() => {
+                        window.location.href = "{% url 'products' %}";
+                    }, 10000);
+                } else {
+                    console.error('Error deleting the custom product');
+                }
+            }).catch(error => console.error('Error:', error));
+        });
+    });
+</script>
 {% endblock %}
