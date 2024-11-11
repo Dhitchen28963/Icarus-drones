@@ -43,6 +43,28 @@
         </div>
     </div>
 
+    <!-- Toast Container -->
+    <div class="message-container">
+        <div class="toast custom-toast rounded-0 border-top-0 d-none" data-autohide="false">
+            <div class="arrow-up arrow-success"></div>
+            <div class="w-100 toast-capper bg-success"></div>
+            <div class="toast-header bg-white text-dark">
+                <strong class="mr-auto">Success!</strong>
+                <button type="button" class="ml-2 mb-1 close text-dark" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body bg-white">
+                <div class="row">
+                    <div class="col">
+                        Product deleted successfully!
+                        <hr class="mt-1 mb-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="product-container col-10 offset-1">
             <div class="row mt-1 mb-2">
@@ -78,7 +100,7 @@
                                 {% if product.image %}
                                     <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
                                 {% else %}
-                                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="No Image Available">
+                                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
                                 {% endif %}
                             </a>
                             <div class="card-body pb-0">
@@ -89,11 +111,11 @@
                                     <div class="col">
                                         <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
                                         {% if product.category %}
-                                        <p class="small mt-1 mb-0">
-                                            <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
-                                                <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
-                                            </a>
-                                        </p>
+                                            <p class="small mt-1 mb-0">
+                                                <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
+                                                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                                </a>
+                                            </p>
                                         {% endif %}
                                         {% if product.rating %}
                                             <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
@@ -115,7 +137,7 @@
                         <div class="col-12 d-sm-none mb-5">
                             <hr>
                         </div>
-                    {% endif %}                        
+                    {% endif %}
                     {% if forloop.counter|divisibleby:2 %}
                         <div class="col-12 d-none d-sm-block d-md-block d-lg-none mb-5">
                             <hr>
@@ -139,90 +161,112 @@
 <div class="btt-button shadow-sm rounded-0 border border-black">
     <a class="btt-link d-flex h-100">
         <i class="fas fa-arrow-up text-black mx-auto my-auto"></i>
-    </a>    
+    </a>
 </div>
-
 {% endblock %}
 
 {% block postloadjs %}
-    {{ block.super }}
-    <script type="text/javascript">
-        // Scroll to top functionality
-        $('.btt-link').click(function(e) {
-            window.scrollTo(0,0);
-        });
-        
-        $('#sort-selector').change(function() {
-            var selector = $(this);
-            var currentUrl = new URL(window.location);
+{{ block.super }}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM Content Loaded");
 
-            var selectedVal = selector.val();
-            if (selectedVal != "reset") {
-                var sort = selectedVal.split("_")[0];
-                var direction = selectedVal.split("_")[1];
+        let selectedProductId = null;
 
-                currentUrl.searchParams.set("sort", sort);
-                currentUrl.searchParams.set("direction", direction);
-
-                window.location.replace(currentUrl);
-            } else {
-                currentUrl.searchParams.delete("sort");
-                currentUrl.searchParams.delete("direction");
-
-                window.location.replace(currentUrl);
-            }
-        });
-
-        // Handle deletion with modal confirmation
-        document.addEventListener('DOMContentLoaded', function() {
-            let selectedProductId = null;
-
-            document.querySelectorAll('.delete-product-button').forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    selectedProductId = this.getAttribute('data-product-id');
-                    $('#deleteConfirmationModal').modal('show');
-                });
+        document.querySelectorAll('.delete-product-button').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                selectedProductId = this.getAttribute('data-product-id');
+                console.log('Delete button clicked for product ID:', selectedProductId);
+                $('#deleteConfirmationModal').modal('show');
             });
+        });
 
-            // Confirm deletion on modal confirmation
-            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
-                if (selectedProductId) {
-                    fetch(`/products/delete/${selectedProductId}/`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}',
-                            'Content-Type': 'application/json'
-                        },
-                    }).then(response => {
-                        if (response.ok) {
-                            // Hide the modal
-                            $('#deleteConfirmationModal').modal('hide');
+        document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+            console.log('Delete confirmation button clicked.');
+            if (selectedProductId) {
+                console.log('Delete confirmed, sending fetch request for product ID:', selectedProductId);
+                fetch(`/products/delete/${selectedProductId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Fetch request successful');
+                        $('#deleteConfirmationModal').modal('hide');
 
-                            // Trigger the toast display
+                        // Remove the deleted product's card from the DOM
+                        const productCard = document.querySelector(`[data-product-id="${selectedProductId}"]`);
+                        if (productCard) {
+                            productCard.remove();
+                            console.log(`Product ID ${selectedProductId} removed from the page.`);
+                        } else {
+                            console.warn(`Product card for ID ${selectedProductId} not found.`);
+                        }
+
+                        // Show the success toast and then remove it from the DOM after a timeout
+                        setTimeout(function() {
                             const toastElement = document.querySelector('.toast.custom-toast');
+
                             if (toastElement) {
                                 console.log('Toast element found, displaying success toast');
-                                const toastBody = toastElement.querySelector('.toast-body');
-                                toastBody.innerHTML = 'Product deleted successfully!';
-                                const successToast = new bootstrap.Toast(toastElement);
-                                successToast.show();
-                            } else {
-                                console.log('Toast element not found');
-                            } 
+                                toastElement.classList.remove('d-none');
 
-                            // Redirect to the products page after showing the toast
-                            setTimeout(() => {
-                                window.location.href = "{% url 'products' %}";
-                            }, 5000);
-                        } else {
-                            console.error('Error deleting the product');
-                        }
-                    }).catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
-            });
+                                const successToast = new bootstrap.Toast(toastElement, {
+                                    autohide: true,
+                                    delay: 3000 // Toast will hide after 3 seconds
+                                });
+                                successToast.show();
+
+                                // Remove the toast from the DOM after it's been shown
+                                setTimeout(() => {
+                                    toastElement.classList.add('d-none');
+                                }, 3500);
+                            } else {
+                                console.log('Toast element not found in the DOM');
+                            }
+                        }, 500); // Adjust delay if necessary
+
+                    } else {
+                        console.error('Error deleting the product');
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                console.warn('No product ID selected for deletion.');
+            }
         });
-    </script>
+    });
+
+    // Scroll to top functionality
+    $('.btt-link').click(function(e) {
+        window.scrollTo(0, 0);
+    });
+
+    // Sorting functionality
+    $('#sort-selector').change(function() {
+        var selector = $(this);
+        var currentUrl = new URL(window.location);
+
+        var selectedVal = selector.val();
+        if (selectedVal != "reset") {
+            var sort = selectedVal.split("_")[0];
+            var direction = selectedVal.split("_")[1];
+
+            console.log('Redirecting to new sorted URL:', currentUrl.toString());
+            currentUrl.searchParams.set("sort", sort);
+            currentUrl.searchParams.set("direction", direction);
+            window.location.replace(currentUrl);
+        } else {
+            currentUrl.searchParams.delete("sort");
+            currentUrl.searchParams.delete("direction");
+
+            console.log('Resetting sort and redirecting to:', currentUrl.toString());
+            window.location.replace(currentUrl);
+        }
+    });
+</script>
 {% endblock %}
