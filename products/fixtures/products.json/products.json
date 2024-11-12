@@ -24,7 +24,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (DJI Fly App)",
+            "mobile_app_support": "Yes",
             "warranty": "1 year"
         }
     },
@@ -53,7 +53,7 @@
             "wind_resistance": "Yes",
             "material": "ABS Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (DJI Go 4 App)",
+            "mobile_app_support": "Yes",
             "warranty": "1 year"
         }
     },
@@ -82,7 +82,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium Alloy",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Autel Explorer App)",
+            "mobile_app_support": "Yes",
             "warranty": "1 year"
         }
     },
@@ -5063,6 +5063,7 @@
             "category": 7,
             "rating": "4.9",
             "image": "accessories3.webp",
+            "camera_quality": "4K",
             "color": "White",
             "compatibility": "Compatible with DJI, Autel, and Parrot.",
             "material": "Plastic and Glass",
@@ -5817,6 +5818,7 @@
             "description": "A black camera with various attachments.",
             "price": "299.99",
             "category": 7,
+            "camera_quality": "4K",
             "rating": "4.5",
             "image": "accessories45.webp",
             "color": "Black",
@@ -5835,6 +5837,7 @@
             "description": "A white camera with various attachments.",
             "price": "299.99",
             "category": 7,
+            "camera_quality": "4K",
             "rating": "4.5",
             "image": "accessories46.webp",
             "color": "White",
@@ -7263,7 +7266,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7292,7 +7295,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7321,7 +7324,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7350,7 +7353,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7379,7 +7382,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7408,7 +7411,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7437,7 +7440,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7466,7 +7469,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7495,7 +7498,7 @@
             "wind_resistance": "Yes",
             "material": "Carbon Fiber and Plastic",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Falcon App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7524,7 +7527,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7553,7 +7556,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7582,7 +7585,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7611,7 +7614,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7640,7 +7643,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7669,7 +7672,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7698,7 +7701,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7727,7 +7730,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7756,7 +7759,7 @@
             "wind_resistance": "Yes",
             "material": "Aluminum and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Sky Hawk App)",
+            "mobile_app_support": "Yes",
             "warranty": "2 years"
         }
     },
@@ -7785,7 +7788,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -7814,7 +7817,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -7843,7 +7846,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -7872,7 +7875,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -7901,7 +7904,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -7930,7 +7933,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -7959,7 +7962,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -7988,7 +7991,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     },
@@ -8017,7 +8020,7 @@
             "wind_resistance": "Yes",
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
-            "mobile_app_support": "Yes (Vortex Pro App)",
+            "mobile_app_support": "Yes",
             "warranty": "3 years"
         }
     }
