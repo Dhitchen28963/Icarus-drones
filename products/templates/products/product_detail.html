@@ -177,24 +177,17 @@
                         // Trigger the toast display
                         const toastElement = document.querySelector('.toast.custom-toast');
                         if (toastElement) {
-                            console.log('Toast element found, displaying success toast');
                             const toastBody = toastElement.querySelector('.toast-body');
                             toastBody.innerHTML = 'Product deleted successfully!';
                             const successToast = new bootstrap.Toast(toastElement);
                             successToast.show();
-                        } else {
-                            console.log('Toast element not found');
-                        } 
+                        }
 
                         // Redirect to the products page
                         setTimeout(() => {
                             window.location.href = "{% url 'products' %}";
-                        }, 5000); // Adjust the delay as needed
-                    } else {
-                        console.error('Error deleting the product');
+                        }, 5000);
                     }
-                }).catch(error => {
-                    console.error('Error:', error);
                 });
             }
         });

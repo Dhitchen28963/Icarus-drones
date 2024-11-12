@@ -169,7 +169,6 @@
 {{ block.super }}
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
-        console.log("DOM Content Loaded");
 
         let selectedProductId = null;
 
@@ -177,15 +176,12 @@
             button.addEventListener('click', function(event) {
                 event.preventDefault();
                 selectedProductId = this.getAttribute('data-product-id');
-                console.log('Delete button clicked for product ID:', selectedProductId);
                 $('#deleteConfirmationModal').modal('show');
             });
         });
 
         document.getElementById('confirmDeleteButton').addEventListener('click', function() {
-            console.log('Delete confirmation button clicked.');
             if (selectedProductId) {
-                console.log('Delete confirmed, sending fetch request for product ID:', selectedProductId);
                 fetch(`/products/delete/${selectedProductId}/`, {
                     method: 'POST',
                     headers: {
@@ -194,29 +190,23 @@
                     },
                 }).then(response => {
                     if (response.ok) {
-                        console.log('Fetch request successful');
                         $('#deleteConfirmationModal').modal('hide');
 
                         // Remove the deleted product's card from the DOM
                         const productCard = document.querySelector(`[data-product-id="${selectedProductId}"]`);
                         if (productCard) {
                             productCard.remove();
-                            console.log(`Product ID ${selectedProductId} removed from the page.`);
                         } else {
-                            console.warn(`Product card for ID ${selectedProductId} not found.`);
                         }
 
                         // Show the success toast and then remove it from the DOM after a timeout
                         setTimeout(function() {
                             const toastElement = document.querySelector('.toast.custom-toast');
-
                             if (toastElement) {
-                                console.log('Toast element found, displaying success toast');
                                 toastElement.classList.remove('d-none');
-
                                 const successToast = new bootstrap.Toast(toastElement, {
                                     autohide: true,
-                                    delay: 3000 // Toast will hide after 3 seconds
+                                    delay: 3000
                                 });
                                 successToast.show();
 
@@ -225,18 +215,14 @@
                                     toastElement.classList.add('d-none');
                                 }, 3500);
                             } else {
-                                console.log('Toast element not found in the DOM');
                             }
                         }, 500); // Adjust delay if necessary
 
                     } else {
-                        console.error('Error deleting the product');
                     }
                 }).catch(error => {
-                    console.error('Error:', error);
                 });
             } else {
-                console.warn('No product ID selected for deletion.');
             }
         });
     });
@@ -256,15 +242,12 @@
             var sort = selectedVal.split("_")[0];
             var direction = selectedVal.split("_")[1];
 
-            console.log('Redirecting to new sorted URL:', currentUrl.toString());
             currentUrl.searchParams.set("sort", sort);
             currentUrl.searchParams.set("direction", direction);
             window.location.replace(currentUrl);
         } else {
             currentUrl.searchParams.delete("sort");
             currentUrl.searchParams.delete("direction");
-
-            console.log('Resetting sort and redirecting to:', currentUrl.toString());
             window.location.replace(currentUrl);
         }
     });

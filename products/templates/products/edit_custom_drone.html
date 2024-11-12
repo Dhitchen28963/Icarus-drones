@@ -25,6 +25,7 @@
             <div class="col-12 col-md-6">
                 <form method="POST" action="{% url 'edit_custom_product' product.id %}" class="form mb-2" enctype="multipart/form-data">
                     {% csrf_token %}
+                    
                     <!-- Drone Type Selection -->
                     <div class="form-group">
                         <label for="drone-type">Drone Type:</label>
@@ -45,9 +46,42 @@
                         </select>
                     </div>
 
-                    <div class="text-right">
+                    <!-- Existing Attachments -->
+                    <div class="form-group">
+                        <h4>Manage Attachments</h4>
+                        <label>Select attachments to remove:</label>
+                        <ul>
+                            {% for attachment in attachments %}
+                                <li>
+                                    <input type="checkbox" name="remove_attachments" value="{{ attachment.id }}">
+                                    {{ attachment.name }} - {{ attachment.description }} (${{ attachment.price }})
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Add New Attachment -->
+                    <div class="form-group">
+                        <h4>Add New Attachment</h4>
+                        <label>Enter details for a new attachment:</label>
+                        <div class="mb-2">
+                            <label for="attachment-name">Name:</label>
+                            <input type="text" name="attachment_name" id="attachment-name" class="form-control" placeholder="Attachment name" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="attachment-description">Description:</label>
+                            <input type="text" name="attachment_description" id="attachment-description" class="form-control" placeholder="Attachment description" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="attachment-price">Price:</label>
+                            <input type="number" name="attachment_price" id="attachment-price" class="form-control" placeholder="Attachment price" required min="0">
+                        </div>
+                        <button type="submit" name="add_attachment" class="btn btn-primary">Add Attachment</button>
+                    </div>
+
+                    <div class="text-right mt-4">
                         <a class="btn btn-outline-black rounded-0" href="{% url 'custom_product' %}">Cancel</a>
-                        <button class="btn btn-black rounded-0" type="submit">Update Custom Drone</button>
+                        <button class="btn btn-black rounded-0" type="submit" name="update_product">Update Custom Drone</button>
                     </div>
                 </form>
             </div>            
@@ -70,10 +104,9 @@
 
             // Create a toast instance
             let toastInstance = new bootstrap.Toast(toastElement, {
-                autohide: false // Prevent automatic hiding for this instance
+                autohide: false
             });
 
-            // Function to show the toast for a specified duration
             function showToastForDuration(duration) {
                 toastInstance.show();
                 setTimeout(() => {
@@ -81,39 +114,24 @@
                 }, duration);
             }
 
-            // Set initial state on page load
             function setInitialState() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const selectedTypeValue = urlParams.get('drone_type') || '{{ product_type }}';
                 const selectedColor = urlParams.get('drone_color') || '{{ product_color }}';
                 const showToast = urlParams.get('show_toast');
 
-                // Map incoming type value to expected dropdown value
                 const mappedTypeValue = skuMapping[selectedTypeValue] || selectedTypeValue;
-
-                console.log('Initial selectedTypeValue:', mappedTypeValue); // Debugging line
-                console.log('Initial selectedColor:', selectedColor); // Debugging line
-
-                // Set the selected type in the dropdown
                 let typeSet = false;
                 for (let i = 0; i < droneTypeSelect.options.length; i++) {
-                    console.log('Option value:', droneTypeSelect.options[i].value, 'MappedTypeValue:', mappedTypeValue); // Debugging line
                     if (droneTypeSelect.options[i].value === mappedTypeValue) {
                         droneTypeSelect.selectedIndex = i;
                         typeSet = true;
                         break;
                     }
                 }
-
-                if (!typeSet) {
-                    console.warn('Type not set correctly, defaulting to the first option.');
-                    droneTypeSelect.selectedIndex = 0; // Default to the first option if not matched
-                }
-
-                // Get the friendly display name for the type
+                if (!typeSet) droneTypeSelect.selectedIndex = 0;
                 const selectedTypeName = typeSet ? droneTypeSelect.options[droneTypeSelect.selectedIndex].text : droneTypeSelect.options[0].text;
 
-                // Set the selected color in the dropdown
                 for (let i = 0; i < droneColorSelect.options.length; i++) {
                     if (droneColorSelect.options[i].value === selectedColor) {
                         droneColorSelect.selectedIndex = i;
@@ -121,23 +139,18 @@
                     }
                 }
 
-                // Get the friendly display name for the color
                 const selectedColorOption = Array.from(droneColorSelect.options).find(option => option.value === selectedColor);
                 const selectedColorName = selectedColorOption ? selectedColorOption.getAttribute("data-color-name") : selectedColor;
 
-                // Show the toast message on initial load if show_toast is true
                 if (showToast === 'true') {
                     document.querySelector('.toast-body').innerHTML = `You are editing ${selectedTypeName} - ${selectedColorName} custom drone!`;
                     document.querySelector('.toast-header strong').innerHTML = 'Info';
-
-                    // Show the toast for 20 seconds
                     showToastForDuration(20000);
                 }
             }
 
-            setInitialState(); // Call to set the initial state on load
+            setInitialState();
 
-            // Function to update the toast message with current selections and show it
             function updateToastMessage() {
                 const selectedTypeName = droneTypeSelect.options[droneTypeSelect.selectedIndex].text;
                 const selectedColorName = droneColorSelect.options[droneColorSelect.selectedIndex].getAttribute("data-color-name");
@@ -145,11 +158,9 @@
                 document.querySelector('.toast-body').innerHTML = `You are editing ${selectedTypeName} - ${selectedColorName} custom drone!`;
                 document.querySelector('.toast-header strong').innerHTML = 'Info';
 
-                // Show the toast for a shorter duration (e.g., 6 seconds)
                 showToastForDuration(6000);
             }
 
-            // Add event listeners for real-time updates
             droneTypeSelect.addEventListener('change', updateToastMessage);
             droneColorSelect.addEventListener('change', updateToastMessage);
         });

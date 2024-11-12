@@ -31,7 +31,6 @@
       <script src="https://js.stripe.com/v3/"></script>
       <script>
         $(document).ready(function() {
-          console.log('jQuery is ready');
         });
       </script>
     {% endblock %}
@@ -154,7 +153,15 @@
 
     {% block postloadjs %}
     <script type="text/javascript">
-      $('.toast').toast('show');
+      document.addEventListener('DOMContentLoaded', function() {
+        // Override Bootstrap toast default delay settings
+        if ($.fn.toast) {
+          $.fn.toast.Constructor.Default.delay = 6000;
+        }
+
+        // Display all toasts immediately when the page loads
+        $('.toast').toast('show');
+      });
     </script>
     {% endblock %}
   </body>

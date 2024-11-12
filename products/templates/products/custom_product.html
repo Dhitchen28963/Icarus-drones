@@ -161,7 +161,6 @@
             const toastElement = document.getElementById('infoToast');
             const toast = new bootstrap.Toast(toastElement);
             toast.show();
-            console.log(`Toast displayed for: ${selectedTypeName} - ${selectedColorName}`); // Debug log
         }
 
         // Set initial state and show initial toast
@@ -244,14 +243,12 @@
                     // Show info toast for deletion confirmation
                     document.querySelector('.toast-body').innerHTML = 'Product deleted!';
                     const infoToast = new bootstrap.Toast(document.getElementById('infoToast'));
-                    infoToast.show(); // Show the info toast for deletion
+                    infoToast.show();
                     setTimeout(() => {
                         window.location.href = "{% url 'products' %}";
                     }, 10000);
-                } else {
-                    console.error('Error deleting the custom product');
                 }
-            }).catch(error => console.error('Error:', error));
+            });
         });
     });
 </script>

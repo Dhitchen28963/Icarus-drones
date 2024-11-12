@@ -1,37 +1,275 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block page_header %}
-    <div class="container header-container">
-        <div class="row">
-            <div class="col"></div>
-        </div>
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
     </div>
+</div>
 {% endblock %}
 
 {% block content %}
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <hr>
-                <h2 class="logo-font mb-4">Product Management</h2>
-                <h5 class="text-muted">Add a Product</h5>
-                <hr>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <form method="POST" action="{% url 'add_product' %}" class="form mb-2" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ form | crispy }}
-                    <div class="text-right">
-                        <a class="btn btn-outline-black rounded-0" href="{% url 'products' %}">Cancel</a>
-                        <button class="btn btn-black rounded-0" type="submit">Add Product</button>
-                    </div>
-                </form>
-            </div>            
+<div class="overlay"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <hr>
+            <h2 class="logo-font mb-4">Product Management</h2>
+            <h5 class="text-muted">Add a Product</h5>
+            <hr>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <form method="POST" action="{% url 'add_product' %}" class="form mb-2" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Main Category Selection -->
+                <div id="div_id_category" class="form-group">
+                    <label for="id_category" class="form-label">Category</label>
+                    <select name="category" id="id_category" class="border-black rounded-0 select form-select">
+                        <option value="1">Drones</option>
+                        <option value="2">Accessories</option>
+                        <option value="3">Carry Cases</option>
+                        <option value="4">Remotes</option>
+                        <option value="5">Battery Packs</option>
+                        <option value="6">Propellors and Blades</option>
+                        <option value="7">Cameras</option>
+                        <option value="8">Lenses</option>
+                        <option value="9">VR Goggles</option>
+                        <option value="10">Drone Spare Parts</option>
+                        <option value="11">Bundles</option>
+                        <option value="12">New Arrivals</option>
+                        <option value="13">Deals</option>
+                        <option value="14">Custom Drones</option>
+                    </select>
+                </div>
+
+                <!-- Subcategory for "New Arrivals" and "Deals" -->
+                <div id="div_id_subcategory" class="form-group" style="display: none;">
+                    <label for="id_subcategory" class="form-label">Subcategory</label>
+                    <select name="subcategory" id="id_subcategory" class="border-black rounded-0 select form-select">
+                        <option value="">Select a subcategory</option>
+                        <option value="1">Drones</option>
+                        <option value="2">Accessories</option>
+                        <option value="3">Carry Cases</option>
+                        <option value="4">Remotes</option>
+                        <option value="5">Battery Packs</option>
+                        <option value="6">Propellors and Blades</option>
+                        <option value="7">Cameras</option>
+                        <option value="8">Lenses</option>
+                        <option value="9">VR Goggles</option>
+                        <option value="10">Drone Spare Parts</option>
+                        <option value="11">Bundles</option>
+                        <option value="14">Custom Drones</option>
+                    </select>
+                </div>
+
+                <!-- General Fields -->
+                <div id="div_id_sku" class="form-group">
+                    <label for="id_sku" class="form-label">Sku</label>
+                    <input type="text" name="sku" id="id_sku" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_name" class="form-group">
+                    <label for="id_name" class="form-label requiredField">Name<span class="asteriskField">*</span></label>
+                    <input type="text" name="name" id="id_name" class="border-black rounded-0 textinput form-control" required>
+                </div>
+
+                <div id="div_id_description" class="form-group">
+                    <label for="id_description" class="form-label requiredField">Description<span class="asteriskField">*</span></label>
+                    <textarea name="description" id="id_description" class="border-black rounded-0 textarea form-control" required></textarea>
+                </div>
+
+                <div id="div_id_price" class="form-group">
+                    <label for="id_price" class="form-label requiredField">Price<span class="asteriskField">*</span></label>
+                    <input type="number" name="price" id="id_price" class="border-black rounded-0 numberinput form-control" step="0.01" required>
+                </div>
+
+                <div id="div_id_image" class="form-group">
+                    <label for="id_image" class="form-label">Image</label>
+                    <input type="file" name="image" id="id_image" class="border-black rounded-0 form-control">
+                </div>
+
+                <!-- Category-specific fields -->
+                <div id="div_id_color" class="form-group">
+                    <label for="id_color" class="form-label">Color</label>
+                    <input type="text" name="color" id="id_color" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_rotors" class="form-group">
+                    <label for="id_rotors" class="form-label">Rotors</label>
+                    <input type="number" name="rotors" id="id_rotors" class="border-black rounded-0 numberinput form-control">
+                </div>
+
+                <div id="div_id_speed" class="form-group">
+                    <label for="id_speed" class="form-label">Speed</label>
+                    <input type="text" name="speed" id="id_speed" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_weight" class="form-group">
+                    <label for="id_weight" class="form-label">Weight</label>
+                    <input type="text" name="weight" id="id_weight" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_flight_time" class="form-group">
+                    <label for="id_flight_time" class="form-label">Flight Time</label>
+                    <input type="text" name="flight_time" id="id_flight_time" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_camera" class="form-group">
+                    <label for="id_camera" class="form-label">Camera</label>
+                    <select name="camera" id="id_camera" class="border-black rounded-0 select form-select">
+                        <option value="" selected>---------</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div id="div_id_camera_quality" class="form-group">
+                    <label for="id_camera_quality" class="form-label">Camera Quality</label>
+                    <input type="text" name="camera_quality" id="id_camera_quality" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_compatibility" class="form-group">
+                    <label for="id_compatibility" class="form-label">Compatibility</label>
+                    <input type="text" name="compatibility" id="id_compatibility" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_package_contents" class="form-group">
+                    <label for="id_package_contents" class="form-label">Package Contents</label>
+                    <textarea name="package_contents" id="id_package_contents" class="border-black rounded-0 textarea form-control"></textarea>
+                </div>
+
+                <div id="div_id_warranty" class="form-group">
+                    <label for="id_warranty" class="form-label">Warranty</label>
+                    <input type="text" name="warranty" id="id_warranty" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_material" class="form-group">
+                    <label for="id_material" class="form-label">Material</label>
+                    <input type="text" name="material" id="id_material" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_control_range" class="form-group">
+                    <label for="id_control_range" class="form-label">Control Range</label>
+                    <input type="text" name="control_range" id="id_control_range" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <!-- Additional fields for Bundles -->
+                <div id="div_id_drones_included" class="form-group">
+                    <label for="id_drones_included" class="form-label">Drones Included</label>
+                    <input type="number" name="drones_included" id="id_drones_included" class="border-black rounded-0 numberinput form-control">
+                </div>
+
+                <div id="div_id_drone_model" class="form-group">
+                    <label for="id_drone_model" class="form-label">Drone Model</label>
+                    <input type="text" name="drone_model" id="id_drone_model" class="border-black rounded-0 textinput form-control">
+                </div>
+
+                <div id="div_id_accessories_included" class="form-group">
+                    <label for="id_accessories_included" class="form-label">Accessories Included</label>
+                    <textarea name="accessories_included" id="id_accessories_included" class="border-black rounded-0 textarea form-control"></textarea>
+                </div>
+
+                <div class="text-right mt-3">
+                    <a class="btn btn-outline-black rounded-0" href="{% url 'products' %}">Cancel</a>
+                    <button class="btn btn-black rounded-0" type="submit">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CSS for Field Display Control -->
+<style>
+    .form-group {
+        display: none; /* Hide all fields by default */
+    }
+
+    .show-field {
+        display: block !important; /* Only fields with this class will show */
+    }
+</style>
+
+<!-- JavaScript for Dynamic Display Logic -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.querySelector('#id_category');
+    const subcategorySelect = document.querySelector('#id_subcategory');
+    const subcategoryDiv = document.querySelector('#div_id_subcategory');
+
+    const categoryMap = {
+        '1': 'Drones',
+        '2': 'Accessories',
+        '3': 'Carry Cases',
+        '4': 'Remotes',
+        '5': 'Battery Packs',
+        '6': 'Propellors and Blades',
+        '7': 'Cameras',
+        '8': 'Lenses',
+        '9': 'VR Goggles',
+        '10': 'Drone Spare Parts',
+        '11': 'Bundles',
+        '12': 'New Arrivals',
+        '13': 'Deals',
+        '14': 'Custom Drones'
+    };
+
+    const fieldGroups = {
+        'Drones': ['color', 'rotors', 'speed', 'weight', 'flight_time', 'camera', 'camera_quality', 'collision_avoidance', 'gps', 'control_range', 'max_altitude', 'wind_resistance', 'material', 'remote_control', 'mobile_app_support', 'warranty'],
+        'Accessories': ['color', 'compatibility', 'material', 'package_contents', 'warranty'],
+        'Carry Cases': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'Remotes': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'Battery Packs': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'Propellors and Blades': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'Cameras': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'Lenses': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'VR Goggles': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'Drone Spare Parts': ['compatibility', 'material', 'package_contents', 'warranty'],
+        'Bundles': ['drones_included', 'drone_model', 'rotors', 'color', 'camera', 'camera_quality', 'flight_time', 'gps', 'control_range', 'accessories_included', 'compatibility', 'package_contents', 'warranty'],
+        'Custom Drones': ['color', 'rotors', 'speed', 'weight', 'flight_time', 'camera', 'camera_quality', 'collision_avoidance', 'gps', 'control_range', 'max_altitude', 'wind_resistance', 'material', 'remote_control', 'mobile_app_support', 'warranty']
+    };
+
+    function toggleFields(selectedCategory, selectedSubcategory) {
+        document.querySelectorAll('.form-group').forEach(field => field.classList.remove('show-field'));
+
+        fieldGroups['Default'] = ['sku', 'name', 'description', 'price', 'image', 'category'];
+
+        fieldGroups['Default'].forEach(fieldId => {
+            document.querySelector(`#div_id_${fieldId}`).classList.add('show-field');
+        });
+
+        const fieldsToShow = selectedSubcategory ? fieldGroups[selectedSubcategory] : fieldGroups[selectedCategory];
+        if (fieldsToShow) {
+            fieldsToShow.forEach(fieldId => {
+                const fieldElement = document.querySelector(`#div_id_${fieldId}`);
+                if (fieldElement) {
+                    fieldElement.classList.add('show-field');
+                }
+            });
+        }
+    }
+
+    function updateFormFields() {
+        const selectedCategory = categoryMap[categorySelect.value];
+        const selectedSubcategory = subcategorySelect.value ? categoryMap[subcategorySelect.value] : null;
+
+        if (selectedCategory === 'New Arrivals' || selectedCategory === 'Deals') {
+            subcategoryDiv.style.display = 'block';
+        } else {
+            subcategoryDiv.style.display = 'none';
+        }
+
+        toggleFields(selectedCategory, selectedSubcategory);
+    }
+
+    categorySelect.addEventListener('change', updateFormFields);
+    subcategorySelect.addEventListener('change', updateFormFields);
+    updateFormFields();
+});
+</script>
 {% endblock %}
