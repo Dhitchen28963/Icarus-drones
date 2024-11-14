@@ -53,20 +53,40 @@ def add_to_bag(request, item_id):
 
 
 def add_custom_drone_to_bag(request):
-    """Add a custom drone to the shopping bag"""
+    """Add a custom drone to the shopping bag with debugging"""
     if request.method == 'POST':
-        sku = request.POST.get('sku')
+        color = request.POST.get('color')
         quantity = int(request.POST.get('quantity', 1))
         attachments = request.POST.getlist('attachments')
+        selected_drone_model = request.POST.get('drone_type')
+
+        # Debugging: Print retrieved form data
+        print(f"Selected Drone Model: {selected_drone_model}, Color: {color}")
+
+        # Ensure both selected_drone_model and color are provided
+        if not selected_drone_model or not color:
+            messages.error(request, "Drone model or color is missing.")
+            return redirect('view_bag')
 
         try:
-            product = Product.objects.get(sku=sku)
+            # Attempt to find a matching product using model and color
+            product = Product.objects.get(
+                sku__startswith=selected_drone_model,
+                color__iexact=color
+            )
+            sku = product.sku
+            drone_type = product.name.split(' - ')[0]
+
+            # Debugging: Print product details
+            print(f"Product Found - SKU: {sku}, Drone Type: {drone_type}, Color: {color}, Price: {product.price}")
         except Product.DoesNotExist:
+            # Debugging: Log when product is not found
+            print(f"No product found for model '{selected_drone_model}' and color '{color}'")
             messages.error(request, "The product you tried to add was not found.")
             return redirect('view_bag')
 
-        # Create a unique key based on SKU and attachments
-        custom_key = f"{sku}"
+        # Create a unique key based on SKU and color
+        custom_key = f"{sku}-{color}"
         if attachments:
             custom_key = f"{custom_key}-{'-'.join(attachments)}"
 
@@ -74,29 +94,41 @@ def add_custom_drone_to_bag(request):
 
         # Calculate attachment costs and the final price
         extra_cost = sum(float(att['price']) for att in ATTACHMENTS if att['sku'] in attachments)
-        final_price = float(product.price) + extra_cost  # Base price + attachment costs
+        final_price = float(product.price) + extra_cost
 
+        # Add or update the custom item in the bag
         if custom_key in bag:
             bag[custom_key]['quantity'] += quantity
             attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
             attachments_text = ', '.join(attachment_names)
-            messages.success(request, f'Updated {product.name} with attachments: {attachments_text} quantity to {bag[custom_key]["quantity"]}.')
+            messages.success(request, f'Updated {drone_type} - {color} with attachments: {attachments_text} quantity to {bag[custom_key]["quantity"]}.')
+            # Debugging: Print updated bag item
+            print(f"Updated Bag Item: {bag[custom_key]}")
         else:
             bag[custom_key] = {
                 'quantity': quantity,
                 'price': final_price,
                 'attachments': attachments,
                 'sku': sku,
+                'drone_type': drone_type,
+                'color': color,
+                'image_url': f"/media/{product.image}",
+                'name': f"{drone_type} - {color}"
             }
             attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
             attachments_text = ', '.join(attachment_names)
             if attachments:
-                messages.success(request, f"{product.name} with attachments: {attachments_text} added to your bag.")
+                messages.success(request, f"{drone_type} - {color} with attachments: {attachments_text} added to your bag.")
             else:
-                messages.success(request, f"{product.name} without attachments added to your bag.")
+                messages.success(request, f"{drone_type} - {color} added to your bag.")
+            
+            # Debugging: Print newly added bag item
+            print(f"Added Bag Item: {bag[custom_key]}")
 
+        # Update the session
         request.session['bag'] = bag
         return redirect('view_bag')
+
 
 
 def adjust_bag(request, item_id):

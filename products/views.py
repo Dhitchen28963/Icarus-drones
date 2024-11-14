@@ -2,7 +2,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
-from django.db.models.functions import Lower
+from django.db.models.functions import Lower, Substr
 from products.constants import ATTACHMENTS
 from .models import Product, Category, Attachment
 from .forms import ProductForm, AttachmentForm
@@ -68,33 +68,48 @@ def product_detail(request, product_id):
 
     return render(request, 'products/product_detail.html', context)
 
-# View renders the custom_product.html template for customizing specific drones
+# View renders the custom drones
 def custom_product(request):
     """ A view to render the custom product page with customizable options """
-    custom_drones = Product.objects.filter(category__name="custom_drones")
-    product = custom_drones.first() if custom_drones.exists() else None
 
-    drones = [
-        {'name': 'Falcon X', 'value': 'falcon-x-10001'},
-        {'name': 'Sky Hawk', 'value': 'sky-hawk-10002'},
-        {'name': 'Phantom Vortex', 'value': 'phantom-vortex-10003'},
-    ]
+    # Fetch all products categorized as 'Custom Drones'
+    custom_drones = Product.objects.filter(category__name="custom_drones").annotate(
+        base_model=Substr('sku', 1, 15)
+    )
+
+    unique_drones = {}
+    for drone in custom_drones:
+        base_model = drone.base_model
+
+        # Ensure that all trailing digits and hyphens are removed from the base model
+        if base_model:
+            base_model = base_model.rstrip("0123456789-")
+
+            # Store unique drone models only once by their cleaned base name
+            if base_model not in unique_drones:
+                unique_drones[base_model] = {
+                    'name': drone.name.split(' - ')[0],
+                    'value': base_model,
+                    'colors': [],
+                }
+
+            # Add color options for each drone type
+            unique_drones[base_model]['colors'].append({
+                'color': drone.color,
+                'image': drone.image,
+            })
+
+    drone_options = list(unique_drones.values())
 
     colors = [
-        ('black', 'Black'),
-        ('white', 'White'),
-        ('blue', 'Blue'),
-        ('green', 'Green'),
-        ('pink', 'Pink'),
-        ('purple', 'Purple'),
-        ('red', 'Red'),
-        ('yellow', 'Yellow'),
-        ('orange', 'Orange'),
+        ('black', 'Black'), ('white', 'White'), ('blue', 'Blue'),
+        ('green', 'Green'), ('pink', 'Pink'), ('purple', 'Purple'),
+        ('red', 'Red'), ('yellow', 'Yellow'), ('orange', 'Orange'),
     ]
 
     context = {
-        'product': product,
-        'drones': drones,
+        'product': custom_drones.first() if custom_drones.exists() else None,
+        'drones': drone_options,
         'colors': colors,
         'ATTACHMENTS': ATTACHMENTS,
         'MEDIA_URL': settings.MEDIA_URL,
@@ -107,13 +122,15 @@ def add_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save()
+            product = form.save(commit=False)
+            if not product.image:
+                product.image = 'products/noimage.webp'
+            product.save()
             messages.success(request, 'Successfully added product!')
             return redirect(reverse('product_detail', args=[product.id]))
         else:
             messages.error(request, 'Failed to add product. Please ensure the form is valid.')
     else:
-        # Get category from request GET parameters if provided
         category_id = request.GET.get('category')
         initial_data = {'category': category_id} if category_id else {}
         form = ProductForm(initial=initial_data)
@@ -157,54 +174,71 @@ def delete_product(request, product_id):
     messages.success(request, 'Product deleted!')
     return redirect(reverse('products'))
 
+
 def edit_custom_product(request, product_id):
     """ Edit a custom drone with attachment management functionality """
     product = get_object_or_404(Product, pk=product_id)
     form = ProductForm(instance=product)
     attachment_form = AttachmentForm(request.POST or None, request.FILES or None)
 
-    # Handle form submissions for updating the product, adding attachments, or removing attachments
     if request.method == 'POST':
-        # Update the custom drone's information
         if 'update_product' in request.POST:
             form = ProductForm(request.POST, request.FILES, instance=product)
             if form.is_valid():
                 form.save()
                 messages.success(request, f'Successfully updated {product.name}!')
-                return redirect(reverse('edit_custom_product', args=[product.id]))
+                return redirect(f"{reverse('edit_custom_product', args=[product.id])}?drone_type={product.sku.split('-')[0].lower()}&drone_color={product.sku.split('-')[-1].lower()}&show_toast=true")
             else:
                 messages.error(request, 'Failed to update the custom drone. Please ensure the form is valid.')
 
-        # Add a new attachment if provided
         elif 'add_attachment' in request.POST and attachment_form.is_valid():
             new_attachment = attachment_form.save(commit=False)
-            new_attachment.product = product  # Link the attachment to the product
+            new_attachment.product = product
             new_attachment.save()
             messages.success(request, 'New attachment added successfully!')
-            return redirect(reverse('edit_custom_product', args=[product.id]))
+            return redirect(f"{reverse('edit_custom_product', args=[product.id])}?drone_type={product.sku.split('-')[0].lower()}&drone_color={product.sku.split('-')[-1].lower()}&show_toast=true")
 
-        # Remove selected attachments
         elif 'remove_attachments' in request.POST:
             removed_attachments = request.POST.getlist('remove_attachments')
             for attachment_id in removed_attachments:
                 attachment = get_object_or_404(Attachment, id=attachment_id)
                 attachment.delete()
                 messages.success(request, f'Attachment "{attachment.name}" removed successfully!')
-            return redirect(reverse('edit_custom_product', args=[product.id]))
+            return redirect(f"{reverse('edit_custom_product', args=[product.id])}?drone_type={product.sku.split('-')[0].lower()}&drone_color={product.sku.split('-')[-1].lower()}&show_toast=true")
 
     else:
         form = ProductForm(instance=product)
         messages.info(request, f'You are editing {product.name}')
 
-    # Extract type and color from SKU for display in the form
-    sku_parts = product.sku.split('-')
-    product_type = sku_parts[0]
-    product_color = sku_parts[-1]
+    # Handle SKU extraction and prioritize URL parameters for setting drone type and color
+    sku_parts = product.sku.split('-') if product.sku else ['unknown']
+    product_type = request.GET.get('drone_type', sku_parts[0]).lower()
+    product_color = request.GET.get('drone_color', sku_parts[-1]).lower()
 
-    # Check if there are URL parameters for type and color
-    if 'drone_type' in request.GET and 'drone_color' in request.GET:
-        product_type = request.GET['drone_type']
-        product_color = request.GET['drone_color']
+    # Map each drone to a full identifier for consistency with product_type
+    custom_drones = Product.objects.filter(category__name="custom_drones").values('name', 'sku')
+    unique_drones = []
+    seen_drones = set()
+    for drone in custom_drones:
+        # Ensure 'name' and 'sku' are not None to avoid AttributeError
+        if drone['name'] and drone['sku']:
+            drone_name_parts = drone['name'].split(' ')
+            if len(drone_name_parts) > 1:
+                # Create a consistent format like "phantom-vortex"
+                drone_base_model = f"{drone_name_parts[0].lower()}-{drone_name_parts[1].lower()}"
+            else:
+                drone_base_model = drone['sku'].split('-')[0].lower()
+        elif drone['sku']:
+            drone_base_model = drone['sku'].split('-')[0].lower()
+        else:
+            drone_base_model = 'unknown'
+
+        if drone_base_model not in seen_drones:
+            seen_drones.add(drone_base_model)
+            unique_drones.append({
+                'name': drone['name'].split(' - ')[0] if drone['name'] else 'Unnamed Drone',
+                'value': drone_base_model
+            })
 
     # Filter attachments to exclude any that are marked as removed in the session
     filtered_attachments = [att for att in ATTACHMENTS if att["id"] not in request.session.get('removed_attachments', [])]
@@ -218,11 +252,7 @@ def edit_custom_product(request, product_id):
         'available_attachments': available_attachments,
         'product_type': product_type,
         'product_color': product_color,
-        'drones': [
-            {'name': 'Falcon X', 'value': 'custom1'},
-            {'name': 'Sky Hawk', 'value': 'custom2'},
-            {'name': 'Phantom Vortex', 'value': 'custom3'},
-        ],
+        'drones': unique_drones,
         'colors': [
             ('black', 'Black'),
             ('white', 'White'),
@@ -238,10 +268,11 @@ def edit_custom_product(request, product_id):
 
     return render(request, 'products/edit_custom_drone.html', context)
 
+
 def delete_custom_product(request, product_id):
     """ Delete a custom drone and redirect to the products page """
     product = get_object_or_404(Product, pk=product_id)
-    product_name = product.name  # Store the product name for the success message
+    product_name = product.name
     product.delete()
     messages.success(request, f'Custom drone "{product_name}" deleted successfully!')
     return redirect(reverse('products'))

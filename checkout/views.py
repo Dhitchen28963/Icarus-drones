@@ -167,23 +167,11 @@ def checkout(request):
                 }
                 item_data['image'] = product.image.url if product.image else None
             else:
-                custom_type = "custom1" if "falcon" in item_data['sku'] else (
-                    "custom2" if "sky-hawk" in item_data['sku'] else "custom3"
-                )
-                color = item_data['sku'].split('-')[-1]
-                custom_image_path = f'/media/{custom_type}-{color}.webp'
-
-                if os.path.isfile(os.path.join(settings.MEDIA_ROOT, f'{custom_type}-{color}.webp')):
-                    item_data['image'] = custom_image_path
-                else:
-                    item_data['image'] = '/media/noimage.webp'
-
+                # Fetching product details dynamically without specific custom types
+                product = get_object_or_404(Product, sku=item_data['sku'])
+                item_data['name'] = product.name
+                item_data['image'] = f"/media/{product.image}" if product.image else '/media/noimage.webp'
                 item_data['quantity'] = quantity
-                try:
-                    product = Product.objects.get(sku=item_data['sku'])
-                    item_data['name'] = product.name
-                except Product.DoesNotExist:
-                    item_data['name'] = 'Custom Drone'
 
                 if 'attachments' in item_data and item_data['attachments']:
                     item_data['attachment_list'] = [get_attachment_name_by_sku(att) for att in item_data['attachments']]
@@ -206,7 +194,7 @@ def checkout(request):
         loyalty_points_earned = int(total // 10)
         product_count = sum(item['quantity'] for item in bag.values())
 
-        # Attempt to prefill the form with profile information if authenticated
+        # Prefill the form with profile information if authenticated
         if request.user.is_authenticated:
             try:
                 profile = UserProfile.objects.get(user=request.user)
@@ -242,6 +230,7 @@ def checkout(request):
         }
 
         return render(request, 'checkout/checkout.html', context)
+
 
 def checkout_success(request, order_number):
     save_info = request.session.get('save_info')

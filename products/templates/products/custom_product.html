@@ -12,6 +12,7 @@
 {% block content %}
 <div class="overlay"></div>
 <div class="container-fluid">
+
     <!-- Custom Delete Confirmation Modal -->
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -35,7 +36,7 @@
     <div class="row">
         <div class="col-12 col-md-6">
             <div class="image-preview">
-                <img id="drone-image" class="card-img-top img-fluid" src="{{ MEDIA_URL }}custom1-black.webp" alt="Custom Drone">
+                <img id="drone-image" class="card-img-top img-fluid" src="{{ MEDIA_URL }}falcon-x-black.webp" alt="Custom Drone">
             </div>
         </div>
 
@@ -70,9 +71,10 @@
 
                 <form class="form mt-5" action="{% url 'add_custom_drone_to_bag' %}" method="POST">
                     {% csrf_token %}
-                    <input type="hidden" name="sku" id="selected-drone-sku" value="falcon-x-10001-black">
-                    <input type="hidden" name="quantity" value="1">
-                    <input type="hidden" name="color" id="selected-drone-color" value="black">
+                    <input type="hidden" name="sku" id="selected-drone-sku">
+                    <input type="hidden" name="drone_type" id="drone-type-hidden">
+                    <input type="hidden" name="color" id="selected-drone-color">
+
 
                     {% for attachment in ATTACHMENTS %}
                         <div>
@@ -121,51 +123,27 @@
         const rightArrow = document.getElementById('right-arrow');
         let currentColorIndex = 0;
 
-        // Map to relate SKU with image prefix
-        const skuMap = {
-            'falcon-x-10001': 'custom1',
-            'sky-hawk-10002': 'custom2',
-            'phantom-vortex-10003': 'custom3'
-        };
-
         // Create an array of all color options for easy navigation
         const colorItems = Array.from(colorOptions);
 
-        // Function to update the drone image based on selected type and color
+        // Function to update the drone image and SKU based on selected type and color
         function updateDroneImage() {
-            let selectedType = droneTypeSelect.value;
-            let selectedColor = document.querySelector('input[name="color"]:checked').value;
+            const selectedType = droneTypeSelect.value;
+            const selectedColor = document.querySelector('input[name="color"]:checked').value;
+
+            selectedSkuInput.value = `${selectedType}-${selectedColor}`;
             selectedColorInput.value = selectedColor;
+            document.getElementById('drone-type-hidden').value = selectedType;
 
-            if (selectedType && selectedColor) {
-                // Construct SKU and update hidden input
-                const newSku = `${selectedType}-${selectedColor}`;
-                selectedSkuInput.value = newSku;
-
-                // Construct new image URL and update the image source
-                const newImageUrl = "{{ MEDIA_URL }}" + `${skuMap[selectedType]}-${selectedColor}.webp`;
-                droneImage.src = newImageUrl;
-            }
+            // Update image URL dynamically based on type and color
+            const newImageUrl = "{{ MEDIA_URL }}" + `${selectedType}-${selectedColor}.webp`;
+            droneImage.src = newImageUrl;
         }
 
-        // Function to display a toast message with the current selections
-        function showToast() {
-            const selectedTypeName = droneTypeSelect.options[droneTypeSelect.selectedIndex].text;
-            const selectedColorName = document.querySelector('input[name="color"]:checked').value;
-
-            // Update toast content
-            document.querySelector('.toast-body').innerHTML = `You are editing ${selectedTypeName} - ${selectedColorName} custom drone!`;
-            document.querySelector('.toast-header strong').innerHTML = 'Info';
-
-            // Show the toast
-            const toastElement = document.getElementById('infoToast');
-            const toast = new bootstrap.Toast(toastElement);
-            toast.show();
-        }
-
-        // Set initial state and show initial toast
+        // Set initial state on load
         function setInitialState() {
             const currentImageSrc = droneImage ? droneImage.src : '';
+
             if (currentImageSrc) {
                 const imageParts = currentImageSrc.split('/').pop().split('-');
                 const currentType = imageParts[0];
@@ -173,23 +151,22 @@
 
                 // Select the matching type in the dropdown
                 for (let i = 0; i < droneTypeSelect.options.length; i++) {
-                    if (skuMap[droneTypeSelect.options[i].value] === currentType) {
+                    if (droneTypeSelect.options[i].value === currentType) {
                         droneTypeSelect.selectedIndex = i;
                         break;
                     }
                 }
 
                 // Check the matching color radio input
-                for (let i = 0; i < colorOptions.length; i++) {
-                    if (colorOptions[i].value === currentColor) {
-                        colorOptions[i].checked = true;
-                        break;
+                colorOptions.forEach(option => {
+                    if (option.value === currentColor) {
+                        option.checked = true;
                     }
-                }
+                });
             }
         }
 
-        // Event listeners for left and right arrow clicks to navigate color options
+        // Event listeners for navigating color options
         leftArrow.addEventListener('click', function() {
             currentColorIndex = (currentColorIndex === 0) ? colorItems.length - 1 : currentColorIndex - 1;
             colorItems[currentColorIndex].checked = true;
@@ -202,19 +179,15 @@
             updateDroneImage();
         });
 
-        // Event listener for real-time updates when color is selected
-        colorOptions.forEach(option => {
-            option.addEventListener('change', updateDroneImage);
-        });
-
-        // Event listener for drone type changes
+        // Event listeners for color and type changes
+        colorOptions.forEach(option => option.addEventListener('change', updateDroneImage));
         droneTypeSelect.addEventListener('change', updateDroneImage);
 
-        setInitialState(); // Set initial state on page load
+        setInitialState();
 
-        // Event listener for Edit button to show toast on click
+        // Edit button to capture selections and redirect
         editButton.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default action
+            event.preventDefault();
             const selectedType = droneTypeSelect.value;
             const selectedColor = document.querySelector('input[name="color"]:checked').value;
 
@@ -222,14 +195,13 @@
             window.location.href = `{% url 'edit_custom_product' product.id %}?drone_type=${selectedType}&drone_color=${selectedColor}&show_toast=true`;
         });
 
-
-        // Event listener for delete button to show confirmation modal
+        // Delete confirmation modal
         document.getElementById('deleteCustomProductButton').addEventListener('click', function(event) {
             event.preventDefault();
             document.getElementById('deleteConfirmationModal').modal('show');
         });
 
-        // Event listener for confirming deletion
+        // Confirm deletion and show toast
         document.getElementById('confirmDeleteButton').addEventListener('click', function() {
             fetch("{% url 'delete_custom_product' product.id %}", {
                 method: 'POST',
@@ -240,7 +212,6 @@
             }).then(response => {
                 if (response.ok) {
                     document.getElementById('deleteConfirmationModal').modal('hide');
-                    // Show info toast for deletion confirmation
                     document.querySelector('.toast-body').innerHTML = 'Product deleted!';
                     const infoToast = new bootstrap.Toast(document.getElementById('infoToast'));
                     infoToast.show();

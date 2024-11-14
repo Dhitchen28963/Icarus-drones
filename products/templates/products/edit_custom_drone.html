@@ -31,11 +31,13 @@
                         <label for="drone-type">Drone Type:</label>
                         <select id="drone-type" name="drone_type" class="form-control">
                             {% for drone in drones %}
-                                <option value="{{ drone.value }}" {% if drone.value == product_type %}selected{% endif %}>{{ drone.name }}</option>
+                                <option value="{{ drone.value }}" {% if drone.value == product_type %}selected{% endif %}>
+                                    {{ drone.name }}
+                                </option>
                             {% endfor %}
                         </select>
                     </div>
-
+                    
                     <!-- Color Selection -->
                     <div class="form-group">
                         <label for="drone-color">Color:</label>
@@ -95,14 +97,12 @@
             const droneColorSelect = document.getElementById('drone-color');
             const toastElement = document.getElementById('infoToast');
 
-            // Create a mapping for SKU to dropdown values
-            const skuMapping = {
-                'falcon-x-10001': 'custom1',
-                'sky-hawk-10002': 'custom2',
-                'phantom-vortex-10003': 'custom3'
-            };
+            // Define initial values for drone type and color directly from Django context
+            const initialDroneType = "{{ product_type }}";
+            const initialDroneColor = "{{ product_color }}";
+            const showToast = new URLSearchParams(window.location.search).get('show_toast');
 
-            // Create a toast instance
+            // Create a toast instance with custom duration
             let toastInstance = new bootstrap.Toast(toastElement, {
                 autohide: false
             });
@@ -115,32 +115,33 @@
             }
 
             function setInitialState() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const selectedTypeValue = urlParams.get('drone_type') || '{{ product_type }}';
-                const selectedColor = urlParams.get('drone_color') || '{{ product_color }}';
-                const showToast = urlParams.get('show_toast');
+                console.log(`Initial Type: ${initialDroneType}, Initial Color: ${initialDroneColor}`);
+                console.log("Checking drone type options...");
 
-                const mappedTypeValue = skuMapping[selectedTypeValue] || selectedTypeValue;
+                // Select the matching type in the dropdown based on initialDroneType
                 let typeSet = false;
                 for (let i = 0; i < droneTypeSelect.options.length; i++) {
-                    if (droneTypeSelect.options[i].value === mappedTypeValue) {
-                        droneTypeSelect.selectedIndex = i;
+                    console.log(`Option ${i}: ${droneTypeSelect.options[i].value}`);
+                    if (droneTypeSelect.options[i].value === initialDroneType) {
+                        droneTypeSelect.options[i].selected = true;
                         typeSet = true;
                         break;
                     }
                 }
-                if (!typeSet) droneTypeSelect.selectedIndex = 0;
+                if (!typeSet) droneTypeSelect.options[0].selected = true;
+
                 const selectedTypeName = typeSet ? droneTypeSelect.options[droneTypeSelect.selectedIndex].text : droneTypeSelect.options[0].text;
 
+                // Select the matching color in the dropdown based on initialDroneColor
                 for (let i = 0; i < droneColorSelect.options.length; i++) {
-                    if (droneColorSelect.options[i].value === selectedColor) {
-                        droneColorSelect.selectedIndex = i;
+                    if (droneColorSelect.options[i].value === initialDroneColor) {
+                        droneColorSelect.options[i].selected = true;
                         break;
                     }
                 }
 
-                const selectedColorOption = Array.from(droneColorSelect.options).find(option => option.value === selectedColor);
-                const selectedColorName = selectedColorOption ? selectedColorOption.getAttribute("data-color-name") : selectedColor;
+                const selectedColorOption = Array.from(droneColorSelect.options).find(option => option.value === initialDroneColor);
+                const selectedColorName = selectedColorOption ? selectedColorOption.getAttribute("data-color-name") : initialDroneColor;
 
                 if (showToast === 'true') {
                     document.querySelector('.toast-body').innerHTML = `You are editing ${selectedTypeName} - ${selectedColorName} custom drone!`;
