@@ -276,3 +276,68 @@ def delete_custom_product(request, product_id):
     product.delete()
     messages.success(request, f'Custom drone "{product_name}" deleted successfully!')
     return redirect(reverse('products'))
+
+
+def compare_products(request, product_id):
+    """
+    View to compare a selected drone against others.
+    """
+    from decimal import Decimal
+
+    # Helper function to sanitize and convert weight to a numeric value
+    def sanitize_weight(value):
+        if value:
+            return Decimal(value.lower().replace('g', '').strip())  # Remove 'g' and convert to Decimal
+        return Decimal('0')  # Default weight if value is None or empty
+
+    # Get the selected drone
+    selected_drone = get_object_or_404(Product, pk=product_id)
+
+    # Filter out only drones (exclude accessories)
+    drones = Product.objects.filter(category__name="drones")
+
+    # Get the second drone to compare (default to the first in the list)
+    compare_drone_id = request.GET.get('compare_drone')
+    compare_drone = get_object_or_404(Product, pk=compare_drone_id) if compare_drone_id else drones.first()
+
+    # Define specifications to compare
+    specifications = [
+        # ('Specification Name', Left Value, Right Value, Better is Higher)
+        ('Price', selected_drone.price, compare_drone.price, False),  # Lower is better
+        ('Flight Time', selected_drone.flight_time, compare_drone.flight_time, True),  # Higher is better
+        ('Control Range', selected_drone.control_range, compare_drone.control_range, True),  # Higher is better
+        ('Max Altitude', selected_drone.max_altitude, compare_drone.max_altitude, True),  # Higher is better
+        ('Speed', selected_drone.speed, compare_drone.speed, True),  # Higher is better
+        ('Camera', selected_drone.camera, compare_drone.camera, True),  # "Yes" is better
+        ('Camera Quality', selected_drone.camera_quality, compare_drone.camera_quality, True),  # Higher is better
+        ('Collision Avoidance', selected_drone.collision_avoidance, compare_drone.collision_avoidance, True),  # Higher is better
+        ('Wind Resistance', selected_drone.wind_resistance, compare_drone.wind_resistance, True),  # Higher is better
+        ('Weight', sanitize_weight(selected_drone.weight), sanitize_weight(compare_drone.weight), False),  # Lower is better
+        ('Rotors', selected_drone.rotors, compare_drone.rotors, True),  # Higher is better
+        ('GPS', selected_drone.gps, compare_drone.gps, True),  # Higher is better
+    ]
+
+    # Add color indicators for better or worse values, with neutral for equal values
+    specifications_with_colors = []
+    for spec, left_value, right_value, better_is_higher in specifications:
+        if left_value == right_value:
+            left_color = right_color = ""  # No color for equal values
+        elif spec == "Weight":
+            # Explicit handling for Weight (lower is better)
+            left_color = "text-success" if left_value < right_value else "text-danger"
+            right_color = "text-success" if right_value < left_value else "text-danger"
+        else:
+            # General case for better_is_higher
+            left_color = "text-success" if (better_is_higher and left_value > right_value) or (not better_is_higher and left_value < right_value) else "text-danger"
+            right_color = "text-success" if (better_is_higher and right_value > left_value) or (not better_is_higher and right_value < left_value) else "text-danger"
+
+        specifications_with_colors.append((spec, left_value, left_color, right_value, right_color))
+
+    context = {
+        'selected_drone': selected_drone,
+        'compare_drone': compare_drone,
+        'drones': drones,
+        'specifications': specifications_with_colors,
+    }
+
+    return render(request, 'products/compare_products.html', context)

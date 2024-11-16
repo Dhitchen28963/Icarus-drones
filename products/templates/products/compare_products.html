@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="compare-container container my-5" style="padding-top: 130px;">
+    <div class="row text-center align-items-center">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Compare Drones</h2>
+        </div>
+    </div>
+
+    <div class="row text-center align-items-center">
+        <!-- Selected Drone -->
+        <div class="col-md-4">
+            <a href="{% url 'product_detail' selected_drone.id %}">
+                <img src="{{ selected_drone.image.url }}" class="img-fluid mb-3" alt="{{ selected_drone.name }}">
+            </a>
+        </div>
+
+        <!-- Dropdown in the Middle -->
+        <div class="col-md-4">
+            <select class="form-control" id="compare-drone-dropdown" onchange="location = this.value;">
+                {% for drone in drones %}
+                    <option value="{% url 'compare_product' selected_drone.id %}?compare_drone={{ drone.id }}"
+                            {% if drone.id == compare_drone.id %}selected{% endif %}>
+                        {{ drone.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Compare Drone -->
+        <div class="col-md-4">
+            <a href="{% url 'product_detail' compare_drone.id %}">
+                <img src="{{ compare_drone.image.url }}" class="img-fluid mb-3" alt="{{ compare_drone.name }}">
+            </a>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Specifications Comparison Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>{{ selected_drone.name }}</th>
+                    <th>Specification</th>
+                    <th>{{ compare_drone.name }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for spec, left_value, left_color, right_value, right_color in specifications %}
+                    <tr>
+                        <!-- Left Drone Value -->
+                        <td class="{{ left_color }}">
+                            {{ left_value }}
+                        </td>
+            
+                        <!-- Specification Name -->
+                        <td>
+                            <strong>
+                                {% if spec == "Weight" %}
+                                    {{ spec }} (g)
+                                {% elif spec == "Price" %}
+                                    {{ spec }} ($)
+                                {% else %}
+                                    {{ spec }}
+                                {% endif %}
+                            </strong>
+                        </td>
+            
+                        <!-- Right Drone Value -->
+                        <td class="{{ right_color }}">
+                            {{ right_value }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>            
+        </table>
+    </div>
+</div>
+{% endblock %}
