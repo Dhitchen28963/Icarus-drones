@@ -3,10 +3,11 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product
 from products.constants import ATTACHMENTS
+from profiles.models import UserProfile
 
 
 def get_attachment_name_by_sku(sku):
-    """ Helper function to return the human-readable name of an attachment given its SKU """
+    """Helper function to return the human-readable name of an attachment given its SKU"""
     for attachment in ATTACHMENTS:
         if attachment['sku'] == sku:
             return attachment['name']
@@ -18,8 +19,17 @@ def bag_contents(request):
     total = Decimal(0)
     product_count = 0
     bag = request.session.get('bag', {})
+    loyalty_points_used = Decimal(0)
+    loyalty_discount = Decimal(0)
+    user_loyalty_points = 0
 
-    print(f"Bag Contents: {bag}")
+    # If user is authenticated, get their loyalty points
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            user_loyalty_points = user_profile.loyalty_points
+        except UserProfile.DoesNotExist:
+            user_loyalty_points = 0
 
     for item_id, item_data in bag.items():
         if isinstance(item_data, dict):
@@ -51,10 +61,9 @@ def bag_contents(request):
                     'price': price,
                 })
             except Product.DoesNotExist:
-                print(f"Product not found for item_id: {item_id}")
                 continue
         else:
-            print(f"Invalid item in bag: {item_id} -> {item_data}")
+            continue
 
     # Calculate delivery and grand total
     free_delivery_threshold = Decimal(str(settings.FREE_DELIVERY_THRESHOLD))
@@ -67,6 +76,12 @@ def bag_contents(request):
 
     grand_total = delivery + total
 
+    # Apply loyalty points discount
+    if 'loyalty_points' in request.session:
+        loyalty_points_used = Decimal(request.session.get('loyalty_points', 0))
+        loyalty_discount = loyalty_points_used * Decimal(0.1)  # $0.10 per point
+        grand_total = max(grand_total - loyalty_discount, Decimal(0))
+
     context = {
         'bag_items': bag_items,
         'total': total,
@@ -75,6 +90,9 @@ def bag_contents(request):
         'free_delivery_delta': free_delivery_delta,
         'free_delivery_threshold': free_delivery_threshold,
         'grand_total': grand_total,
+        'loyalty_points_used': loyalty_points_used,
+        'loyalty_discount': loyalty_discount,
+        'user_loyalty_points': user_loyalty_points,
     }
 
     return context

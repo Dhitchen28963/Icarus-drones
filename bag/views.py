@@ -1,4 +1,4 @@
-from decimal import Decimal 
+from decimal import Decimal
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
@@ -12,7 +12,6 @@ def get_attachment_name_by_sku(sku):
             return attachment['name']
     return sku
 
-
 def view_bag(request):
     """ A view that renders the bag contents page with loyalty points """
     bag = request.session.get('bag', {})
@@ -22,17 +21,23 @@ def view_bag(request):
     for item_id, item_data in bag.items():
         total += Decimal(item_data['price']) * item_data['quantity']
 
+    # Adjust total with applied loyalty points
+    loyalty_points_used = request.session.get('loyalty_points', 0)
+    discount = Decimal(loyalty_points_used) * Decimal('0.1')  # $0.10 per point
+    discounted_total = max(total - discount, Decimal(0))
+
     # Calculate loyalty points (assuming 1 point per $10 spent)
-    loyalty_points_earned = int(total // 10)
+    loyalty_points_earned = int(discounted_total // 10)
 
     context = {
         'bag': bag,
         'total': total,
+        'discounted_total': discounted_total,
+        'loyalty_points_used': loyalty_points_used,
         'loyalty_points_earned': loyalty_points_earned,
     }
 
     return render(request, 'bag/bag.html', context)
-
 
 def add_to_bag(request, item_id):
     """ Add a quantity of the specified product to the shopping bag """
@@ -48,9 +53,10 @@ def add_to_bag(request, item_id):
         bag[str(item_id)] = {'quantity': quantity, 'price': float(product.price), 'sku': product.sku}
         messages.success(request, f'Added {product.name} to your bag.')
 
+    # Clear loyalty points if the bag changes
+    request.session.pop('loyalty_points', None)
     request.session['bag'] = bag
     return redirect(redirect_url)
-
 
 def add_custom_drone_to_bag(request):
     """Add a custom drone to the shopping bag with debugging"""
@@ -60,28 +66,19 @@ def add_custom_drone_to_bag(request):
         attachments = request.POST.getlist('attachments')
         selected_drone_model = request.POST.get('drone_type')
 
-        # Debugging: Print retrieved form data
-        print(f"Selected Drone Model: {selected_drone_model}, Color: {color}")
-
         # Ensure both selected_drone_model and color are provided
         if not selected_drone_model or not color:
             messages.error(request, "Drone model or color is missing.")
             return redirect('view_bag')
 
         try:
-            # Attempt to find a matching product using model and color
             product = Product.objects.get(
                 sku__startswith=selected_drone_model,
                 color__iexact=color
             )
             sku = product.sku
             drone_type = product.name.split(' - ')[0]
-
-            # Debugging: Print product details
-            print(f"Product Found - SKU: {sku}, Drone Type: {drone_type}, Color: {color}, Price: {product.price}")
         except Product.DoesNotExist:
-            # Debugging: Log when product is not found
-            print(f"No product found for model '{selected_drone_model}' and color '{color}'")
             messages.error(request, "The product you tried to add was not found.")
             return redirect('view_bag')
 
@@ -102,8 +99,6 @@ def add_custom_drone_to_bag(request):
             attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
             attachments_text = ', '.join(attachment_names)
             messages.success(request, f'Updated {drone_type} - {color} with attachments: {attachments_text} quantity to {bag[custom_key]["quantity"]}.')
-            # Debugging: Print updated bag item
-            print(f"Updated Bag Item: {bag[custom_key]}")
         else:
             bag[custom_key] = {
                 'quantity': quantity,
@@ -121,15 +116,13 @@ def add_custom_drone_to_bag(request):
                 messages.success(request, f"{drone_type} - {color} with attachments: {attachments_text} added to your bag.")
             else:
                 messages.success(request, f"{drone_type} - {color} added to your bag.")
-            
-            # Debugging: Print newly added bag item
-            print(f"Added Bag Item: {bag[custom_key]}")
+
+        # Clear loyalty points if the bag changes
+        request.session.pop('loyalty_points', None)
 
         # Update the session
         request.session['bag'] = bag
         return redirect('view_bag')
-
-
 
 def adjust_bag(request, item_id):
     """Adjust the quantity of the specified product to the specified amount"""
@@ -155,9 +148,10 @@ def adjust_bag(request, item_id):
     else:
         messages.error(request, "Error adjusting the bag. Item not found or is invalid.")
 
+    # Clear loyalty points if the bag changes
+    request.session.pop('loyalty_points', None)
     request.session['bag'] = bag
     return redirect(reverse('view_bag'))
-
 
 def remove_from_bag(request, item_id):
     """Remove the item from the shopping bag"""
@@ -183,9 +177,10 @@ def remove_from_bag(request, item_id):
             bag.pop(item_id)
             messages.success(request, message)
 
+        # Clear loyalty points if the bag changes
+        request.session.pop('loyalty_points', None)
         request.session['bag'] = bag
         return HttpResponse(status=200)
 
     except Exception as e:
-        print(f"Error removing item: {e}")
         return HttpResponse(status=500)

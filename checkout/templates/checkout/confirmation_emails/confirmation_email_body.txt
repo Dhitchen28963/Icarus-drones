@@ -8,7 +8,9 @@ Order Date: {{ order.date }}
 Order Summary:
 Order Total: ${{ order.order_total|floatformat:2 }}
 Delivery: ${{ order.delivery_cost|floatformat:2 }}
+Discount Applied: ${{ order.discount_applied|floatformat:2 }}
 Grand Total: ${{ order.grand_total|floatformat:2 }}
+
 
 Shipping Address:
 {{ order.street_address1 }}
@@ -18,12 +20,12 @@ Shipping Address:
 
 We've recorded your contact number as {{ order.phone_number }}.
 
+**Loyalty Points Used**: {{ loyalty_points_used }} points
 **Loyalty Points Earned**: {{ loyalty_points_earned }} points
 
 If you have any questions or need assistance, please reach out to us at {{ contact_email }}. We’re here to help!
 
 Thank you for choosing Icarus Drones. We hope you enjoy your new gear!
 
-Best regards,
-
+Best regards,  
 The Icarus Drones Team

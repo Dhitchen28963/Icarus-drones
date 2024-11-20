@@ -28,6 +28,10 @@
                         You earned {{ loyalty_points_earned }} loyalty points on this order!
                     </p>
                 {% endif %}
+
+                {% if discount_applied %}
+                    <p class="text-muted">You redeemed {{ order.loyalty_points_used }} loyalty points for this purchase, saving ${{ discount_applied|floatformat:2 }}.</p>
+                {% endif %}
             </div>
         </div>
 
@@ -198,7 +202,7 @@
             </div>
         </div>
 
-        <!-- Back to Profile or Shop CTA -->
+        <!-- Back to Profile -->
         <div class="row">
 			<div class="col-12 col-lg-7 text-right">
                 {% if from_profile %}

@@ -79,20 +79,48 @@
                     <div class="col-7 offset-2">
                         <p class="my-0">Order Total:</p>
                         <p class="my-0">Delivery:</p>
+                        <p class="my-0">Discount Applied:</p>
                         <p class="my-0">Grand Total:</p>
                     </div>
                     <div class="col-3">
-                        <p class="my-0">${{ total | floatformat:2 }}</p>
-                        <p class="my-0">${{ delivery | floatformat:2 }}</p>
-                        <p class="my-0"><strong>${{ grand_total | floatformat:2 }}</strong></p>
+                        <p class="my-0" data-total="{{ total|floatformat:2|default_if_none:'0.00' }}">${{ total|floatformat:2|default_if_none:'0.00' }}</p>
+                        <p class="my-0" data-delivery="{{ delivery|floatformat:2|default_if_none:'0.00' }}">${{ delivery|floatformat:2|default_if_none:'0.00' }}</p>
+                        <p id="discount-display" class="my-0">- ${{ discount_applied|default_if_none:'0.00' }}</p>
+                        <p class="my-0" data-grand-total="{{ grand_total|floatformat:2|default_if_none:'0.00' }}">${{ grand_total|floatformat:2|default_if_none:'0.00' }}</p>
+                        <p class="my-0" data-loyalty-earned="{{ loyalty_points_earned|default_if_none:0 }}">{{ loyalty_points_earned|default_if_none:0 }}</p>
                     </div>
                 </div>
                 <div class="row text-black text-right mb-3">
                     <div class="col-7 offset-2">
-                        <p class="my-0">Loyalty Points Earned:</p>
+                        <p class="my-0">Available Loyalty Points:</p>
+                        <p class="my-0">Redeemed Loyalty Points:</p>
                     </div>
                     <div class="col-3">
-                        <p class="my-0">{{ loyalty_points_earned }}</p>
+                        <p class="my-0">{{ request.user.userprofile.loyalty_points }}</p>
+                        <p class="my-0">
+                            <input type="number" 
+                                   id="loyalty-points-input" 
+                                   name="loyalty_points" 
+                                   class="form-control" 
+                                   min="0" 
+                                   max="{{ request.user.userprofile.loyalty_points }}">
+                        </p>
+                    </div>
+                </div>          
+                <div class="row text-black text-right mb-3">
+                    <div class="col-7 offset-2">
+                        <p class="my-0">Updated Loyalty Points Earned:</p>
+                    </div>
+                    <div class="col-3">
+                        <p class="my-0 updated-loyalty-points">{{ loyalty_points }}</p>
+                    </div>
+                </div>
+                <div class="row text-black text-right mb-3">
+                    <div class="col-7 offset-2">
+                        <p class="my-0">Updated Grand Total:</p>
+                    </div>
+                    <div class="col-3">
+                        <p class="my-0 updated-grand-total">${{ grand_total|floatformat:2 }}</p>
                     </div>
                 </div>
             </div>
@@ -100,8 +128,9 @@
                 <p class="text-muted">Please fill out the form below to complete your order</p>
                 <form action="{% url 'checkout' %}" method="POST" id="payment-form">
                     {% csrf_token %}
-                    <!-- Hidden input for client_secret -->
                     <input type="hidden" name="client_secret" value="{{ client_secret }}">
+                    <input type="hidden" name="loyalty_points" id="hidden-loyalty-points" value="0">
+                    
                     <fieldset class="rounded px-3 mb-5">
                         <legend class="fieldset-label small text-black px-2 w-auto">Details</legend>
                         {{ order_form.full_name | as_crispy_field }}
@@ -153,7 +182,7 @@
                             <span class="icon">
                                 <i class="fas fa-exclamation-circle"></i>
                             </span>
-                            <span>Your card will be charged <strong>${{ grand_total|floatformat:2 }}</strong></span>
+                            <span>Your card will be charged <strong data-subtotal>${{ grand_total|floatformat:2 }}</strong></span>
                         </p>
                     </div>
                 </form>
@@ -177,6 +206,41 @@
         document.getElementById('payment-form').addEventListener('submit', function(event) {
             document.getElementById('loading-overlay').style.display = 'flex';
         });
+
+        // Loyalty points input handling
+        document.getElementById('loyalty-points-input').addEventListener('input', function (e) {
+            const maxPoints = parseInt(this.getAttribute('max'), 10);
+            let points = parseInt(this.value, 10);
+
+            if (points > maxPoints) {
+                this.value = maxPoints;
+                points = maxPoints;
+            } else if (points < 0 || isNaN(points)) {
+                this.value = 0;
+                points = 0;
+            }
+
+            const discount = points * 0.1; // $0.10 per loyalty point
+            const total = parseFloat(document.querySelector('[data-total]').dataset.total);
+            const delivery = parseFloat(document.querySelector('[data-delivery]').dataset.delivery);
+            const grandTotal = total + delivery - discount;
+            const loyaltyPointsEarned = Math.floor(grandTotal / 10);
+
+            // Update grand total and loyalty points earned in the UI
+            document.querySelector('[data-grand-total]').textContent = `$${grandTotal.toFixed(2)}`;
+            document.querySelector('[data-loyalty-earned]').textContent = loyaltyPointsEarned;
+            document.querySelector('.updated-loyalty-points').textContent = loyaltyPointsEarned;
+            document.querySelector('.updated-grand-total').textContent = `$${grandTotal.toFixed(2)}`;
+
+            // Update hidden input value for server
+            document.getElementById('hidden-loyalty-points').value = points;
+
+            // Update "Your card will be charged" section dynamically
+            const subtotalElement = document.querySelector('[data-subtotal]');
+            if (subtotalElement) {
+                subtotalElement.dataset.subtotal = grandTotal.toFixed(2);
+                subtotalElement.textContent = `$${grandTotal.toFixed(2)}`;
+            }
+        });
     </script>
 {% endblock %}
-

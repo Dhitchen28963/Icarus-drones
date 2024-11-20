@@ -18,10 +18,8 @@ def profile(request):
     else:
         form = UserProfileForm(instance=profile)
     
-    # Retrieve orders and calculate loyalty points for each
+    # Retrieve orders without recalculating loyalty points
     orders = profile.orders.all()
-    for order in orders:
-        order.loyalty_points_earned = int(order.grand_total // 10)
 
     template = 'profiles/profile.html'
     context = {
@@ -36,9 +34,6 @@ def order_history(request, order_number):
     """ Display the order history for a specific order. """
     order = get_object_or_404(Order, order_number=order_number)
 
-    # Calculate loyalty points earned for this specific order
-    loyalty_points_earned = int(order.grand_total // 10)  # Assuming 1 point per $10 spent
-
     messages.info(request, (
         f'This is a past confirmation for order number {order_number}. '
         'A confirmation email was sent on the order date.'
@@ -48,7 +43,7 @@ def order_history(request, order_number):
     context = {
         'order': order,
         'from_profile': True,
-        'loyalty_points_earned': loyalty_points_earned,
+        'loyalty_points_earned': order.loyalty_points,
     }
 
     return render(request, template, context)

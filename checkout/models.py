@@ -26,9 +26,13 @@ class Order(models.Model):
     delivery_cost = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    discount_applied = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0, blank=True, null=True
+    )
     original_bag = models.TextField(null=False, blank=False, default='')
     stripe_pid = models.CharField(max_length=254, null=False, blank=False, default='')
     loyalty_points = models.IntegerField(null=False, blank=False, default=0)
+    loyalty_points_used = models.IntegerField(null=False, blank=False, default=0)
 
     def _generate_order_number(self):
         """
@@ -36,23 +40,39 @@ class Order(models.Model):
         """
         return uuid.uuid4().hex.upper()
 
-    def update_total(self):
+    def loyalty_points_earned(self):
+        """Calculate loyalty points based on the grand total."""
+        return int(self.grand_total // 10)
+
+    loyalty_points_earned.short_description = 'Loyalty Points Earned'
+
+    def update_total(self, loyalty_points_used=0):
         """
         Update grand total each time a line item is added,
-        accounting for delivery costs and calculating loyalty points.
+        accounting for delivery costs and adjusting for loyalty points used.
         """
+        # Reset totals before recalculating
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
+        self.delivery_cost = 0
+
+        # Recalculate delivery costs
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
-        else:
-            self.delivery_cost = 0
-        self.grand_total = self.order_total + self.delivery_cost
-        self.loyalty_points = int(self.grand_total / 10)
-        self.save()
 
-    def loyalty_points_earned(self):
-        """ Calculate loyalty points as a percentage of the grand total """
-        return int(self.grand_total / 10)
+        # Calculate grand total before applying loyalty points
+        self.grand_total = self.order_total + self.delivery_cost
+
+        # Deduct loyalty points discount
+        discount = Decimal(loyalty_points_used) * Decimal('0.1')  # $0.10 per point
+        self.discount_applied = discount
+        self.grand_total = max(self.grand_total - discount, Decimal('0.00'))
+
+        # Update loyalty points earned
+        self.loyalty_points = int(self.grand_total // 10)
+
+        # Save applied loyalty points for future reference
+        self.loyalty_points_used = loyalty_points_used
+        self.save()
 
     def save(self, *args, **kwargs):
         """
@@ -99,7 +119,7 @@ class OrderLineItem(models.Model):
         self.lineitem_total += attachment_total * self.quantity
 
         super().save(*args, **kwargs)
-        self.order.update_total()
+        self.order.update_total(loyalty_points_used=self.order.loyalty_points_used)
 
     def get_readable_attachments(self):
         """
