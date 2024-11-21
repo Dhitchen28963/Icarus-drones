@@ -190,6 +190,100 @@ a.category-badge > span.badge:hover {
     background-color: orange;
 }
 
+/* Product review form */
+.pagination .btn-outline-black {
+    color: black;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 0;
+}
+
+.pagination .btn-outline-black:hover,
+.pagination .btn-outline-black:focus {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+
+.pagination .btn-outline-black.active {
+    color: white !important;
+    background-color: black;
+    border-color: black;
+    font-weight: bold;
+}
+
+.pagination .btn-outline-black.active a {
+    color: white !important;
+    text-decoration: none;
+}
+
+.pagination .btn-outline-black.active span,
+.pagination .btn-outline-black.active i {
+    color: white !important;
+}
+
+.form-control {
+    border: 1px solid #333;
+    border-radius: 0;
+    padding: 10px;
+    font-size: 14px;
+}
+
+#stars {
+    height: auto;
+    line-height: 1.5;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    border: 1px solid #333;
+    background-color: white;
+}
+
+#stars:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+textarea.form-control {
+    resize: none;
+    pointer-events: auto;
+    background-color: #fff;
+}
+
+button.btn-black {
+    background-color: #000;
+    color: #fff;
+    border: none;
+}
+
+button.btn-black:hover {
+    background-color: #222;
+    color: #fff;
+}
+
+/* Star Rating Styles */
+.star-rating {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.star {
+    font-size: 24px;
+    color: #ddd;
+    transition: color 0.2s ease-in-out;
+}
+
+.star:hover,
+.star.selected {
+    color: #ffc107;
+}
+
+.star:hover ~ .star {
+    color: #ddd;
+}
+
 .arrow {
     font-size: 30px;
     cursor: pointer;

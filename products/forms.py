@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Category, Attachment
+from .models import Product, Category, Attachment, ProductReview
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -35,3 +35,24 @@ class AttachmentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'border-black rounded-0'
+
+
+class ProductReviewForm(forms.ModelForm):
+    class Meta:
+        model = ProductReview
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.NumberInput(attrs={
+                'id': 'id_rating',  # Explicitly set the id
+                'class': 'form-control',
+                'min': 1,
+                'max': 5,
+                'placeholder': 'Rate this product (1-5)',
+            }),
+            'comment': forms.Textarea(attrs={
+                'id': 'id_comment',
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Write your review here...',
+            }),
+        }

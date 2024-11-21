@@ -34,6 +34,10 @@ class StripeWH_Handler:
                 'discount_applied': f"${discount:.2f}",
             }
         )
+        # Temporarily show email content
+        print("\nConfirmation Email:")
+        print(f"Subject: {subject}")
+        print(f"Body:\n{body}")
         send_mail(
             subject,
             body,

@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.db.models import Q
 from django.db.models.functions import Lower, Substr
 from products.constants import ATTACHMENTS
-from .models import Product, Category, Attachment
-from .forms import ProductForm, AttachmentForm
+from .models import Product, Category, Attachment, ProductReview
+from .forms import ProductForm, AttachmentForm, ProductReviewForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # View to show all products, including sorting and search queries
 def all_products(request):
@@ -57,18 +58,38 @@ def all_products(request):
 
     return render(request, 'products/products.html', context)
 
-# View to show individual product details
-def product_detail(request, product_id):
-    """ A view to show individual product details """
-    product = get_object_or_404(Product, pk=product_id)
 
+def product_detail(request, product_id):
+    """ A view to show individual product details with review filtering and pagination """
+    product = get_object_or_404(Product, pk=product_id)
+    
+    # Get filter for reviews based on stars
+    star_filter = request.GET.get('stars')
+    reviews = product.reviews.all()
+    
+    if star_filter:
+        reviews = reviews.filter(rating=star_filter)
+    
+    # Paginate reviews
+    paginator = Paginator(reviews, 5)  # Show 5 reviews per page
+    page = request.GET.get('page')
+    
+    try:
+        reviews = paginator.page(page)
+    except PageNotAnInteger:
+        reviews = paginator.page(1)
+    except EmptyPage:
+        reviews = paginator.page(paginator.num_pages)
+    
     context = {
         'product': product,
+        'reviews': reviews,
+        'star_filter': star_filter,
     }
 
     return render(request, 'products/product_detail.html', context)
 
-# View renders the custom drones
+
 def custom_product(request):
     """ A view to render the custom product page with customizable options """
 
@@ -341,3 +362,29 @@ def compare_products(request, product_id):
     }
 
     return render(request, 'products/compare_products.html', context)
+
+
+def add_product_review(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if request.method == 'POST':
+        form = ProductReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user  # Associate the review with the logged-in user
+            review.product = product   # Associate the review with the product
+            review.save()
+            messages.success(request, 'Your review has been submitted successfully!')
+            return redirect('product_detail', product_id=product_id)
+        else:
+            messages.error(request, 'There was an error with your review submission. Please ensure all fields are filled out.')
+    else:
+        form = ProductReviewForm()
+
+    # Debug the form instance
+    print("Form instance:", form)
+    print("Form fields:", form.fields)
+    
+    return render(request, 'products/product_detail.html', {
+        'product': product,
+        'form': form,
+    })

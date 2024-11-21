@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Attachment
+from .models import Category, Product, Attachment, ProductReview
 
 # Admin for Category
 class CategoryAdmin(admin.ModelAdmin):
@@ -47,7 +47,15 @@ class AttachmentAdmin(admin.ModelAdmin):
     search_fields = ('name', 'sku')
     list_editable = ('price',)
 
+
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'rating', 'created_at')
+    list_filter = ('product', 'rating', 'created_at')
+    search_fields = ('product__name', 'user__username', 'comment')
+
+
 # Register models with admin site
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Attachment, AttachmentAdmin)
+admin.site.register(ProductReview, ProductReviewAdmin)

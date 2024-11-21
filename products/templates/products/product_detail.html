@@ -116,6 +116,108 @@
             </div>
         </div>
     </div>
+    
+    <!-- Product Reviews Section -->
+    <div id="reviews-section">
+        <div class="col-12">
+            <h3 class="text-center logo-font">Product Reviews</h3>
+            <hr class="w-50 mb-4 mx-auto">
+
+            <!-- Filter by Rating -->
+            <form method="get" action="" class="mb-4">
+                <label for="stars" class="mr-2">Filter by Rating:</label>
+                <select name="stars" id="stars" class="form-control d-inline-block w-auto">
+                    <option value="">All Ratings</option>
+                    <option value="5" {% if star_filter == "5" %}selected{% endif %}>5 Stars</option>
+                    <option value="4" {% if star_filter == "4" %}selected{% endif %}>4 Stars</option>
+                    <option value="3" {% if star_filter == "3" %}selected{% endif %}>3 Stars</option>
+                    <option value="2" {% if star_filter == "2" %}selected{% endif %}>2 Stars</option>
+                    <option value="1" {% if star_filter == "1" %}selected{% endif %}>1 Star</option>
+                </select>
+            </form>
+
+            {% if reviews %}
+                <div class="row">
+                    {% for review in reviews %}
+                        <div class="col-12 mb-4">
+                            <div class="card border-black rounded-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="mb-0">{{ review.user.username }}</h5>
+                                        <span class="text-muted small">{{ review.created_at|date:"F j, Y" }}</span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <span class="text-muted small">
+                                            <i class="fas fa-star"></i> {{ review.rating }} / 5
+                                        </span>
+                                        <p class="mt-2">{{ review.comment }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination Controls -->
+                <nav aria-label="Review Pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if reviews.has_previous %}
+                            <li class="page-item">
+                                <a class="btn btn-outline-black" href="?page={{ reviews.previous_page_number }}{% if star_filter %}&stars={{ star_filter }}{% endif %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for num in reviews.paginator.page_range %}
+                            <li class="page-item {% if reviews.number == num %}active{% endif %}">
+                                <a class="btn btn-outline-black {% if reviews.number == num %}active{% endif %}" href="?page={{ num }}{% if star_filter %}&stars={{ star_filter }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if reviews.has_next %}
+                            <li class="page-item">
+                                <a class="btn btn-outline-black" href="?page={{ reviews.next_page_number }}{% if star_filter %}&stars={{ star_filter }}{% endif %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% else %}
+                <p class="text-center mt-4">No reviews yet. Be the first to review this product!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Add a Review Form -->
+    {% if user.is_authenticated %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h4 class="logo-font text-center">Write a Review</h4>
+            <hr class="w-50 mb-4 mx-auto">
+            <form method="post" action="{% url 'add_product_review' product.id %}" class="p-4 border-black rounded-0 bg-white">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_rating" class="small text-muted">Rating (1-5)</label>
+                    <div id="star-rating" class="star-rating">
+                        <span data-value="1" class="star">&#9733;</span>
+                        <span data-value="2" class="star">&#9733;</span>
+                        <span data-value="3" class="star">&#9733;</span>
+                        <span data-value="4" class="star">&#9733;</span>
+                        <span data-value="5" class="star">&#9733;</span>
+                    </div>
+                    <input type="hidden" id="id_rating" name="rating" value="">
+                </div>
+                <div class="form-group">
+                    <label for="id_comment" class="small text-muted">Comment</label>
+                    <textarea id="id_comment" name="comment" class="form-control" rows="3" placeholder="Write your review here..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-black text-uppercase">Submit Review</button>
+            </form>
+        </div>
+    </div>
+{% else %}
+<p class="text-center mt-5">You must <a href="{% url 'account_login' %}" class="text-info">log in</a> to write a review.</p>
+{% endif %}
 </div>
 
 {% endblock %}
@@ -123,14 +225,50 @@
 {% block postloadjs %}
 {{ block.super }}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+        // Parent container for event delegation
+        const container = document.body;
+
+        container.addEventListener('change', function (event) {
+            if (event.target && event.target.id === 'stars') {
+                const starsDropdown = event.target;
+                const selectedRating = starsDropdown.value;
+                const currentUrl = new URL(window.location.href);
+
+                // Update the URL parameter for stars
+                if (selectedRating) {
+                    currentUrl.searchParams.set('stars', selectedRating);
+                } else {
+                    currentUrl.searchParams.delete('stars');
+                }
+
+                // Use fetch for AJAX-like behavior
+                fetch(currentUrl.toString(), { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                    .then(response => response.text())
+                    .then(html => {
+                        // Replace only the review section
+                        const reviewsSection = document.querySelector('#reviews-section');
+                        const parser = new DOMParser();
+                        const newDocument = parser.parseFromString(html, 'text/html');
+                        const newReviewsSection = newDocument.querySelector('#reviews-section');
+
+                        reviewsSection.innerHTML = newReviewsSection.innerHTML;
+
+                        // Smooth scrolling to reviews section
+                        reviewsSection.scrollIntoView({ behavior: 'smooth' });
+                    })
+                    .catch(error => console.error('Error fetching reviews:', error));
+            }
+        });
+
+        // Existing Quantity Increment/Decrement Logic
         const incrementQtyButtons = document.querySelectorAll('.increment-qty');
         const decrementQtyButtons = document.querySelectorAll('.decrement-qty');
         const qtyInputs = document.querySelectorAll('.qty_input');
         let selectedProductId = null;
 
         incrementQtyButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const itemId = this.dataset.item_id;
                 const qtyInput = document.getElementById('id_qty_' + itemId);
@@ -142,7 +280,7 @@
         });
 
         decrementQtyButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const itemId = this.dataset.item_id;
                 const qtyInput = document.getElementById('id_qty_' + itemId);
@@ -155,7 +293,7 @@
 
         // Open modal when delete button is clicked
         document.querySelectorAll('.delete-product-button').forEach(button => {
-            button.addEventListener('click', function(event) {
+            button.addEventListener('click', function (event) {
                 event.preventDefault();
                 selectedProductId = this.getAttribute('data-product-id');
                 $('#deleteConfirmationModal').modal('show');
@@ -163,7 +301,7 @@
         });
 
         // Confirm deletion on modal confirmation
-        document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
             if (selectedProductId) {
                 fetch(`/products/delete/${selectedProductId}/`, {
                     method: 'POST',
@@ -193,6 +331,62 @@
                 });
             }
         });
+
+        // Debugging for Review Form Fields
+        const commentField = document.getElementById('id_comment');
+        const ratingField = document.getElementById('id_rating');
+
+        if (commentField) {
+            commentField.addEventListener('input', (e) => console.log('Comment Field Input Event:', e.target.value));
+        }
+
+        if (ratingField) {
+            ratingField.addEventListener('change', (e) => console.log('Rating Field Change Event:', e.target.value));
+        }
+
+        // Star Rating Logic
+        const stars = document.querySelectorAll('#star-rating .star');
+        const ratingInput = document.querySelector('#id_rating');
+
+        if (stars && ratingInput) {
+            stars.forEach((star) => {
+                star.addEventListener('click', function () {
+                    const selectedValue = this.getAttribute('data-value');
+                    ratingInput.value = selectedValue;
+
+                    // Highlight selected stars
+                    stars.forEach((s, index) => {
+                        if (index < selectedValue) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseover', function () {
+                    const hoverValue = this.getAttribute('data-value');
+                    stars.forEach((s, index) => {
+                        if (index < hoverValue) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseout', function () {
+                    const selectedValue = ratingInput.value || 0;
+                    stars.forEach((s, index) => {
+                        if (index < selectedValue) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
+            });
+        }
     });
 </script>
 {% endblock %}
