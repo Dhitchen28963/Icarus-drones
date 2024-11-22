@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/manage_issues.css' %}">
+{% endblock %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="overlay"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h2 class="logo-font mb-4 text-center">Manage Customer Issues</h2>
+            <hr>
+        </div>
+    </div>
+    
+    <!-- Toggle Buttons -->
+    <div class="row mb-3">
+        <div class="col text-center">
+            <button id="toggle-table-view" class="btn btn-primary">Table View</button>
+            <button id="toggle-card-view" class="btn btn-secondary">Card View</button>
+        </div>
+    </div>
+
+    <!-- Table View -->
+    <div id="table-view" class="view-container">
+        {% if issues %}
+            <div class="table-responsive">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Issue Type</th>
+                            <th>Description</th>
+                            <th>User</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for issue in issues %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'order_history' issue.order.order_number %}" 
+                                       title="{{ issue.order.order_number }}">
+                                        {{ issue.order.order_number|truncatechars:8 }}
+                                    </a>
+                                </td>
+                                <td>{{ issue.get_issue_type_display }}</td>
+                                <td>{{ issue.description|truncatechars:50 }}</td>
+                                <td>{{ issue.user.username }}</td>
+                                <td>{{ issue.created_at|date:"F j, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'respond_to_issue' issue.id %}" 
+                                       class="btn btn-primary btn-sm mb-2">
+                                        Respond
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center mt-4">No unresolved issues at the moment.</p>
+        {% endif %}
+    </div>
+
+    <!-- Card View -->
+    <div id="card-view" class="view-container d-none">
+        <div class="row">
+            {% if issues %}
+                {% for issue in issues %}
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="list-group-item p-4 border">
+                            <h5>Order: {{ issue.order.order_number }}</h5>
+                            <p><strong>Type:</strong> {{ issue.get_issue_type_display }}</p>
+                            <p><strong>Description:</strong> {{ issue.description }}</p>
+                            <p><strong>Status:</strong> {{ issue.get_status_display }}</p>
+                            <p><strong>User:</strong> {{ issue.user.username }}</p>
+                            <p><strong>Date:</strong> {{ issue.created_at|date:"F j, Y" }}</p>
+                            <a href="{% url 'respond_to_issue' issue.id %}" class="btn btn-primary">Respond</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center mt-4">No unresolved issues at the moment.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Respond to an issue (conditionally displayed when responding) -->
+    {% if issue_to_respond %}
+    <div class="row mt-5">
+        <div class="col-12 col-lg-6 offset-lg-3">
+            <div class="card border-black rounded-0 p-4 bg-light">
+                <h4 class="logo-font mb-4 text-center">Respond to Issue</h4>
+                <p class="text-muted mb-2">
+                    <strong>Order Number:</strong> {{ issue_to_respond.order.order_number }}
+                </p>
+                <p class="text-muted mb-2">
+                    <strong>Issue Type:</strong> {{ issue_to_respond.get_issue_type_display }}
+                </p>
+                <p class="text-muted mb-2">
+                    <strong>Description:</strong> {{ issue_to_respond.description }}
+                </p>
+                <p class="text-muted mb-2">
+                    <strong>Reported By:</strong> {{ issue_to_respond.user.username }}
+                </p>
+                <p class="text-muted mb-4">
+                    <strong>Reported On:</strong> {{ issue_to_respond.created_at|date:"F j, Y" }}
+                </p>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ response_form.as_p }}
+                    <button type="submit" class="btn btn-black rounded-0 text-uppercase float-right">
+                        Send Response
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableView = document.getElementById('table-view');
+            const cardView = document.getElementById('card-view');
+            const tableButton = document.getElementById('toggle-table-view');
+            const cardButton = document.getElementById('toggle-card-view');
+
+            // Show Table View by default
+            tableView.classList.remove('d-none');
+            cardView.classList.add('d-none');
+
+            // Toggle Table View
+            tableButton.addEventListener('click', function () {
+                tableView.classList.remove('d-none');
+                cardView.classList.add('d-none');
+                tableButton.classList.add('btn-primary');
+                tableButton.classList.remove('btn-secondary');
+                cardButton.classList.add('btn-secondary');
+                cardButton.classList.remove('btn-primary');
+            });
+
+            // Toggle Card View
+            cardButton.addEventListener('click', function () {
+                cardView.classList.remove('d-none');
+                tableView.classList.add('d-none');
+                cardButton.classList.add('btn-primary');
+                cardButton.classList.remove('btn-secondary');
+                tableButton.classList.add('btn-secondary');
+                tableButton.classList.remove('btn-primary');
+            });
+        });
+    </script>
+{% endblock %}
