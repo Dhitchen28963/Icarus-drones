@@ -6,18 +6,23 @@ from django_countries.fields import CountryField
 from decimal import Decimal
 from django.db import transaction
 
+
 class LoyaltyPointsTransaction(models.Model):
     TRANSACTION_TYPES = [
         ('EARN', 'Points Earned'),
         ('REDEEM', 'Points Redeemed'),
     ]
 
-    user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='points_transactions')
+    user_profile = models.ForeignKey(
+        'UserProfile', on_delete=models.CASCADE, related_name='points_transactions'
+    )
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
     points = models.IntegerField()
     balance_before = models.IntegerField()
     balance_after = models.IntegerField()
-    order = models.ForeignKey('checkout.Order', on_delete=models.SET_NULL, null=True, blank=True)
+    order = models.ForeignKey(
+        'checkout.Order', on_delete=models.SET_NULL, null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -26,10 +31,10 @@ class LoyaltyPointsTransaction(models.Model):
     def __str__(self):
         return f"{self.transaction_type} - {self.points} points"
 
+
 class UserProfile(models.Model):
     """
-    A user profile model for maintaining default
-    delivery information and order history
+    A user profile model for maintaining default delivery information and order history
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=100, blank=True, null=True)
@@ -54,8 +59,7 @@ class UserProfile(models.Model):
         current_points = self.loyalty_points
         points_deducted = 0
         points_added = 0
-        
-        # First handle redemption
+
         if points_used > 0 and current_points >= points_used:
             self.points_transactions.create(
                 transaction_type='REDEEM',
@@ -69,7 +73,6 @@ class UserProfile(models.Model):
             self.loyalty_points = current_points
             self.save()
 
-        # Then handle points earned
         if points_earned > 0:
             self.points_transactions.create(
                 transaction_type='EARN',
@@ -87,13 +90,43 @@ class UserProfile(models.Model):
 
 
 @receiver(post_save, sender=User)
-
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    """
-    Create or update the user profile whenever the User object is saved.
-    """
     if created:
         UserProfile.objects.create(user=instance)
     else:
-        # Existing users: just save the profile
         instance.userprofile.save()
+
+
+class OrderIssue(models.Model):
+    ISSUE_CHOICES = [
+        ('not_received', 'Order Not Received'),
+        ('damaged', 'Damaged Item(s)'),
+        ('missing', 'Missing Item(s)'),
+        ('other', 'Other'),
+    ]
+
+    STATUS_CHOICES = [
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='order_issues')
+    order = models.ForeignKey(
+        'checkout.Order', on_delete=models.CASCADE, related_name='issues'
+    )
+    issue_type = models.CharField(max_length=20, choices=ISSUE_CHOICES)
+    description = models.TextField()
+    response = models.TextField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default='in_progress'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Issue - {self.issue_type} (Order: {self.order.order_number}) - {self.get_status_display()}"
+
+    class Meta:
+        permissions = [
+            ("can_manage_issues", "Can manage customer issues"),
+        ]
