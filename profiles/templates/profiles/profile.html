@@ -74,6 +74,12 @@
                                         </ul>
                                     </td>
                                     <td>${{ order.grand_total }}</td>
+                                    <td>
+                                        <a href="{% url 'report_order_issue' order.order_number %}" 
+                                           class="btn btn-danger btn-sm">
+                                            Report an Issue
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
