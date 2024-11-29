@@ -1,12 +1,16 @@
 from django.conf import settings
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.functions import Lower, Substr
 from products.constants import ATTACHMENTS
 from .models import Product, Category, Attachment, ProductReview
 from .forms import ProductForm, AttachmentForm, ProductReviewForm
+from profiles.models import Wishlist, UserProfile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import json
 
 # View to show all products, including sorting and search queries
 def all_products(request):
@@ -388,3 +392,35 @@ def add_product_review(request, product_id):
         'product': product,
         'form': form,
     })
+
+
+@login_required
+def toggle_wishlist(request):
+    """
+    Toggle a product in the user's wishlist.
+    """
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)  # Parse JSON payload
+            product_id = data.get('product_id')
+            if not product_id:
+                return JsonResponse({'error': 'Product ID missing'}, status=400)
+
+            product = get_object_or_404(Product, id=product_id)
+            user_profile = get_object_or_404(UserProfile, user=request.user)
+
+            wishlist, created = Wishlist.objects.get_or_create(user_profile=user_profile)
+
+            if product in wishlist.products.all():
+                wishlist.products.remove(product)
+                return JsonResponse({'status': 'removed', 'message': f'Removed "{product.name}" from your wishlist!'})
+            else:
+                wishlist.products.add(product)
+                return JsonResponse({'status': 'added', 'message': f'Added "{product.name}" to your wishlist!'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'Error occurred: {e}'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

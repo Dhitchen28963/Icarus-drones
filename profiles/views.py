@@ -1,12 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import UserProfile, OrderIssue
+from .models import UserProfile, OrderIssue, Wishlist, UserMessage
 from .forms import UserProfileForm, OrderIssueForm, OrderIssueResponseForm
 from checkout.models import Order
+from products.models import Product
 from django.core.mail import send_mail
 from .decorators import superuser_or_staff_required, superuser_required
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+import json
 
 
 @login_required
@@ -17,6 +20,9 @@ def profile(request):
     # Retrieve unresolved and resolved issues using `status`
     unresolved_issues = profile.user.order_issues.filter(status='in_progress')
     resolved_issues = profile.user.order_issues.filter(status='resolved')
+
+    # Retrieve wishlist for preview
+    wishlist_products = profile.wishlist.products.all()
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=profile)
@@ -31,22 +37,26 @@ def profile(request):
     # Retrieve orders without recalculating loyalty points
     orders = profile.orders.all()
 
-    # Add `can_manage_issues` to the context
-    can_manage_issues = (
-        request.user.is_superuser or request.user.has_perm('profiles.can_manage_issues')
-    )
-
     template = 'profiles/profile.html'
     context = {
         'form': form,
         'orders': orders,
+        'wishlist_products': wishlist_products,
         'unresolved_issues': unresolved_issues,
         'resolved_issues': resolved_issues,
         'on_profile_page': True,
-        'can_manage_issues': can_manage_issues,
     }
 
     return render(request, template, context)
+
+
+@login_required
+def wishlist_view(request):
+    """View to display the user's wishlist."""
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    wishlist, created = Wishlist.objects.get_or_create(user_profile=user_profile)
+    wishlist_products = wishlist.products.all()
+    return render(request, 'profiles/wishlist.html', {'wishlist_products': wishlist_products})
 
 
 def order_history(request, order_number):
@@ -70,7 +80,7 @@ def order_history(request, order_number):
 
 @login_required
 def report_order_issue(request, order_number):
-    # Retrieve the order via the user profile
+    """Allow users to report an issue with an order."""
     order = get_object_or_404(
         Order,
         order_number=order_number,
@@ -106,7 +116,6 @@ def report_order_issue(request, order_number):
     return render(request, 'profiles/report_issue.html', {'form': form, 'order': order})
 
 
-
 @superuser_or_staff_required
 def manage_issues(request):
     """ View to list all order issues. """
@@ -122,14 +131,21 @@ def manage_issues(request):
 
 @superuser_or_staff_required
 def respond_to_issue(request, issue_id):
-    """ View to respond to a specific issue. """
+    """View to respond to a specific issue."""
     issue = get_object_or_404(OrderIssue, id=issue_id)
 
     if request.method == 'POST':
         form = OrderIssueResponseForm(request.POST, instance=issue)
         if form.is_valid():
-            # Save the response and status directly from the form
+            # Save the response and status
             form.save()
+
+            # Add the response to the user's messages
+            UserMessage.objects.create(
+                user=issue.user,
+                created_by=request.user,
+                content=f"Response to your issue for order {issue.order.order_number}: {issue.response}",
+            )
 
             # Send email notification if the status is resolved
             if issue.status == 'resolved':
@@ -140,7 +156,7 @@ def respond_to_issue(request, issue_id):
                     recipient_list=[issue.user.email],
                 )
 
-            messages.success(request, 'Response saved and status updated.')
+            messages.success(request, 'Response saved and message sent to the customer.')
             return redirect('manage_issues')
         else:
             messages.error(request, 'There was an error saving your response. Please try again.')
@@ -154,19 +170,45 @@ def respond_to_issue(request, issue_id):
     return render(request, 'profiles/respond_to_issue.html', context)
 
 
-
 @login_required
 def messages_view(request):
     """View to display messages for the user."""
     profile = request.user.userprofile
+
+    # Fetch messages related to the user
+    messages_list = UserMessage.objects.filter(user=request.user).order_by('-created_at')
+
     unresolved_issues = profile.user.order_issues.filter(status='in_progress')
     resolved_issues = profile.user.order_issues.filter(status='resolved')
 
     context = {
+        'messages_list': messages_list,
         'unresolved_issues': unresolved_issues,
         'resolved_issues': resolved_issues,
     }
     return render(request, 'profiles/messages.html', context)
+
+
+@login_required
+def respond_to_message(request, message_id):
+    """Handle responses to messages."""
+    if request.method == "POST":
+        original_message = get_object_or_404(UserMessage, id=message_id)
+
+        response_content = request.POST.get("response")
+        if response_content:
+            # Create a response message linked to the original sender
+            UserMessage.objects.create(
+                user=original_message.created_by,
+                created_by=request.user,
+                content=response_content,
+                parent_message=original_message
+            )
+            messages.success(request, "Your response has been sent successfully.")
+        else:
+            messages.error(request, "Your response cannot be empty.")
+
+        return redirect("messages")  # Redirect back to the messages page
 
 
 @superuser_required
@@ -192,3 +234,35 @@ def manage_staff(request):
 
     users = User.objects.all()
     return render(request, 'profiles/manage_staff.html', {'users': users})
+
+
+@login_required
+def toggle_wishlist(request):
+    """
+    Toggle a product in the user's wishlist.
+    """
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)  # Parse JSON payload
+            product_id = data.get('product_id')
+            if not product_id:
+                return JsonResponse({'error': 'Product ID missing'}, status=400)
+
+            product = get_object_or_404(Product, id=product_id)
+            user_profile = get_object_or_404(UserProfile, user=request.user)
+
+            wishlist, created = Wishlist.objects.get_or_create(user_profile=user_profile)
+
+            if product in wishlist.products.all():
+                wishlist.products.remove(product)
+                return JsonResponse({'status': 'removed', 'message': f'Removed "{product.name}" from your wishlist!'})
+            else:
+                wishlist.products.add(product)
+                return JsonResponse({'status': 'added', 'message': f'Added "{product.name}" to your wishlist!'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'Error occurred: {e}'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

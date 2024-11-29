@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django_countries.fields import CountryField
 from decimal import Decimal
 from django.db import transaction
+from products.models import Product
 
 
 class LoyaltyPointsTransaction(models.Model):
@@ -130,3 +131,31 @@ class OrderIssue(models.Model):
         permissions = [
             ("can_manage_issues", "Can manage customer issues"),
         ]
+
+
+class Wishlist(models.Model):
+    user_profile = models.OneToOneField('UserProfile', on_delete=models.CASCADE, related_name='wishlist')
+    products = models.ManyToManyField(Product, related_name='wishlisted_by', blank=True)
+
+    def __str__(self):
+        return f"{self.user_profile.user.username}'s Wishlist"
+
+
+@receiver(post_save, sender=UserProfile)
+def create_user_wishlist(sender, instance, created, **kwargs):
+    """
+    Signal to create a wishlist for every new UserProfile.
+    """
+    if created:
+        Wishlist.objects.create(user_profile=instance)
+
+
+class UserMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    parent_message = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name="responses")
+
+    def __str__(self):
+        return f"Message to {self.user.username} from {self.created_by.username}"

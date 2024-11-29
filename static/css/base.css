@@ -308,6 +308,40 @@ button.btn-black:hover {
     color: #fff;
 }
 
+/* Wishlist styles */
+.wishlist-icon {
+    cursor: pointer;
+}
+
+.wishlist-icon .fa-heart {
+    color: gray;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.wishlist-icon .fa-heart.wishlist-active {
+    color: red;
+}
+
+.card {
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card-title {
+    font-size: 1rem;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
 /* Star Rating Styles */
 .star-rating {
     display: flex;

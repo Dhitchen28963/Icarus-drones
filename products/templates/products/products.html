@@ -94,67 +94,73 @@
             </div>
             <div class="row">
                 {% for product in products %}
-                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3" data-product-id="{{ product.id }}">
-                        <div class="card h-100 border-0">
-                            <a href="{% url 'product_detail' product.id %}">
-                                {% if product.image %}
-                                    <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                                {% else %}
-                                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
-                                {% endif %}
-                            </a>
-                            <div class="card-body pb-0">
-                                <p class="mb-0">{{ product.name }}</p>
-                            </div>
-                            <div class="card-footer bg-white pt-0 border-0 text-left">
-                                <div class="row">
-                                    <div class="col">
-                                        <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
-                                        {% if product.category %}
-                                            <p class="small mt-1 mb-0">
-                                                <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
-                                                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
-                                                </a>
-                                            </p>
+                <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3" data-product-id="{{ product.id }}">
+                    <div class="card h-100 border-0">
+                        <div class="d-flex justify-content-end p-2">
+                            <i class="fas fa-heart wishlist-icon {% if product in user.wishlist.products.all %}wishlist-active{% endif %}" 
+                               data-product-id="{{ product.id }}"></i>
+                        </div>
+                        <a href="{% url 'product_detail' product.id %}">
+                            {% if product.image %}
+                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
+                            {% endif %}
+                        </a>
+                        <div class="card-body pb-0">
+                            <p class="mb-0">{{ product.name }}</p>
+                        </div>
+                        <div class="card-footer bg-white pt-0 border-0 text-left">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
+                                    {% if product.category %}
+                                        <p class="small mt-1 mb-0">
+                                            <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
+                                                <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                            </a>
+                                        </p>
+                                    {% endif %}
+                                    {% if product.rating %}
+                                        <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
+                                    {% else %}
+                                        <small class="text-muted">No Rating</small>
+                                    {% endif %}
+                                    <small class="ml-3">
+                                        <i class="fas fa-heart wishlist-icon {% if product in user.wishlist.products.all %}wishlist-active{% endif %}" 
+                                           data-product-id="{{ product.id }}"></i>
+                                        {% if request.user.is_authenticated and not request.user.is_superuser %}
+                                            <a href="{% url 'compare_product' product.id %}" class="text-info">Compare</a>
+                                        {% elif request.user.is_superuser %}
+                                            <a href="{% url 'edit_product' product.id %}">Edit</a> | 
+                                            <a href="#" class="text-danger delete-product-button" data-product-id="{{ product.id }}">Delete</a>
                                         {% endif %}
-                                        {% if product.rating %}
-                                            <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-                                        {% else %}
-                                            <small class="text-muted">No Rating</small>
-                                        {% endif %}
-                                        <small class="ml-3">
-                                            {% if request.user.is_authenticated and not request.user.is_superuser %}
-                                                <a href="{% url 'compare_product' product.id %}" class="text-info">Compare</a>
-                                            {% elif request.user.is_superuser %}
-                                                <a href="{% url 'edit_product' product.id %}">Edit</a> | 
-                                                <a href="#" class="text-danger delete-product-button" data-product-id="{{ product.id }}">Delete</a>
-                                            {% endif %}
-                                        </small>
-                                    </div>
+                                    </small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% if forloop.counter|divisibleby:1 %}
-                        <div class="col-12 d-sm-none mb-5">
-                            <hr>
-                        </div>
-                    {% endif %}
-                    {% if forloop.counter|divisibleby:2 %}
-                        <div class="col-12 d-none d-sm-block d-md-block d-lg-none mb-5">
-                            <hr>
-                        </div>
-                    {% endif %}
-                    {% if forloop.counter|divisibleby:3 %}
-                        <div class="col-12 d-none d-lg-block d-xl-none mb-5">
-                            <hr>
-                        </div>
-                    {% endif %}
-                    {% if forloop.counter|divisibleby:4 %}
-                        <div class="col-12 d-none d-xl-block mb-5">
-                            <hr>
-                        </div>
-                    {% endif %}
+                </div>
+                {% if forloop.counter|divisibleby:1 %}
+                    <div class="col-12 d-sm-none mb-5">
+                        <hr>
+                    </div>
+                {% endif %}
+                {% if forloop.counter|divisibleby:2 %}
+                    <div class="col-12 d-none d-sm-block d-md-block d-lg-none mb-5">
+                        <hr>
+                    </div>
+                {% endif %}
+                {% if forloop.counter|divisibleby:3 %}
+                    <div class="col-12 d-none d-lg-block d-xl-none mb-5">
+                        <hr>
+                    </div>
+                {% endif %}
+                {% if forloop.counter|divisibleby:4 %}
+                    <div class="col-12 d-none d-xl-block mb-5">
+                        <hr>
+                    </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -170,19 +176,65 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
         let selectedProductId = null;
 
+        // Wishlist Toggle Logic
+        const wishlistToggleUrl = "{% url 'products_toggle_wishlist' %}";
+        document.querySelectorAll('.wishlist-icon').forEach(icon => {
+            icon.addEventListener('click', function () {
+                const productId = this.getAttribute('data-product-id');
+
+                fetch(wishlistToggleUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ product_id: productId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'added') {
+                        this.classList.add('wishlist-active');
+                    } else if (data.status === 'removed') {
+                        this.classList.remove('wishlist-active');
+                    }
+
+                    // Show the success toast and update its message
+                    setTimeout(function () {
+                        const toastElement = document.querySelector('.toast.custom-toast');
+                        if (toastElement) {
+                            toastElement.classList.remove('d-none');
+                            const toastBody = toastElement.querySelector('.toast-body .col');
+                            toastBody.innerHTML = data.message || 'Action completed successfully!';
+                            const successToast = new bootstrap.Toast(toastElement, {
+                                autohide: true,
+                                delay: 3000
+                            });
+                            successToast.show();
+
+                            // Remove the toast after it’s been shown
+                            setTimeout(() => {
+                                toastElement.classList.add('d-none');
+                            }, 3500);
+                        }
+                    }, 500);
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
         document.querySelectorAll('.delete-product-button').forEach(button => {
-            button.addEventListener('click', function(event) {
+            button.addEventListener('click', function (event) {
                 event.preventDefault();
                 selectedProductId = this.getAttribute('data-product-id');
                 $('#deleteConfirmationModal').modal('show');
             });
         });
 
-        document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
             if (selectedProductId) {
                 fetch(`/products/delete/${selectedProductId}/`, {
                     method: 'POST',
@@ -198,11 +250,10 @@
                         const productCard = document.querySelector(`[data-product-id="${selectedProductId}"]`);
                         if (productCard) {
                             productCard.remove();
-                        } else {
                         }
 
                         // Show the success toast and then remove it from the DOM after a timeout
-                        setTimeout(function() {
+                        setTimeout(function () {
                             const toastElement = document.querySelector('.toast.custom-toast');
                             if (toastElement) {
                                 toastElement.classList.remove('d-none');
@@ -212,30 +263,25 @@
                                 });
                                 successToast.show();
 
-                                // Remove the toast from the DOM after it's been shown
+                                // Remove the toast after it’s been shown
                                 setTimeout(() => {
                                     toastElement.classList.add('d-none');
                                 }, 3500);
-                            } else {
                             }
-                        }, 500); // Adjust delay if necessary
-
-                    } else {
+                        }, 500);
                     }
-                }).catch(error => {
-                });
-            } else {
+                }).catch(error => console.error('Error:', error));
             }
         });
     });
 
     // Scroll to top functionality
-    $('.btt-link').click(function(e) {
+    $('.btt-link').click(function (e) {
         window.scrollTo(0, 0);
     });
 
     // Sorting functionality
-    $('#sort-selector').change(function() {
+    $('#sort-selector').change(function () {
         var selector = $(this);
         var currentUrl = new URL(window.location);
 

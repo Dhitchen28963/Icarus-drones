@@ -57,6 +57,33 @@
                 {% else %}
                     <p>No resolved issues.</p>
                 {% endif %}
+
+                <!-- Add Messages Section -->
+                <h5 class="logo-font mt-4 mb-3">Messages</h5>
+                {% if messages_list %}
+                    <ul class="list-group">
+                        {% for message in messages_list %}
+                            <li class="list-group-item">
+                                <strong>From:</strong> {{ message.created_by.username }}<br>
+                                <strong>Message:</strong> {{ message.content }}<br>
+                                <strong>Sent On:</strong> {{ message.created_at|date:"F j, Y, g:i a" }}
+                                <br>
+
+                                <!-- Response Section -->
+                                <form method="post" action="{% url 'respond_to_message' message.id %}" class="mt-3">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="response-{{ message.id }}">Your Response</label>
+                                        <textarea class="form-control" id="response-{{ message.id }}" name="response" rows="3" placeholder="Type your response here..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-black rounded-0 text-uppercase">Send Response</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No messages.</p>
+                {% endif %}
             </div>
         </div>
     </div>

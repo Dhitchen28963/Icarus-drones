@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}">
+{% endblock %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <hr>
+                <h2 class="logo-font mb-4">My Wishlist</h2>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            {% if wishlist_products %}
+                <div class="col-12">
+                    <div class="row">
+                        {% for product in wishlist_products %}
+                            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                                <div class="card h-100 border-0">
+                                    <a href="{% url 'product_detail' product.id %}">
+                                        {% if product.image %}
+                                            <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                                        {% else %}
+                                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
+                                        {% endif %}
+                                    </a>
+                                    <div class="card-body pb-0">
+                                        <p class="mb-0 text-center font-weight-bold">{{ product.name }}</p>
+                                        <p class="mb-0 text-center text-muted">${{ product.price }}</p>
+                                    </div>
+                                    <div class="card-footer bg-white border-0 text-center">
+                                        <i class="fas fa-heart wishlist-icon {% if product in wishlist_products %}wishlist-active{% endif %}" 
+                                           data-product-id="{{ product.id }}"></i>
+                                        <a href="{% url 'product_detail' product.id %}" class="btn btn-black btn-sm rounded-0">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="col text-center mt-4">
+                    <p>Your wishlist is empty.</p>
+                    <a href="{% url 'products' %}" class="btn btn-black rounded-0">Start Shopping</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="message-container">
+        <div class="toast custom-toast rounded-0 border-top-0 d-none" data-autohide="false">
+            <div class="arrow-up arrow-success"></div>
+            <div class="w-100 toast-capper bg-success"></div>
+            <div class="toast-header bg-white text-dark">
+                <strong class="mr-auto">Success!</strong>
+                <button type="button" class="ml-2 mb-1 close text-dark" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body bg-white">
+                <div class="row">
+                    <div class="col">
+                        <!-- Success message will be dynamically updated -->
+                        Item removed from wishlist!
+                        <hr class="mt-1 mb-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const wishlistToggleUrl = "{% url 'profiles_toggle_wishlist' %}";
+        const toastElement = document.querySelector('.toast.custom-toast');
+
+        document.querySelectorAll('.wishlist-icon').forEach(icon => {
+            icon.addEventListener('click', function () {
+                const productId = this.getAttribute('data-product-id');
+
+                fetch(wishlistToggleUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ product_id: productId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'removed') {
+                        // Remove the product card from the DOM
+                        const productCard = this.closest('.col-6');
+                        if (productCard) {
+                            productCard.remove();
+                        }
+
+                        // Check if there are any products left in the wishlist
+                        const remainingProducts = document.querySelectorAll('.col-6');
+                        if (remainingProducts.length === 0) {
+                            const wishlistContainer = document.querySelector('.container .row');
+                            wishlistContainer.innerHTML = `
+                                <div class="col text-center mt-4">
+                                    <p>Your wishlist is empty.</p>
+                                    <a href="{% url 'products' %}" class="btn btn-black rounded-0">Start Shopping</a>
+                                </div>`;
+                        }
+                    }
+
+                    // Show the success toast with the message
+                    if (toastElement) {
+                        toastElement.classList.remove('d-none');
+                        const toastBody = toastElement.querySelector('.toast-body .col');
+                        toastBody.innerHTML = data.message || 'Item removed from wishlist!';
+                        const successToast = new bootstrap.Toast(toastElement, {
+                            autohide: true,
+                            delay: 3000
+                        });
+                        successToast.show();
+
+                        setTimeout(() => {
+                            toastElement.classList.add('d-none');
+                        }, 3500);
+                    } else {
+                        console.error('Toast element not found on the page.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+</script>
+{% endblock %}

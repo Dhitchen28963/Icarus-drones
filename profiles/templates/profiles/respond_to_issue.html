@@ -43,40 +43,28 @@
                     <p class="text-muted mb-4">
                         <strong>Date:</strong> {{ issue.created_at|date:"F j, Y" }}
                     </p>
+                </div>
 
-                    <!-- New Respond to Issue Form Section -->
-                    <div class="card border-black rounded-0 p-4 bg-light">
-                        <h4 class="logo-font mb-4 text-center">Respond to Issue</h4>
-                        <p class="text-muted mb-2">
-                            <strong>Order Number:</strong> {{ issue.order.order_number }}
-                        </p>
-                        <p class="text-muted mb-2">
-                            <strong>Issue Type:</strong> {{ issue.get_issue_type_display }}
-                        </p>
-                        <p class="text-muted mb-2">
-                            <strong>Description:</strong> {{ issue.description }}
-                        </p>
-                        <p class="text-muted mb-2">
-                            <strong>Reported By:</strong> {{ issue.user.username }}
-                        </p>
-                        <p class="text-muted mb-4">
-                            <strong>Reported On:</strong> {{ issue.created_at|date:"F j, Y" }}
-                        </p>
-
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="form-group"></div>
-                                <label for="id_status">Status</label>
-                                <select name="status" class="form-control" id="id_status">
-                                    <option value="in_progress">In Progress</option>
-                                    <option value="resolved">Resolved</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-black rounded-0 text-uppercase float-right">
-                                Save Response
-                            </button>
-                        </form>
-                    </div>
+                <!-- Respond to Issue Form Section -->
+                <div class="card border-black rounded-0 p-4 bg-light mt-4">
+                    <h4 class="logo-font mb-4 text-center">Respond to Issue</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_status">Status</label>
+                            <select name="status" class="form-control" id="id_status">
+                                <option value="in_progress" {% if issue.status == "in_progress" %}selected{% endif %}>In Progress</option>
+                                <option value="resolved" {% if issue.status == "resolved" %}selected{% endif %}>Resolved</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_response">Message</label>
+                            <textarea name="response" class="form-control" id="id_response" rows="4" placeholder="Add a message to the user">{{ issue.response|default_if_none:'' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-black rounded-0 text-uppercase float-right">
+                            Save Response
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -83,6 +83,7 @@
                   {% if can_manage_issues %}
                       <a href="{% url 'manage_issues' %}" class="dropdown-item">Manage Issues</a>
                   {% endif %}
+                  <a href="{% url 'wishlist' %}" class="dropdown-item">Wishlist</a>
                   <a href="{% url 'messages' %}" class="dropdown-item">Messages</a>
                   <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
                 {% else %}
