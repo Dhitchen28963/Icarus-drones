@@ -30,7 +30,6 @@
                 <form class="mt-3" action="{% url 'profile' %}" method="POST" id="profile-update-form">
                     {% csrf_token %}
 
-                    <!-- Render Profile Form Fields -->
                     {{ form|crispy }}
 
                     <!-- Custom Loyalty Points Display -->

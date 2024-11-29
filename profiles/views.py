@@ -137,17 +137,24 @@ def respond_to_issue(request, issue_id):
     if request.method == 'POST':
         form = OrderIssueResponseForm(request.POST, instance=issue)
         if form.is_valid():
-            # Save the response and status
             form.save()
 
-            # Add the response to the user's messages
+            # Get the most recent message related to this issue, if any
+            parent_message = UserMessage.objects.filter(
+                user=issue.user,
+                created_by=issue.user,
+                content__icontains=issue.description,  # Match the issue description
+            ).order_by('-created_at').first()
+
+            # Add the response to the user's message trail
             UserMessage.objects.create(
                 user=issue.user,
                 created_by=request.user,
                 content=f"Response to your issue for order {issue.order.order_number}: {issue.response}",
+                parent_message=parent_message,
             )
 
-            # Send email notification if the status is resolved
+            # Send email notification if the issue is resolved
             if issue.status == 'resolved':
                 send_mail(
                     subject=f"Response to your order issue: {issue.order.order_number}",
@@ -170,23 +177,32 @@ def respond_to_issue(request, issue_id):
     return render(request, 'profiles/respond_to_issue.html', context)
 
 
+
 @login_required
 def messages_view(request):
-    """View to display messages for the user."""
-    profile = request.user.userprofile
+    """View to display messages for the user or all messages for superusers/staff."""
+    if request.user.is_superuser or request.user.is_staff:
+        # Show all parent messages for superusers or staff
+        parent_messages = UserMessage.objects.filter(parent_message__isnull=True).order_by('-created_at')
+        unresolved_issues = OrderIssue.objects.filter(status='in_progress')
+        resolved_issues = OrderIssue.objects.filter(status='resolved')
+    else:
+        # Show only messages for the current user
+        profile = request.user.userprofile
+        parent_messages = UserMessage.objects.filter(
+            user=request.user, parent_message__isnull=True
+        ).order_by('-created_at')
 
-    # Fetch messages related to the user
-    messages_list = UserMessage.objects.filter(user=request.user).order_by('-created_at')
-
-    unresolved_issues = profile.user.order_issues.filter(status='in_progress')
-    resolved_issues = profile.user.order_issues.filter(status='resolved')
+        unresolved_issues = profile.user.order_issues.filter(status='in_progress')
+        resolved_issues = profile.user.order_issues.filter(status='resolved')
 
     context = {
-        'messages_list': messages_list,
+        'parent_messages': parent_messages,
         'unresolved_issues': unresolved_issues,
         'resolved_issues': resolved_issues,
     }
     return render(request, 'profiles/messages.html', context)
+
 
 
 @login_required
@@ -208,7 +224,7 @@ def respond_to_message(request, message_id):
         else:
             messages.error(request, "Your response cannot be empty.")
 
-        return redirect("messages")  # Redirect back to the messages page
+        return redirect("messages")
 
 
 @superuser_required
@@ -243,7 +259,7 @@ def toggle_wishlist(request):
     """
     if request.method == "POST":
         try:
-            data = json.loads(request.body)  # Parse JSON payload
+            data = json.loads(request.body)
             product_id = data.get('product_id')
             if not product_id:
                 return JsonResponse({'error': 'Product ID missing'}, status=400)

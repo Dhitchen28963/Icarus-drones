@@ -401,7 +401,7 @@ def toggle_wishlist(request):
     """
     if request.method == "POST":
         try:
-            data = json.loads(request.body)  # Parse JSON payload
+            data = json.loads(request.body)
             product_id = data.get('product_id')
             if not product_id:
                 return JsonResponse({'error': 'Product ID missing'}, status=400)

@@ -155,7 +155,9 @@ class UserMessage(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    parent_message = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name="responses")
+    parent_message = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.CASCADE, related_name="responses"
+    )
 
     def __str__(self):
         return f"Message to {self.user.username} from {self.created_by.username}"
