@@ -154,7 +154,42 @@ a.category-badge > span.badge:hover {
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
-/* Arrows for navigation */
+.black-color {
+    background-color: black;
+}
+
+.white-color {
+    background-color: white;
+}
+
+.blue-color {
+    background-color: blue;
+}
+
+.green-color {
+    background-color: green;
+}
+
+.pink-color {
+    background-color: pink;
+}
+
+.purple-color {
+    background-color: purple;
+}
+
+.red-color {
+    background-color: red;
+}
+
+.yellow-color {
+    background-color: yellow;
+}
+
+.orange-color {
+    background-color: orange;
+}
+
 .arrow {
     font-size: 30px;
     cursor: pointer;
@@ -186,24 +221,411 @@ a.category-badge > span.badge:hover {
     line-height: 1;
 }
 
+/* Report issue */
+.form-control#id_issue_type {
+    height: 3rem;
+    line-height: 1.5;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+#id_status {
+    height: auto;
+    min-height: 40px;
+    padding: 10px;
+}
+
+
+/* Product review form */
+.pagination .btn-outline-black {
+    color: black;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 0;
+}
+
+.pagination .btn-outline-black:hover,
+.pagination .btn-outline-black:focus {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+
+.pagination .btn-outline-black.active {
+    color: white !important;
+    background-color: black;
+    border-color: black;
+    font-weight: bold;
+}
+
+.pagination .btn-outline-black.active a {
+    color: white !important;
+    text-decoration: none;
+}
+
+.pagination .btn-outline-black.active span,
+.pagination .btn-outline-black.active i {
+    color: white !important;
+}
+
+.form-control {
+    border: 1px solid #333;
+    border-radius: 0;
+    padding: 10px;
+    font-size: 14px;
+}
+
+#stars {
+    height: auto;
+    line-height: 1.5;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    border: 1px solid #333;
+    background-color: white;
+}
+
+#stars:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+textarea.form-control {
+    resize: none;
+    pointer-events: auto;
+    background-color: #fff;
+}
+
+button.btn-black {
+    background-color: #000;
+    color: #fff;
+    border: none;
+}
+
+button.btn-black:hover {
+    background-color: #222;
+    color: #fff;
+}
+
+/* Wishlist styles */
+.wishlist-icon {
+    cursor: pointer;
+}
+
+.wishlist-icon .fa-heart {
+    color: gray;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.wishlist-icon .fa-heart.wishlist-active {
+    color: red;
+}
+
+.card {
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card-title {
+    font-size: 1rem;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+/* Star Rating Styles */
+.star-rating {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.star {
+    font-size: 24px;
+    color: #ddd;
+    transition: color 0.2s ease-in-out;
+}
+
+.star:hover,
+.star.selected {
+    color: #ffc107;
+}
+
+.star:hover ~ .star {
+    color: #ddd;
+}
+
+/* ------------------------------- bootstrap toasts */
+
+.message-container {
+    position: fixed;
+    top: 72px;
+    right: 15px;
+    z-index: 99999999999;
+}
+
+.custom-toast {
+    overflow: visible;
+}
+
+.toast-capper {
+    height: 2px;
+}
+
+.arrow-up {
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent; 
+    border-bottom: 10px solid black;
+    position: absolute;
+    top: -10px;
+    right: 36px;
+}
+
+/* Convenience classes - colors copied from Bootstrap */
+.arrow-primary {
+    border-bottom-color: #007bff !important;
+}
+
+.arrow-secondary {
+    border-bottom-color: #6c757d !important;
+}
+
+.arrow-success {
+    border-bottom-color: #28a745 !important;
+}
+
+.arrow-danger {
+    border-bottom-color: #dc3545 !important;
+}
+
+.arrow-warning {
+    border-bottom-color: #ffc107 !important;
+}
+
+.arrow-info {
+    border-bottom-color: #17a2b8 !important;
+}
+
+.arrow-light {
+    border-bottom-color: #f8f9fa !important;
+}
+
+.arrow-dark {
+    border-bottom-color: #343a40 !important;
+}
+
+.bag-notification-wrapper {
+    height: 100px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* All auth styles */
+.logout-page {
+    padding-top: 160px;
+}
+
+.auth-page {
+    padding-top: 180px;
+}
+
+.auth-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+
+/* Compare product styles */
+.compare-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.text-success {
+    color: green !important;
+    font-weight: bold;
+}
+
+.text-danger {
+    color: red !important;
+}
+
+.table {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+#compare-drone-dropdown {
+    margin: auto;
+    max-width: 300px;
+}
+
+.row.align-items-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Messages styling */
+.nav-tabs .nav-link.active {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 0;
+}
+
+.nav-tabs .nav-link {
+    color: #000;
+    font-weight: 600;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.list-group-item {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.list-group-item ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.list-group-item ul li {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 /* -------------------------------- Media Queries */
 
-/* Three rows of three circles on small screens */
 @media (max-width: 768px) {
     .color-option {
-        width: 25px; /* Smaller size for medium screens */
+        width: 25px;
         height: 25px;
     }
 
     .color-selector {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+        grid-template-columns: repeat(3, 1fr);
         justify-items: center;
         gap: 10px;
     }
 }
 
-/* Customization container: closer to image on screens up to 767px */
+/* Compare product styles */
+@media (max-width: 676px) {
+    .compare-container .row.align-items-center {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .compare-container .col-md-4 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #compare-drone-dropdown {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    .compare-container img {
+        max-width: 80%;
+        height: auto;
+    }
+}
+
+/* Bag html styles */
+@media (max-width: 537px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table {
+        font-size: 0.85rem;
+    }
+
+    .table th, .table td {
+        padding: 5px;
+        white-space: nowrap;
+    }
+
+    .table td img {
+        max-width: 60px;
+        height: auto;
+    }
+
+    .input-group {
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .input-group .btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .input-group .form-control {
+        width: 50px;
+        height: 28px;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+
+    .bag-totals h6,
+    .bag-totals h4,
+    .bag-totals p {
+        font-size: 0.9rem;
+    }
+
+    .bag-totals {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .btn-lg {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        display: inline-block;
+        width: auto;
+        margin: 5px;
+    }
+}
+
 @media (max-width: 469px) {
     h2.logo-font {
         margin-top: 20px;
@@ -225,7 +647,6 @@ a.category-badge > span.badge:hover {
     }
 }
 
-/* Two rows on very small screens (320px - 480px) */
 @media (max-width: 480px) {
     .color-option {
         width: 20px;
@@ -235,6 +656,88 @@ a.category-badge > span.badge:hover {
     .color-selector {
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
+    }
+
+    #topnav .input-group .form-control, 
+    #topnav .input-group-append .btn .icon,
+    #topnav .list-inline-item .nav-link {
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+    }
+
+    #topnav .input-group-append .btn .icon i {
+        font-size: 14px;
+    }
+
+    #topnav .list-inline-item .nav-link div i, 
+    #topnav .list-inline-item .nav-link div p {
+        font-size: 12px;
+    }
+
+    #topnav .list-inline-item .nav-link div i.fa-shopping-bag,
+    #topnav .list-inline-item .nav-link div p {
+        font-size: 12px;
+    }
+
+    .navbar-toggler {
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+    }
+}
+
+@media (max-width: 478px) {
+    .hide-on-small {
+        display: none;
+    }
+}
+
+@media (max-width: 443px) {
+    .order-history {
+        overflow-x: auto;
+    }
+
+    .order-history table {
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .order-history td, .order-history th {
+        white-space: nowrap;
+    }
+
+    .order-history .btn {
+        padding: 5px 10px;
+        
+        font-size: 10px;
+    }
+    .hide-on-small {
+        display: none;
+    }
+}
+
+@media (max-width: 437px) {
+    .nav-tabs .nav-link {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    .nav-tabs {
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+}
+
+@media (max-width: 406px) {
+    .list-group-item {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    th:nth-child(3),
+    td:nth-child(3) {
+        display: none;
     }
 }
 
@@ -249,7 +752,6 @@ a.category-badge > span.badge:hover {
         font-size: 14px;
     }
 
-    /* Target the My Account text and icon */
     #topnav .list-inline-item .nav-link div i, 
     #topnav .list-inline-item .nav-link div p {
         font-size: 12px;
@@ -259,7 +761,6 @@ a.category-badge > span.badge:hover {
         font-size: 16px;
     }
 
-    /* Target the shopping bag icon and text */
     #topnav .list-inline-item .nav-link div i.fa-shopping-bag,
     #topnav .list-inline-item .nav-link div p {
         font-size: 12px;
@@ -269,7 +770,6 @@ a.category-badge > span.badge:hover {
         font-size: 16px;
     }
 
-    /* Reduce size for the mobile search icon and text */
     #mobile-search .fas.fa-search {
         font-size: 16px;
     }
@@ -319,7 +819,6 @@ a.category-badge > span.badge:hover {
     }
 }
 
-/* pad the top a bit when navbar is collapsed on mobile */
 @media (max-width: 991px) {
     .header-container {
         padding-top: 116px;
@@ -330,7 +829,6 @@ a.category-badge > span.badge:hover {
     }
 }
 
-/* Move the image down for screen sizes between 768px and 1004px */
 @media (min-width: 768px) and (max-width: 1004px) {
     .image-preview {
         margin-top: 0.2rem;
