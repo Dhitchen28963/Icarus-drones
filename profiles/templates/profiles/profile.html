@@ -50,10 +50,11 @@
                     <table class="table table-sm table-borderless">
                         <thead>
                             <tr>
-                                <th>Order Number</th>
+                                <th>Order #</th>
                                 <th>Date</th>
                                 <th>Items</th>
-                                <th>Order Total</th>
+                                <th>Total</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,12 +62,12 @@
                                 <tr>
                                     <td>
                                         <a href="{% url 'order_history' order.order_number %}"
-                                        title="{{ order.order_number }}">
+                                           title="{{ order.order_number }}">
                                             {{ order.order_number|truncatechars:6 }}
                                         </a>
                                     </td>
                                     <td>{{ order.date }}</td>
-                                    <td>
+                                    <td class="hide-on-small">
                                         <ul class="list-unstyled">
                                             {% for item in order.lineitems.all %}
                                                 <li class="small">
@@ -79,7 +80,7 @@
                                     <td>
                                         <a href="{% url 'report_order_issue' order.order_number %}" 
                                            class="btn btn-danger btn-sm">
-                                            Report an Issue
+                                            Issue
                                         </a>
                                     </td>
                                 </tr>
@@ -88,9 +89,11 @@
                     </table>
                 </div>
             </div>
+        </div>
 
-            <!-- Wishlist Section -->
-            <div class="col-12 col-lg-6 mt-4">
+        <!-- Wishlist Section -->
+        <div class="row mt-4">
+            <div class="col-12">
                 <h3>My Wishlist</h3>
                 {% if wishlist_products %}
                     <div class="row">

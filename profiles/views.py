@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from .decorators import superuser_or_staff_required, superuser_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json
+import json, re
 
 
 @login_required
@@ -177,7 +177,6 @@ def respond_to_issue(request, issue_id):
     return render(request, 'profiles/respond_to_issue.html', context)
 
 
-
 @login_required
 def messages_view(request):
     """View to display messages for the user or all messages for superusers/staff."""
@@ -196,13 +195,37 @@ def messages_view(request):
         unresolved_issues = profile.user.order_issues.filter(status='in_progress')
         resolved_issues = profile.user.order_issues.filter(status='resolved')
 
+    # Attach the original report to each parent message
+    for message in parent_messages:
+        try:
+            # Use regex to extract the order number
+            match = re.search(r'\b[0-9A-F]{32}\b', message.content)
+            if match:
+                order_number = match.group(0)
+
+                # Find the corresponding OrderIssue
+                message.order_issue = OrderIssue.objects.filter(
+                    order__order_number=order_number,
+                    user=message.user
+                ).first()
+
+                # Attach the initial report
+                if message.order_issue:
+                    message.initial_report = UserMessage(
+                        created_by=message.order_issue.user,
+                        content=message.order_issue.description,
+                        created_at=message.order_issue.created_at,
+                    )
+        except Exception:
+            pass
+
     context = {
         'parent_messages': parent_messages,
         'unresolved_issues': unresolved_issues,
         'resolved_issues': resolved_issues,
     }
-    return render(request, 'profiles/messages.html', context)
 
+    return render(request, 'profiles/messages.html', context)
 
 
 @login_required
