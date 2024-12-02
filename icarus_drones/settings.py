@@ -34,6 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
+    'icarus-drones-d492afe10809.herokuapp.com',
     'localhost',
 ]
 
