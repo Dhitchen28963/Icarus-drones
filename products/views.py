@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.functions import Lower, Substr
@@ -11,6 +11,12 @@ from .forms import ProductForm, AttachmentForm, ProductReviewForm
 from profiles.models import Wishlist, UserProfile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+
+
+
+# Helper function to check if the user is a staff member or superuser
+def is_staff_or_superuser(user):
+    return user.is_superuser or user.is_staff
 
 # View to show all products, including sorting and search queries
 def all_products(request):
@@ -142,6 +148,9 @@ def custom_product(request):
 
     return render(request, 'products/custom_product.html', context)
 
+
+@user_passes_test(is_staff_or_superuser)
+@login_required
 def add_product(request):
     """ Add a product to the store with category-specific field handling """
     if request.method == 'POST':
@@ -169,6 +178,9 @@ def add_product(request):
     }
     return render(request, 'products/add_product.html', context)
 
+
+@user_passes_test(is_staff_or_superuser)
+@login_required
 def edit_product(request, product_id):
     """ Edit a product in the store """
     product = get_object_or_404(Product, pk=product_id)
@@ -192,6 +204,9 @@ def edit_product(request, product_id):
 
     return render(request, 'products/edit_product.html', context)
 
+
+@user_passes_test(is_staff_or_superuser)
+@login_required
 def delete_product(request, product_id):
     """ Delete a product from the store """
     product = get_object_or_404(Product, pk=product_id)
@@ -200,6 +215,8 @@ def delete_product(request, product_id):
     return redirect(reverse('products'))
 
 
+@user_passes_test(is_staff_or_superuser)
+@login_required
 def edit_custom_product(request, product_id):
     """ Edit a custom drone with attachment management functionality """
     product = get_object_or_404(Product, pk=product_id)
@@ -294,6 +311,8 @@ def edit_custom_product(request, product_id):
     return render(request, 'products/edit_custom_drone.html', context)
 
 
+@user_passes_test(is_staff_or_superuser)
+@login_required
 def delete_custom_product(request, product_id):
     """ Delete a custom drone and redirect to the products page """
     product = get_object_or_404(Product, pk=product_id)
@@ -367,15 +386,15 @@ def compare_products(request, product_id):
 
     return render(request, 'products/compare_products.html', context)
 
-
+@login_required
 def add_product_review(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     if request.method == 'POST':
         form = ProductReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user  # Associate the review with the logged-in user
-            review.product = product   # Associate the review with the product
+            review.user = request.user
+            review.product = product
             review.save()
             messages.success(request, 'Your review has been submitted successfully!')
             return redirect('product_detail', product_id=product_id)

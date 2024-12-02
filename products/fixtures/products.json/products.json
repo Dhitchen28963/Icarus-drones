@@ -7257,7 +7257,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7286,7 +7286,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7315,7 +7315,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7344,7 +7344,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7373,7 +7373,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7402,7 +7402,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7431,7 +7431,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7460,7 +7460,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7489,7 +7489,7 @@
             "speed": "72 km/h",
             "weight": "600 g",
             "flight_time": "40 minutes",
-            "camera": "Optional",
+            "camera": "Yes",
             "camera_quality": "N/A",
             "collision_avoidance": "No",
             "gps": "Yes",
@@ -7781,7 +7781,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7789,7 +7789,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -7810,7 +7810,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7818,7 +7818,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -7839,7 +7839,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7847,7 +7847,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -7868,7 +7868,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7876,7 +7876,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -7897,7 +7897,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7905,7 +7905,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -7926,7 +7926,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7934,7 +7934,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -7955,7 +7955,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7963,7 +7963,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -7984,7 +7984,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -7992,7 +7992,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     },
     {
@@ -8013,7 +8013,7 @@
             "flight_time": "50 minutes",
             "camera": "Yes",
             "camera_quality": "64 MP, 8K/30fps",
-            "collision_avoidance": "Yes (AI-powered)",
+            "collision_avoidance": "Yes",
             "gps": "Yes",
             "control_range": "16 km",
             "max_altitude": "7000 m",
@@ -8021,7 +8021,7 @@
             "material": "Magnesium and Carbon Fiber",
             "remote_control": "Yes",
             "mobile_app_support": "Yes",
-            "warranty": "3 years"
+            "warranty": "Yes"
         }
     }
 ]
