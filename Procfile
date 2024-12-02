@@ -1,0 +1,1 @@
+web: gunicorn icarus_drones.wsgi:application
