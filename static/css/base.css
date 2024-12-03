@@ -80,8 +80,9 @@ body {
     left: 0;
     position: fixed;
     background: white;
-    z-index: -1;
+    z-index: 999;
 }
+
 
 a.category-badge > span.badge:hover {
     background: #212529 !important;

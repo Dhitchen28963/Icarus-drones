@@ -189,7 +189,7 @@
             </div>
         </div>
     </div>
-    <div id="loading-overlay">
+    <div id="loading-overlay" style="display: none;">
         <div class="loading-spinner">
             <i class="fas fa-3x fa-sync-alt fa-spin" aria-hidden="true"></i>
         </div>
@@ -202,6 +202,15 @@
     {{ client_secret|json_script:"id_client_secret" }}
     <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
     <script>
+
+        // Ensure the overlay is hidden on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            const overlay = document.getElementById("loading-overlay");
+            if (overlay) {
+                overlay.style.display = "none";
+            }
+        });
+        
         // Show the loading overlay on form submission
         document.getElementById('payment-form').addEventListener('submit', function(event) {
             document.getElementById('loading-overlay').style.display = 'flex';

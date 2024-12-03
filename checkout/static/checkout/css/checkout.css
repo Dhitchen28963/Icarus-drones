@@ -42,6 +42,7 @@ select, input {
     border: 1px solid #000;
 }
 
+
 #loading-overlay {
   display: none;
   position: fixed;
