@@ -6,6 +6,7 @@ from django.conf import settings
 from .models import Order, OrderLineItem
 from products.models import Product
 from profiles.models import UserProfile
+from utils.mailchimp_utils import Mailchimp
 import json
 import stripe
 from decimal import Decimal
@@ -16,6 +17,7 @@ class StripeWH_Handler:
 
     def __init__(self, request):
         self.request = request
+        self.mailchimp = Mailchimp()
 
     def _send_confirmation_email(self, order, loyalty_points_earned, loyalty_points_used, discount):
         """Send the user a confirmation email"""
@@ -35,9 +37,6 @@ class StripeWH_Handler:
             }
         )
         # Temporarily show email content
-        print("\nConfirmation Email:")
-        print(f"Subject: {subject}")
-        print(f"Body:\n{body}")
         send_mail(
             subject,
             body,
@@ -57,6 +56,7 @@ class StripeWH_Handler:
             return 0
 
     def handle_payment_intent_succeeded(self, event):
+        """Handle the payment_intent.succeeded webhook from Stripe"""
         intent = event.data.object
         pid = intent.id
         bag = intent.metadata.get('bag', '{}')
@@ -170,6 +170,21 @@ class StripeWH_Handler:
 
                 # Send confirmation email
                 self._send_confirmation_email(order, loyalty_points_earned, loyalty_points_used, discount)
+
+                # Subscribe user to Mailchimp
+                try:
+                    cust_email = intent.metadata.get('email')
+                    first_name = intent.metadata.get('first_name', '')
+                    last_name = intent.metadata.get('last_name', '')
+                    if cust_email:
+                        self.mailchimp.subscribe_user(
+                            email=cust_email,
+                            first_name=first_name,
+                            last_name=last_name
+                        )
+
+                except Exception as e:
+                    print(f"Mailchimp subscription failed: {e}")
 
             except Exception as e:
                 order.delete()
