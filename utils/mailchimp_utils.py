@@ -15,20 +15,20 @@ class Mailchimp:
             "Content-Type": "application/json",
         }
 
-    def subscribe_user(self, email, first_name='', last_name='', tags=None):
+    def subscribe_user(self, email, first_name='', last_name='', tags=None, address=None):
         """
         Add or update a user subscription in the Mailchimp audience.
         If the user already exists, their information will be updated.
-        
+
         Args:
             email (str): The user's email address.
             first_name (str): The user's first name (optional).
             last_name (str): The user's last name (optional).
             tags (list): Tags to associate with the user (optional).
-        
-        Returns:
-            dict: API response from Mailchimp.
+            address (dict): Address details (optional). Format:
+                            {'addr1': '123 Street Name', 'city': 'City', 'state': 'State', 'zip': '12345', 'country': 'US'}
         """
+        print(f"Subscribing user: {email}, First Name: {first_name}, Last Name: {last_name}, Tags: {tags}")
         url = f"{self.base_url}/lists/{self.audience_id}/members"
         subscriber_hash = self._get_subscriber_hash(email)
         data = {
@@ -37,12 +37,21 @@ class Mailchimp:
             "merge_fields": {
                 "FNAME": first_name,
                 "LNAME": last_name,
+                "ADDRESS": {
+                    "addr1": address.get("addr1", ""),
+                    "city": address.get("city", ""),
+                    "state": address.get("state", ""),
+                    "zip": address.get("zip", ""),
+                    "country": address.get("country", ""),
+                },
             },
         }
+        
         if tags:
             data["tags"] = tags
 
         response = requests.put(f"{url}/{subscriber_hash}", json=data, headers=self.headers)
+        print(f"Mailchimp response: {response.status_code}, {response.text}")
         if response.status_code not in (200, 204):
             raise Exception(f"Mailchimp API error: {response.status_code} {response.text}")
         return response.json()
@@ -50,11 +59,11 @@ class Mailchimp:
     def add_tags_to_user(self, email, tags):
         """
         Add tags to an existing subscriber in the Mailchimp audience.
-        
+
         Args:
             email (str): The user's email address.
             tags (list): List of tags to add.
-        
+
         Returns:
             dict: API response from Mailchimp.
         """
@@ -71,11 +80,11 @@ class Mailchimp:
     def remove_tags_from_user(self, email, tags):
         """
         Remove tags from an existing subscriber in the Mailchimp audience.
-        
+
         Args:
             email (str): The user's email address.
             tags (list): List of tags to remove.
-        
+
         Returns:
             dict: API response from Mailchimp.
         """
@@ -92,10 +101,10 @@ class Mailchimp:
     def _get_subscriber_hash(self, email):
         """
         Generate the MD5 hash of the user's email address as required by Mailchimp API.
-        
+
         Args:
             email (str): The user's email address.
-        
+
         Returns:
             str: MD5 hash of the email address.
         """

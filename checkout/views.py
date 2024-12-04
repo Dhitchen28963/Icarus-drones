@@ -14,6 +14,7 @@ from profiles.models import UserProfile
 from profiles.forms import UserProfileForm
 from products.constants import ATTACHMENTS
 from bag.contexts import bag_contents
+from utils.mailchimp_utils import Mailchimp
 
 # Helper functions for attachments
 def get_attachment_name_by_sku(sku):
@@ -219,27 +220,39 @@ def checkout(request):
 
             total += price * Decimal(str(quantity))
 
-            item_data.update({
-                'name': product.name,
-                'image': f"/media/{product.image}" if product.image else '/media/noimage.webp',
-                'attachment_list': [get_attachment_name_by_sku(att) for att in item_data.get('attachments', [])]
-            })
+            try:
+                image_url = product.image.url if product.image else f"{settings.MEDIA_URL}noimage.webp"
+                
+                item_data.update({
+                    'name': product.name,
+                    'product': product,
+                    'image': image_url,
+                    'attachment_list': [get_attachment_name_by_sku(att) for att in item_data.get('attachments', [])]
+                })
+            except Exception:
+                item_data.update({
+                    'name': product.name,
+                    'product': product,
+                    'image': f"{settings.MEDIA_URL}noimage.webp",
+                    'attachment_list': [get_attachment_name_by_sku(att) for att in item_data.get('attachments', [])]
+                })
+            
             bag_items.append(item_data)
 
         delivery_cost = Decimal('10.00') if total < Decimal('100.00') else Decimal('0.00')
         loyalty_points_used = int(request.session.get('loyalty_points', 0))
         discount = Decimal(loyalty_points_used) * Decimal('0.1')
         grand_total = max(total + delivery_cost - discount, Decimal('0.00'))
-        stripe_total = round(grand_total * 100)  # Use discounted total for Stripe
+        stripe_total = round(grand_total * 100)
         loyalty_points_earned = int(grand_total // 10)
 
         stripe.api_key = stripe_secret_key
         intent = stripe.PaymentIntent.create(
-            amount=stripe_total,  # Your existing amount calculation
+            amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
             payment_method_types=['card'],
             capture_method='automatic',
-            confirm=False,  # Important: Don't confirm automatically
+            confirm=False,
             metadata={
                 'bag': json.dumps(serialized_bag),
                 'save_info': request.POST.get('save_info', ''),
@@ -279,6 +292,7 @@ def checkout(request):
             'product_count': sum(item['quantity'] for item in bag.values()),
             'stripe_public_key': stripe_public_key,
             'client_secret': intent.client_secret,
+            'MEDIA_URL': settings.MEDIA_URL,
         }
 
         return render(request, 'checkout/checkout.html', context)
@@ -324,7 +338,7 @@ def checkout_success(request, order_number):
             )
             current_points = profile.loyalty_points
 
-        # Then add earned points
+        # Add earned loyalty points
         if loyalty_points_earned > 0:
             profile.loyalty_points = current_points + loyalty_points_earned
             profile.save()
@@ -354,10 +368,30 @@ def checkout_success(request, order_number):
         if loyalty_points_earned > 0:
             messages.success(request, f"You earned {loyalty_points_earned} loyalty points for this order.")
 
+        # Sync with Mailchimp
+        try:
+            mailchimp = Mailchimp()
+            address = {
+                "addr1": order.street_address1,
+                "city": order.town_or_city,
+                "state": order.county or "",
+                "zip": order.postcode,
+                "country": order.country.code,
+            }
+            mailchimp.subscribe_user(
+                email=order.email,
+                first_name=order.full_name.split()[0],
+                last_name=" ".join(order.full_name.split()[1:]),
+                tags=["Purchased"],
+                address=address,
+            )
+        except Exception:
+            pass
+
     context = {
         'order': order,
         'loyalty_points_earned': loyalty_points_earned,
-        'discount_applied': discount_applied.quantize(Decimal('0.01')),  # Ensure correct formatting
+        'discount_applied': discount_applied.quantize(Decimal('0.01')),
         'loyalty_points_used': order.loyalty_points_used,
     }
     return render(request, 'checkout/checkout_success.html', context)

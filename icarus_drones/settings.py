@@ -209,6 +209,7 @@ DEFAULT_FROM_EMAIL = 'icarusdrones@example.com'
 # Email Configuration
 if 'DEVELOPMENT' in os.environ:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_DEBUG = True
     DEFAULT_FROM_EMAIL = 'no-reply@icarusdrones.com'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

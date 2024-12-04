@@ -7,6 +7,7 @@ from checkout.models import Order
 from products.models import Product
 from django.core.mail import send_mail
 from .decorators import superuser_or_staff_required, superuser_required
+from utils.mailchimp_utils import Mailchimp
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json, re
@@ -28,6 +29,19 @@ def profile(request):
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
+
+            # Sync with Mailchimp
+            try:
+                mailchimp = Mailchimp()
+                mailchimp.subscribe_user(
+                    email=request.user.email,
+                    first_name=request.user.first_name,
+                    last_name=request.user.last_name,
+                    tags=["Profile Updated"]
+                )
+            except Exception as e:
+                print(f"Mailchimp error: {str(e)}")
+
             messages.success(request, 'Profile updated successfully')
         else:
             messages.error(request, 'Update failed. Please ensure the form is valid.')
