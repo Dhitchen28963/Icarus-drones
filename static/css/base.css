@@ -111,8 +111,8 @@ a.category-badge > span.badge:hover {
     position: relative;
 }
 
-select#drone-type.form-control {
-    height: 40px !important;
+.form-control.mb-3 {
+    height: 40px;
 }
 
 /* Color option container */

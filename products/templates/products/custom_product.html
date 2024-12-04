@@ -44,7 +44,7 @@
             <div class="customization-container custom-margin">
                 <!-- Drone Type Selection -->
                 <label for="drone-type" class="form-label">Drone Type:</label>
-                <select id="drone-type" name="drone_type" class="form-control mb-3">
+                <select id="drone-type" name="drone_type" class="form-control mb-3" style="height: 40px;">
                     {% for drone in drones %}
                         <option value="{{ drone.value }}">{{ drone.name }}</option>
                     {% endfor %}
