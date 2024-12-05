@@ -17,7 +17,7 @@
             integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
             crossorigin="anonymous">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
-      <link rel="stylesheet" href="{% static 'css/base.css' %}">
+      <link rel="stylesheet" href="{% static 'css/base.css' %}?v={% now "U" %}">
     {% endblock %}
 
     {% block extra_css %}
@@ -41,7 +41,7 @@
     <title>Icarus Drones {% block extra_title %}{% endblock %}</title>
   </head>
 
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     <header class="container-fluid fixed-top">
       <div id="topnav" class="row bg-white pt-lg-2 d-none d-lg-flex">
         <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left">
