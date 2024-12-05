@@ -6,11 +6,11 @@ body {
     height: calc(100vh - 164px);
     color: #555;
     font-family: 'Lato';
-    background: white;
+    background: white !important; 
 }
 
 body.home-page {
-    background: url('/media/homepage_background.webp') no-repeat center center fixed;
+    background: url('https://dhitchen28963-icarus-drones.s3.amazonaws.com/media/homepage_background.webp') no-repeat center center fixed;
     background-size: cover;
 }
 
