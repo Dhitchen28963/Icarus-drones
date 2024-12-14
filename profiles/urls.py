@@ -12,4 +12,9 @@ urlpatterns = [
     path('manage-staff/', views.manage_staff, name='manage_staff'),
     path('wishlist/', views.wishlist_view, name='wishlist'),
     path('wishlist/toggle/', views.toggle_wishlist, name='profiles_toggle_wishlist'),
+    path('repairs/', views.handle_repair_submission, name='drone_repair'),
+    path('contact/', views.handle_contact_submission, name='contact_us'),
+    path('manage-messages/', views.manage_messages, name='manage_messages'),
+    path('respond_to_repair_request/<int:request_id>/', views.respond_to_repair_request, name='respond_to_repair_request'),
+    path('respond_to_contact_message/<int:message_id>/', views.respond_to_contact_message, name='respond_to_contact_message'),
 ]

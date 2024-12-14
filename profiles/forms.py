@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserProfile, OrderIssue
+from .models import UserProfile, OrderIssue, ContactMessage, RepairRequest
 
 class UserProfileForm(forms.ModelForm):
     full_name = forms.CharField(
@@ -84,6 +84,68 @@ class OrderIssueResponseForm(forms.ModelForm):
             'rows': 5,
             'placeholder': 'Write your response here...',
         })
+        self.fields['status'].widget = forms.Select(attrs={
+            'class': 'form-control',
+        })
+
+
+class RepairRequestResponseForm(forms.ModelForm):
+    response = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 5,
+            'placeholder': 'Write your response here...'
+        }),
+        label='Response',
+        required=True
+    )
+
+    class Meta:
+        model = RepairRequest
+        fields = ['status']
+        widgets = {
+            'status': forms.Select(attrs={
+                'class': 'form-control',
+            }),
+        }
+        labels = {
+            'status': 'Status',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print("Status field choices:", self.fields['status'].choices)
+        self.fields['status'].widget = forms.Select(attrs={
+            'class': 'form-control',
+        })
+
+
+class ContactMessageResponseForm(forms.ModelForm):
+    response = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 5,
+            'placeholder': 'Write your response here...'
+        }),
+        label='Response',
+        required=True
+    )
+
+    class Meta:
+        model = ContactMessage
+        fields = ['status']
+        widgets = {
+            'status': forms.Select(attrs={
+                'class': 'form-control',
+            }),
+        }
+        labels = {
+            'status': 'Status',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print("Status field choices:", self.fields['status'].choices)
         self.fields['status'].widget = forms.Select(attrs={
             'class': 'form-control',
         })

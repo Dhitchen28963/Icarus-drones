@@ -26,6 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')  # Fallback in case e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEVELOPMENT' in os.environ
 
+
 ALLOWED_HOSTS = [
     '8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
     'icarus-drones-d492afe10809.herokuapp.com',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'bag',
     'checkout',
     'profiles',
+
 
     # Other
     'crispy_forms',

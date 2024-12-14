@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}">
+{% endblock %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+                <h1 class="logo-font text-center mt-4">Contact Us</h1>
+                <p class="text-center text-muted">Have questions? Reach out to us using the form below.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+            <div class="card border-black rounded-0 p-4 bg-light">
+                <h4 class="logo-font mb-4 text-center">Get in Touch</h4>
+
+                <!-- Debug Info -->
+                <p><strong>Debug Info:</strong> {% if messages %} Messages: {{ messages }} {% else %} No messages found {% endif %}</p>
+
+                <form method="post" action="{% url 'contact_us' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_name">Your Name</label>
+                        <input type="text" class="form-control border-black rounded-0" id="id_name" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_email">Your Email</label>
+                        <input type="email" class="form-control border-black rounded-0" id="id_email" name="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_message">Message</label>
+                        <textarea class="form-control border-black rounded-0" id="id_message" name="message" rows="5" placeholder="Write your message here" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-black rounded-0 text-uppercase w-100">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script>
+        console.log("Contact Us Page Loaded");
+    </script>
+{% endblock %}

@@ -150,6 +150,41 @@ def create_user_wishlist(sender, instance, created, **kwargs):
         Wishlist.objects.create(user_profile=instance)
 
 
+class RepairRequest(models.Model):
+    STATUS_CHOICES = [
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repair_requests')
+    drone_model = models.CharField(max_length=255)
+    issue_description = models.TextField()
+    email = models.EmailField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Repair - {self.drone_model} ({self.get_status_display()})"
+
+
+class ContactMessage(models.Model):
+    STATUS_CHOICES = [
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contact_messages')
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    message = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Contact - {self.name} ({self.get_status_display()})"
+
+
+
 class UserMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
@@ -158,6 +193,16 @@ class UserMessage(models.Model):
     parent_message = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.CASCADE, related_name="responses"
     )
+    repair_request = models.ForeignKey(
+        'profiles.RepairRequest', null=True, blank=True, on_delete=models.CASCADE, related_name='messages'
+    )
+    contact_message = models.ForeignKey(
+        'profiles.ContactMessage', null=True, blank=True, on_delete=models.CASCADE, related_name='messages'
+    )
 
     def __str__(self):
-        return f"Message to {self.user.username} from {self.created_by.username}"
+        if self.repair_request:
+            return f"Message for Repair Request {self.repair_request.id} from {self.created_by.username}"
+        elif self.contact_message:
+            return f"Message for Contact Message {self.contact_message.id} from {self.created_by.username}"
+        return f"Message from {self.created_by.username} to {self.user.username}"

@@ -36,6 +36,16 @@
                 Messages
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="repair-requests-tab" data-toggle="tab" href="#repair-requests" role="tab" aria-controls="repair-requests" aria-selected="false">
+                Repair Requests
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-messages-tab" data-toggle="tab" href="#contact-messages" role="tab" aria-controls="contact-messages" aria-selected="false">
+                Contact Messages
+            </a>
+        </li>
     </ul>
 
     <!-- Tab Content -->
@@ -145,6 +155,44 @@
                 </ul>
             {% else %}
                 <p>No messages.</p>
+            {% endif %}
+        </div>
+         <!-- Repair Requests Tab -->
+         <div class="tab-pane fade" id="repair-requests" role="tabpanel" aria-labelledby="repair-requests-tab">
+            <h5 class="logo-font mb-3">Repair Requests</h5>
+            {% if repair_requests %}
+                <ul class="list-group">
+                    {% for request in repair_requests %}
+                        <li class="list-group-item">
+                            <strong>Drone Model:</strong> {{ request.drone_model }}<br>
+                            <strong>Issue:</strong> {{ request.issue_description }}<br>
+                            <strong>Email:</strong> {{ request.email }}<br>
+                            <strong>Status:</strong> {{ request.get_status_display }}<br>
+                            <strong>Date:</strong> {{ request.created_at|date:"F j, Y" }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No repair requests.</p>
+            {% endif %}
+        </div>
+        <!-- Contact Messages Tab -->
+        <div class="tab-pane fade" id="contact-messages" role="tabpanel" aria-labelledby="contact-messages-tab">
+            <h5 class="logo-font mb-3">Contact Messages</h5>
+            {% if contact_messages %}
+                <ul class="list-group">
+                    {% for message in contact_messages %}
+                        <li class="list-group-item">
+                            <strong>Name:</strong> {{ message.name }}<br>
+                            <strong>Email:</strong> {{ message.email }}<br>
+                            <strong>Message:</strong> {{ message.message }}<br>
+                            <strong>Status:</strong> {{ message.get_status_display }}<br>
+                            <strong>Date:</strong> {{ message.created_at|date:"F j, Y" }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No contact messages.</p>
             {% endif %}
         </div>
     </div>

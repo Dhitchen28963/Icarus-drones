@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/manage_issues.css' %}">
+    <link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}">
 {% endblock %}
 
 {% block page_header %}
@@ -22,7 +22,14 @@
             <hr>
         </div>
     </div>
-    
+
+    <!-- Debug Info -->
+    <p><strong>Debug Info:</strong></p>
+    <p>Issues Count: {{ issues|length }}</p>
+    <p>Resolved Issues Count: {{ resolved_issues|length }}</p>
+    <p>Repair Requests Count: {{ repair_requests|length }}</p>
+    <p>Contact Messages Count: {{ contact_messages|length }}</p>
+
     <!-- Toggle Buttons -->
     <div class="row mb-3">
         <div class="col text-center">
@@ -33,6 +40,8 @@
 
     <!-- Table View -->
     <div id="table-view" class="view-container">
+        <!-- Order Issues Section -->
+        <h3>Order Issues</h3>
         {% if issues %}
             <div class="table-responsive">
                 <table class="table table-borderless">
@@ -73,10 +82,77 @@
         {% else %}
             <p class="text-center mt-4">No unresolved issues at the moment.</p>
         {% endif %}
+
+        <!-- Repair Requests Section -->
+        <h3 class="mt-5">Repair Requests</h3>
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Drone Model</th>
+                    <th>Issue</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in repair_requests %}
+                <tr>
+                    <td>{{ request.drone_model }}</td>
+                    <td>{{ request.issue_description }}</td>
+                    <td>{{ request.email }}</td>
+                    <td>{{ request.get_status_display }}</td>
+                    <td>{{ request.created_at }}</td>
+                    <td>
+                        <a href="{% url 'respond_to_repair_request' request.id %}" class="btn btn-primary btn-sm mb-2">Respond</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No repair requests found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Contact Messages Section -->
+        <h3>Contact Messages</h3>
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in contact_messages %}
+                <tr>
+                    <td>{{ message.name }}</td>
+                    <td>{{ message.email }}</td>
+                    <td>{{ message.message }}</td>
+                    <td>{{ message.get_status_display }}</td>
+                    <td>{{ message.created_at }}</td>
+                    <td>
+                        <a href="{% url 'respond_to_contact_message' message.id %}" class="btn btn-primary btn-sm mb-2">Respond</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No contact messages found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <!-- Card View -->
     <div id="card-view" class="view-container d-none">
+        <h3>Order Issues</h3>
         <div class="row">
             {% if issues %}
                 {% for issue in issues %}
