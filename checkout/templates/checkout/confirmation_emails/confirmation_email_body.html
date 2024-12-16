@@ -33,12 +33,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in order.lineitems.all %}
+                                {% for item in lineitems %}
                                 <tr>
                                     <td style="padding: 8px; border-bottom: 1px solid #ddd;">
-                                        {{ item.product.name }}
+                                        {{ item.product_name }}
                                         {% if item.attachments %}
-                                            <br><span style="font-size: 12px; color: #666;">
+                                            <br>
+                                            <span style="font-size: 12px; color: #666;">
                                                 Attachments: {{ item.attachments }}
                                             </span>
                                         {% endif %}

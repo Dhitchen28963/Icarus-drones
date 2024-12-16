@@ -14,6 +14,7 @@ import base64
 import time
 from decimal import Decimal
 from django.db import transaction
+from products.constants import ATTACHMENTS
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +59,15 @@ class StripeWH_Handler:
             logger.info(f"Loyalty Points Earned: {loyalty_points_earned}, Used: {loyalty_points_used}")
             logger.info(f"Discount Applied: ${discount:.2f}")
 
+            # Helper to map SKUs to friendly names and prices
+            def get_attachment_details(attachments_sku_list):
+                attachment_details = []
+                for sku in attachments_sku_list:
+                    for attachment in ATTACHMENTS:
+                        if attachment['sku'] == sku:
+                            attachment_details.append(f"{attachment['name']} (${attachment['price']})")
+                return ", ".join(attachment_details)
+
             background_image_url = "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/homepage_background.webp"
             facebook_icon_url = "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/facebook.png"
             twitter_icon_url = "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/twitter.png"
@@ -81,7 +91,7 @@ class StripeWH_Handler:
                     {
                         'product_name': item.product.name,
                         'quantity': item.quantity,
-                        'attachments': item.get_readable_attachments(),  # Attachments here
+                        'attachments': get_attachment_details(item.attachments.split(',')) if item.attachments else '',
                         'lineitem_total': item.lineitem_total
                     }
                     for item in order.lineitems.all()
