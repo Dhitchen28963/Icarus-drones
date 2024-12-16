@@ -243,7 +243,9 @@ MAILCHIMP_SERVER_PREFIX = os.getenv('MAILCHIMP_SERVER_PREFIX')
 MAILCHIMP_AUDIENCE_ID = os.getenv('MAILCHIMP_AUDIENCE_ID')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+# Dynamic SITE_URL configuration
+SITE_URL = os.getenv('SITE_URL', 'http://localhost:8000')
+print(f"Site URL is set to: {SITE_URL}")
 
 LOGGING = {
     'version': 1,

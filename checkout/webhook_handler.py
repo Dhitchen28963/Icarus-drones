@@ -26,16 +26,13 @@ class StripeWH_Handler:
 
     def _send_confirmation_email(self, order, loyalty_points_earned, loyalty_points_used, discount):
         try:
-            logger.debug("\n========== EMAIL DEBUG INFORMATION ==========")
-            logger.debug("Basic Order Info:")
-            logger.debug(f"Order Number: {order.order_number}")
-            logger.debug(f"Email: {order.email}")
-            
-            logger.debug("\nTotals:")
-            logger.debug(f"Order Total: ${order.order_total}")
-            logger.debug(f"Delivery Cost: ${order.delivery_cost}")
-            logger.debug(f"Grand Total: ${order.grand_total}")
-            logger.debug(f"Discount: ${discount:.2f}")
+            print(f"Order Line Items Count: {order.lineitems.count()}")
+            for line_item in order.lineitems.all():
+                print(f"Product: {line_item.product.name}, Quantity: {line_item.quantity}, Total: {line_item.lineitem_total}")
+            print(f"Order Total: {order.order_total}, Delivery: {order.delivery_cost}, Discount: {discount}, Grand Total: {order.grand_total}")
+        
+            print("Using confirmation_email_body.html template for email content.")
+            print(f"Site URL: {settings.SITE_URL}")
             
             logger.debug("\nLine Items in Order:")
             logger.debug(f"Total Line Items: {order.lineitems.count()}")
@@ -66,6 +63,9 @@ class StripeWH_Handler:
             twitter_icon_url = "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/twitter.png"
             instagram_icon_url = "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/instagram.png"
 
+            # Add the unsubscribe URL
+            unsubscribe_url = f"{settings.SITE_URL}/profiles/unsubscribe/{order.email}/"
+
             context = {
                 'order': order,
                 'contact_email': settings.DEFAULT_FROM_EMAIL,
@@ -76,7 +76,10 @@ class StripeWH_Handler:
                 'facebook_icon_url': facebook_icon_url,
                 'twitter_icon_url': twitter_icon_url,
                 'instagram_icon_url': instagram_icon_url,
+                'unsubscribe_url': unsubscribe_url,
             }
+
+            print(f"Email Context Data: {context}")
 
             subject = render_to_string('checkout/confirmation_emails/confirmation_email_subject.txt', {'order': order}).strip()
             text_content = render_to_string('checkout/confirmation_emails/confirmation_email_body.txt', context)
@@ -92,6 +95,7 @@ class StripeWH_Handler:
         except Exception as e:
             logger.exception(f"Error sending email for order {order.order_number}: {e}")
             raise
+
 
     def handle_event(self, event):
         """Handle a generic/unknown/unexpected webhook event"""
@@ -263,6 +267,7 @@ class StripeWH_Handler:
                             quantity=quantity,
                             attachments=attachments
                         )
+                        print(f"Saving line item for product: {product.name}, Quantity: {item_data['quantity']}, Attachments: {item_data.get('attachments', [])}")
                         order_line_item.save()
                         logger.debug(f"Line item saved: {order_line_item.id}")
 

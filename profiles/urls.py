@@ -17,4 +17,5 @@ urlpatterns = [
     path('manage-messages/', views.manage_messages, name='manage_messages'),
     path('respond_to_repair_request/<int:request_id>/', views.respond_to_repair_request, name='respond_to_repair_request'),
     path('respond_to_contact_message/<int:message_id>/', views.respond_to_contact_message, name='respond_to_contact_message'),
+    path('unsubscribe/<str:email>/', views.unsubscribe, name='unsubscribe'),
 ]

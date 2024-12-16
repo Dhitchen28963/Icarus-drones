@@ -503,3 +503,23 @@ def respond_to_contact_message(request, message_id):
         'message': contact_message,
         'messages_history': messages_history,
     })
+
+
+def unsubscribe(request, email):
+    """Handle user unsubscribe requests"""
+    try:
+        # Unsubscribe the user from the newsletter (Mailchimp or similar service)
+        mailchimp = Mailchimp()
+        mailchimp.unsubscribe_user(email)
+
+        # Optionally, mark the user as unsubscribed in your database
+        profile = UserProfile.objects.filter(user__email=email).first()
+        if profile:
+            profile.is_subscribed = False
+            profile.save()
+
+        messages.success(request, f'You have been successfully unsubscribed.')
+    except Exception as e:
+        messages.error(request, f'Sorry, we couldn\'t unsubscribe you at this time. Please try again later.')
+
+    return redirect('home')
