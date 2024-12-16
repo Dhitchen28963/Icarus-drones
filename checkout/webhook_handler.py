@@ -77,6 +77,15 @@ class StripeWH_Handler:
                 'twitter_icon_url': twitter_icon_url,
                 'instagram_icon_url': instagram_icon_url,
                 'unsubscribe_url': unsubscribe_url,
+                'lineitems': [
+                    {
+                        'product_name': item.product.name,
+                        'quantity': item.quantity,
+                        'attachments': item.get_readable_attachments(),  # Attachments here
+                        'lineitem_total': item.lineitem_total
+                    }
+                    for item in order.lineitems.all()
+                ]
             }
 
             print(f"Email Context Data: {context}")
