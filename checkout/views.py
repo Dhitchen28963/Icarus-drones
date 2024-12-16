@@ -4,8 +4,6 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.contrib import messages
 from django.conf import settings
-from django.template.loader import render_to_string
-from django.core.mail import send_mail
 from decimal import Decimal
 import stripe
 import json
@@ -19,7 +17,6 @@ from products.constants import ATTACHMENTS
 from bag.contexts import bag_contents
 from utils.mailchimp_utils import Mailchimp
 from django.db import transaction
-import logging
 
 # Helper functions for attachments
 def get_attachment_name_by_sku(sku):
@@ -364,14 +361,9 @@ def checkout(request):
         return render(request, 'checkout/checkout.html', context)
 
 
-logger = logging.getLogger(__name__)
-
 def checkout_success(request, order_number):
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
-
-    # Debugging - Confirming email is being sent
-    logger.debug(f"Sending purchase confirmation email to {order.email}")
 
     # Calculate loyalty points earned and discount applied
     loyalty_points_earned = order.loyalty_points
@@ -385,56 +377,6 @@ def checkout_success(request, order_number):
 
     # Order confirmation message
     messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.')
-
-    # Send purchase confirmation email
-    try:
-        # Render email subject and body using your templates
-        subject = render_to_string(
-            'checkout/confirmation_emails/confirmation_email_subject.txt',
-            {'order': order}
-        ).strip()
-
-        body = render_to_string(
-            'checkout/confirmation_emails/confirmation_email_body.txt',
-            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL}
-        )
-
-        # Debugging - Check email content before sending
-        print("Email Subject:", subject)
-        print("Email Body:", body)
-
-        # Send the email
-        send_mail(
-            subject,
-            body,
-            settings.DEFAULT_FROM_EMAIL,
-            [order.email],
-            fail_silently=False,  # Ensures email errors are raised
-        )
-        print(f"Purchase confirmation email sent to {order.email} successfully.")
-    except Exception as e:
-        print(f"Error sending purchase confirmation email: {e}")
-
-    # Sync with Mailchimp
-    try:
-        mailchimp = Mailchimp()
-        address = {
-            "addr1": order.street_address1,
-            "city": order.town_or_city,
-            "state": order.county or "",
-            "zip": order.postcode,
-            "country": order.country.code,
-        }
-        mailchimp.subscribe_user(
-            email=order.email,
-            first_name=order.full_name.split()[0],
-            last_name=" ".join(order.full_name.split()[1:]),
-            tags=["Purchased"],
-            address=address,
-        )
-        print(f"Successfully synced user {order.email} with Mailchimp.")
-    except Exception as e:
-        print(f"Error syncing with Mailchimp: {e}")
 
     # Clear the bag session
     if 'bag' in request.session:
@@ -459,6 +401,27 @@ def checkout_success(request, order_number):
                 profile.default_street_address2 = order.street_address2
                 profile.default_county = order.county
                 profile.save()
+
+            # Sync with Mailchimp
+            try:
+                mailchimp = Mailchimp()
+                address = {
+                    "addr1": order.street_address1,
+                    "city": order.town_or_city,
+                    "state": order.county or "",
+                    "zip": order.postcode,
+                    "country": order.country.code,
+                }
+                mailchimp.subscribe_user(
+                    email=order.email,
+                    first_name=order.full_name.split()[0],
+                    last_name=" ".join(order.full_name.split()[1:]),
+                    tags=["Purchased"],
+                    address=address,
+                )
+            except Exception:
+                pass
+
         except Exception as e:
             messages.error(request, "There was an error updating your profile.")
 
