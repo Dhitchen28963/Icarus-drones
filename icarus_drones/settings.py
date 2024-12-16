@@ -24,8 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')  # Fallback in case env var is missing
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'DEVELOPMENT' in os.environ
+# DEBUG = 'DEVELOPMENT' in os.environ
 
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
@@ -194,8 +195,7 @@ if 'USE_AWS' in os.environ:
 
     # Cache control
     AWS_S3_OBJECT_PARAMETERS = {
-        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-        'CacheControl': 'max-age=94608000',
+        'CacheControl': 'no-cache, no-store, must-revalidate, max-age=0',
     }
 else:
     STATIC_URL = '/static/'

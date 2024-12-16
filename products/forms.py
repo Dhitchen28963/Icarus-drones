@@ -14,10 +14,9 @@ class ProductForm(forms.ModelForm):
         friendly_names = [(c.id, c.get_friendly_name()) for c in categories]
         self.fields['category'].choices = friendly_names
 
-        # Apply consistent styling and set explicit IDs to ensure matching label `for` attributes
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'border-black rounded-0'
-            field.widget.attrs['id'] = f'id_{field_name}'  # Corrected to `id_fieldname` for matching
+            field.widget.attrs['id'] = f'id_{field_name}'
 
     def clean_price(self):
         """ Custom validation for price field """
@@ -43,7 +42,7 @@ class ProductReviewForm(forms.ModelForm):
         fields = ['rating', 'comment']
         widgets = {
             'rating': forms.NumberInput(attrs={
-                'id': 'id_rating',  # Explicitly set the id
+                'id': 'id_rating',
                 'class': 'form-control',
                 'min': 1,
                 'max': 5,

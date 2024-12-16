@@ -6,6 +6,7 @@ from django_countries.fields import CountryField
 from decimal import Decimal
 from django.db import transaction
 from products.models import Product
+import traceback
 
 
 class LoyaltyPointsTransaction(models.Model):
@@ -51,43 +52,54 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-    @transaction.atomic
+
     def adjust_loyalty_points(self, points_used, points_earned, order=None):
         """
-        Adjust loyalty points with transaction logging in a single atomic transaction
-        Returns tuple of (points_deducted, points_added) for confirmation
+        Adjust loyalty points without nested atomic transactions.
         """
-        current_points = self.loyalty_points
+        user_profile = UserProfile.objects.select_for_update().get(id=self.id)
+        current_points = user_profile.loyalty_points
+
         points_deducted = 0
         points_added = 0
 
-        if points_used > 0 and current_points >= points_used:
-            self.points_transactions.create(
-                transaction_type='REDEEM',
-                points=-points_used,
-                balance_before=current_points,
-                balance_after=current_points - points_used,
-                order=order
-            )
-            current_points -= points_used
-            points_deducted = points_used
+        try:
+            # Redeem points first
+            if points_used > 0:
+                if current_points >= points_used:
+                    # Create redemption transaction
+                    self.points_transactions.create(
+                        transaction_type='REDEEM',
+                        points=-points_used,
+                        balance_before=current_points,
+                        balance_after=current_points - points_used,
+                        order=order
+                    )
+                    current_points -= points_used
+                    points_deducted = points_used
+                else:
+                    raise ValueError("Insufficient loyalty points for redemption")
+
+            # Add earned points
+            if points_earned > 0:
+                self.points_transactions.create(
+                    transaction_type='EARN',
+                    points=points_earned,
+                    balance_before=current_points,
+                    balance_after=current_points + points_earned,
+                    order=order
+                )
+                current_points += points_earned
+                points_added = points_earned
+
+            # Update the profile
             self.loyalty_points = current_points
             self.save()
 
-        if points_earned > 0:
-            self.points_transactions.create(
-                transaction_type='EARN',
-                points=points_earned,
-                balance_before=current_points,
-                balance_after=current_points + points_earned,
-                order=order
-            )
-            current_points += points_earned
-            points_added = points_earned
-            self.loyalty_points = current_points
-            self.save()
+            return points_deducted, points_added
 
-        return points_deducted, points_added
+        except Exception as e:
+            raise
 
 
 @receiver(post_save, sender=User)

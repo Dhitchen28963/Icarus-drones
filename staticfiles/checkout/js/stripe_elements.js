@@ -1,6 +1,14 @@
+// Extract public key and client secret
 var stripePublicKey = $('#id_stripe_public_key').text().slice(1, -1);
 var clientSecret = $('#id_client_secret').text().slice(1, -1);
-var stripe = Stripe(stripePublicKey);
+
+// Initialize Stripe with the required beta flag and API version
+var stripe = Stripe(stripePublicKey, {
+    apiVersion: '2023-10-16',
+    betas: ['payment_intent_beta_v3']
+});
+
+// Initialize elements and styling
 var elements = stripe.elements();
 var style = {
     base: {
@@ -18,6 +26,7 @@ var style = {
     }
 };
 var card = elements.create('card', { style: style });
+
 card.mount('#card-element');
 
 // Handle real-time validation errors
@@ -36,7 +45,7 @@ card.addEventListener('change', function (event) {
     }
 });
 
-// Update discount display and payment intent when loyalty points are entered
+// Modify loyalty points input handling
 document.getElementById('loyalty-points-input').addEventListener('input', function () {
     const points = parseInt(this.value) || 0;
     const hiddenInput = document.getElementById('hidden-loyalty-points');
@@ -50,26 +59,50 @@ document.getElementById('loyalty-points-input').addEventListener('input', functi
         discountDisplay.textContent = `$${discountAmount}`;
     }
 
-    // Update the payment intent amount here
     if (clientSecret) {
         const total = parseFloat($('[data-total]').data('total'));
         const newAmount = Math.round((total - discountAmount) * 100);
 
-        stripe.retrievePaymentIntent(clientSecret).then(function(result) {
-            const paymentIntent = result.paymentIntent;
-            
-            if (['requires_payment_method', 'requires_confirmation', 'requires_action'].includes(paymentIntent.status)) {
-                return stripe.updatePaymentIntent(clientSecret, {
-                    amount: newAmount
-                });
-            }
-        });
+        stripe.retrievePaymentIntent(clientSecret)
+            .then(function (result) {
+                const paymentIntent = result.paymentIntent;
+
+                if (['requires_payment_method', 'requires_confirmation', 'requires_action'].includes(paymentIntent.status)) {
+                    return fetch('/checkout/update_payment_intent/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: JSON.stringify({
+                            client_secret: clientSecret,
+                            amount: newAmount
+                        })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.text().then(text => {
+                                    throw new Error(`Server Error: ${text}`);
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.client_secret) {
+                                clientSecret = data.client_secret;
+                            }
+                        })
+                        .catch(error => console.error('Fetch Error:', error));
+                }
+            })
+            .catch(function (error) {
+                console.error('PaymentIntent Update Error:', error);
+            });
     }
 });
 
 // Handle form submission
 var form = document.getElementById('payment-form');
-
 form.addEventListener('submit', function (ev) {
     ev.preventDefault();
 
@@ -96,8 +129,7 @@ form.addEventListener('submit', function (ev) {
         url: '/checkout/cache_checkout_data/',
         type: 'POST',
         data: postData,
-        success: function (response) {
-            // Confirm the payment with Stripe
+        success: function () {
             stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
                     card: card,

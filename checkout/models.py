@@ -63,7 +63,7 @@ class Order(models.Model):
         self.grand_total = self.order_total + self.delivery_cost
 
         # Deduct loyalty points discount
-        discount = Decimal(loyalty_points_used) * Decimal('0.1')  # $0.10 per point
+        discount = Decimal(loyalty_points_used) * Decimal('0.1')
         self.discount_applied = discount
         self.grand_total = max(self.grand_total - discount, Decimal('0.00'))
 

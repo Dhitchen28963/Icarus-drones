@@ -207,9 +207,8 @@
     {{ block.super }}
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}
-    <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
+    <script src="{% static 'checkout/js/stripe_elements.js' %}?v=1.0.2-{% now "U" %}"></script>
     <script>
-
         // Ensure the overlay is hidden on page load
         document.addEventListener("DOMContentLoaded", function () {
             const overlay = document.getElementById("loading-overlay");
@@ -219,39 +218,37 @@
         });
         
         // Show the loading overlay on form submission
-        document.getElementById('payment-form').addEventListener('submit', function(event) {
+        document.getElementById('payment-form').addEventListener('submit', function () {
             document.getElementById('loading-overlay').style.display = 'flex';
         });
 
         // Loyalty points input handling
-        document.getElementById('loyalty-points-input').addEventListener('input', function (e) {
+        document.getElementById('loyalty-points-input').addEventListener('input', function () {
             const maxPoints = parseInt(this.getAttribute('max'), 10);
-            let points = parseInt(this.value, 10);
+            let points = parseInt(this.value, 10) || 0;
 
             if (points > maxPoints) {
                 this.value = maxPoints;
                 points = maxPoints;
-            } else if (points < 0 || isNaN(points)) {
-                this.value = 0;
-                points = 0;
             }
 
-            const discount = points * 0.1; // $0.10 per loyalty point
-            const total = parseFloat(document.querySelector('[data-total]').dataset.total);
-            const delivery = parseFloat(document.querySelector('[data-delivery]').dataset.delivery);
+            // Retrieve total and delivery values from data attributes
+            const total = parseFloat(document.querySelector('[data-total]').dataset.total || 0);
+            const delivery = parseFloat(document.querySelector('[data-delivery]').dataset.delivery || 0);
+
+            const discount = points * 0.1;
             const grandTotal = total + delivery - discount;
             const loyaltyPointsEarned = Math.floor(grandTotal / 10);
 
-            // Update grand total and loyalty points earned in the UI
+            // Update all UI elements
             document.querySelector('[data-grand-total]').textContent = `$${grandTotal.toFixed(2)}`;
             document.querySelector('[data-loyalty-earned]').textContent = loyaltyPointsEarned;
             document.querySelector('.updated-loyalty-points').textContent = loyaltyPointsEarned;
             document.querySelector('.updated-grand-total').textContent = `$${grandTotal.toFixed(2)}`;
-
-            // Update hidden input value for server
             document.getElementById('hidden-loyalty-points').value = points;
+            document.getElementById('discount-display').textContent = `- $${discount.toFixed(2)}`;
 
-            // Update "Your card will be charged" section dynamically
+            // Update "Your card will be charged" section
             const subtotalElement = document.querySelector('[data-subtotal]');
             if (subtotalElement) {
                 subtotalElement.dataset.subtotal = grandTotal.toFixed(2);

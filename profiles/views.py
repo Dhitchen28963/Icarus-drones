@@ -39,9 +39,8 @@ def profile(request):
                     last_name=request.user.last_name,
                     tags=["Profile Updated"]
                 )
-            except Exception as e:
-                print(f"Mailchimp error: {str(e)}")
-
+            except Exception:
+                pass
             messages.success(request, 'Profile updated successfully')
         else:
             messages.error(request, 'Update failed. Please ensure the form is valid.')
@@ -168,11 +167,10 @@ def respond_to_issue(request, issue_id):
         if form.is_valid():
             form.save()
 
-            # Get the most recent message related to this issue, if any
             parent_message = UserMessage.objects.filter(
                 user=issue.user,
                 created_by=issue.user,
-                content__icontains=issue.description,  # Match the issue description
+                content__icontains=issue.description,
             ).order_by('-created_at').first()
 
             # Add the response to the user's message trail
@@ -216,12 +214,7 @@ def messages_view(request):
         resolved_issues = OrderIssue.objects.filter(status='resolved')
         repair_requests = RepairRequest.objects.all().order_by('-created_at')
         contact_messages = ContactMessage.objects.all().order_by('-created_at')
-        
-        # Debug prints for superuser/staff
-        print(f"Number of repair requests found: {repair_requests.count()}")
-        print(f"Number of contact messages found: {contact_messages.count()}")
     else:
-        # Show only messages for the current user
         profile = request.user.userprofile
         parent_messages = UserMessage.objects.filter(
             user=request.user, parent_message__isnull=True
@@ -262,10 +255,6 @@ def messages_view(request):
         'repair_requests': repair_requests,
         'contact_messages': contact_messages,
     }
-
-    # Debug print for context
-    print(f"Context being sent to template: {context}")
-
     return render(request, 'profiles/messages.html', context)
 
 
@@ -351,16 +340,8 @@ def toggle_wishlist(request):
 @login_required
 def manage_messages(request):
     """View to display and manage repair requests and contact messages."""
-    print("Entering manage_messages view", flush=True)
     repair_requests = RepairRequest.objects.all().order_by('-created_at')
     contact_messages = ContactMessage.objects.all().order_by('-created_at')
-
-    print(f"Repair Requests Retrieved: {repair_requests}", flush=True)
-    print(f"Contact Messages Retrieved: {contact_messages}", flush=True)
-
-    # For debugging in the browser:
-    if not repair_requests and not contact_messages:
-        print("No repair requests or contact messages found.", flush=True)
 
     context = {
         'repair_requests': repair_requests,
@@ -369,7 +350,6 @@ def manage_messages(request):
         'resolved_issues': [],
         'parent_messages': [],
     }
-    print(f"Context Prepared: {context}", flush=True)
     return render(request, 'profiles/manage_messages.html', context)
 
 
@@ -417,7 +397,6 @@ def handle_repair_submission(request):
             email=email,
             user=request.user if request.user.is_authenticated else None,
         )
-        print(f"Created RepairRequest: Model={drone_model}, Description={issue_description}, Email={email}")
         messages.success(request, 'Your repair request has been submitted.')
         return redirect('drone_repair')
 

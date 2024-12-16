@@ -75,7 +75,6 @@
             <div class="toast-body bg-white">
                 <div class="row">
                     <div class="col">
-                        <!-- Success message will be dynamically updated -->
                         Item removed from wishlist!
                         <hr class="mt-1 mb-3">
                     </div>
@@ -139,11 +138,8 @@
                         setTimeout(() => {
                             toastElement.classList.add('d-none');
                         }, 3500);
-                    } else {
-                        console.error('Toast element not found on the page.');
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                });
             });
         });
     });

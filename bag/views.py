@@ -23,10 +23,10 @@ def view_bag(request):
 
     # Adjust total with applied loyalty points
     loyalty_points_used = request.session.get('loyalty_points', 0)
-    discount = Decimal(loyalty_points_used) * Decimal('0.1')  # $0.10 per point
+    discount = Decimal(loyalty_points_used) * Decimal('0.1')
     discounted_total = max(total - discount, Decimal(0))
 
-    # Calculate loyalty points (assuming 1 point per $10 spent)
+    # Calculate loyalty points
     loyalty_points_earned = int(discounted_total // 10)
 
     context = {

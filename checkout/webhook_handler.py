@@ -68,51 +68,58 @@ class StripeWH_Handler:
         try:
             intent = event.data.object
             pid = intent.id
-            
-            try:
-                latest_charge = stripe.Charge.retrieve(intent.latest_charge)
-                billing_details = latest_charge.billing_details
-            except Exception as e:
-                return HttpResponse(content=f'Error: {str(e)}', status=500)
+            loyalty_points_used = self._extract_loyalty_points(intent)
+            username = intent.metadata.get('username', 'AnonymousUser')
+            bag = intent.metadata.get('bag', '{}')
 
             try:
                 order = Order.objects.get(stripe_pid=pid)
+
+                # Check if loyalty points have already been adjusted
+                if order.user_profile and order.loyalty_points_used > 0 and order.loyalty_points > 0:
+                    return HttpResponse(content=f'Webhook received: {event["type"]} | Order already processed', status=200)
+
+                user_profile = order.user_profile
+                if user_profile:
+                    with transaction.atomic():
+                        user_profile.adjust_loyalty_points(
+                            points_used=order.loyalty_points_used,
+                            points_earned=order.loyalty_points,
+                            order=order
+                        )
+
+                # Ensure email is sent if not already done
                 if not order.email:
-                    order.email = billing_details.email
+                    order.email = intent.charges.data[0].billing_details.email
                     order.save()
-                self._send_confirmation_email(order, order.loyalty_points, order.loyalty_points_used, order.discount_applied)
+
+                self._send_confirmation_email(
+                    order,
+                    order.loyalty_points,
+                    order.loyalty_points_used,
+                    order.discount_applied
+                )
+
                 return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS: Order processed', status=200)
             except Order.DoesNotExist:
                 pass
 
-            bag = intent.metadata.get('bag', '{}')
-            loyalty_points_used = self._extract_loyalty_points(intent)
-            save_info = intent.metadata.get('save_info', '')
-            username = intent.metadata.get('username', 'AnonymousUser')
-
-            try:
-                bag_items = json.loads(bag)
-            except json.JSONDecodeError as e:
-                return HttpResponse(content=f'Error: {e}', status=400)
-
+            # Process new order if not found
+            bag_items = json.loads(bag)
             order_total = Decimal('0.00')
-            
+
             for item_data in bag_items.values():
-                try:
-                    product = Product.objects.get(sku=item_data['sku'])
-                    quantity = item_data.get('quantity', 0)
-                    item_price = product.price
+                product = Product.objects.get(sku=item_data['sku'])
+                quantity = item_data.get('quantity', 0)
+                item_price = product.price
 
-                    if 'attachments' in item_data and item_data['attachments']:
-                        for attachment_sku in item_data['attachments']:
-                            for attachment in ATTACHMENTS:
-                                if attachment['sku'] == attachment_sku:
-                                    item_price += Decimal(str(attachment['price']))
+                if 'attachments' in item_data and item_data['attachments']:
+                    for attachment_sku in item_data['attachments']:
+                        for attachment in ATTACHMENTS:
+                            if attachment['sku'] == attachment_sku:
+                                item_price += Decimal(str(attachment['price']))
 
-                    order_total += item_price * Decimal(str(quantity))
-                    
-                except Exception as e:
-                    raise
+                order_total += item_price * Decimal(str(quantity))
 
             delivery_cost = Decimal('10.00') if order_total < Decimal('100.00') else Decimal('0.00')
             discount = Decimal(loyalty_points_used) * Decimal('0.1')
@@ -122,92 +129,44 @@ class StripeWH_Handler:
             order, created = Order.objects.get_or_create(
                 stripe_pid=pid,
                 defaults={
-                    'email': billing_details.email,
-                    'full_name': billing_details.name,
+                    'email': intent.charges.data[0].billing_details.email,
+                    'full_name': intent.charges.data[0].billing_details.name,
                     'order_total': order_total,
-                    'delivery_cost': delivery_cost, 
+                    'delivery_cost': delivery_cost,
                     'grand_total': grand_total,
                     'discount_applied': discount,
                     'loyalty_points_used': loyalty_points_used,
                     'loyalty_points': loyalty_points_earned,
                     'original_bag': bag,
-                    'phone_number': billing_details.phone,
-                    'country': billing_details.address.country,
-                    'postcode': shipping_details.postal_code,
-                    'town_or_city': billing_details.address.city,
-                    'street_address1': billing_details.address.line1,
-                    'street_address2': billing_details.address.line2,
-                    'county': billing_details.address.state,
+                    'phone_number': intent.charges.data[0].billing_details.phone,
+                    'country': intent.charges.data[0].billing_details.address.country,
+                    'postcode': intent.charges.data[0].billing_details.address.postal_code,
+                    'town_or_city': intent.charges.data[0].billing_details.address.city,
+                    'street_address1': intent.charges.data[0].billing_details.address.line1,
+                    'street_address2': intent.charges.data[0].billing_details.address.line2,
+                    'county': intent.charges.data[0].billing_details.address.state,
                 }
             )
 
-            try:
-                for item_id, item_data in bag_items.items():
-                    product = Product.objects.get(sku=item_data['sku'])
-                    quantity = item_data.get('quantity', 0)
-                    attachments = ','.join(item_data.get('attachments', []))
+            for item_id, item_data in bag_items.items():
+                product = Product.objects.get(sku=item_data['sku'])
+                quantity = item_data.get('quantity', 0)
+                attachments = ','.join(item_data.get('attachments', []))
 
-                    order_line_item = OrderLineItem(
-                        order=order,
-                        product=product,
-                        quantity=quantity,
-                        attachments=attachments
-                    )
-                    order_line_item.save()
+                order_line_item = OrderLineItem(
+                    order=order,
+                    product=product,
+                    quantity=quantity,
+                    attachments=attachments
+                )
+                order_line_item.save()
 
-                if order.user_profile:
-                    profile = order.user_profile
-                    current_points = profile.loyalty_points
+            self._send_confirmation_email(order, loyalty_points_earned, loyalty_points_used, discount)
 
-                    if loyalty_points_used > 0:
-                        profile.points_transactions.create(
-                            transaction_type='REDEEM',
-                            points=-loyalty_points_used,
-                            balance_before=current_points,
-                            balance_after=max(0, current_points - loyalty_points_used),
-                            order=order
-                        )
-                        current_points = max(0, current_points - loyalty_points_used)
-                        profile.loyalty_points = current_points
-                        profile.save()
-
-                    if loyalty_points_earned > 0:
-                        profile.points_transactions.create(
-                            transaction_type='EARN',
-                            points=loyalty_points_earned,
-                            balance_before=current_points,
-                            balance_after=current_points + loyalty_points_earned,
-                            order=order
-                        )
-                        current_points += loyalty_points_earned
-                        profile.loyalty_points = current_points
-                        profile.save()
-
-                self._send_confirmation_email(order, loyalty_points_earned, loyalty_points_used, discount)
-
-                try:
-                    cust_email = billing_details.email
-                    name_parts = billing_details.name.split()
-                    first_name = name_parts[0]
-                    last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
-                    
-                    if cust_email:
-                        self.mailchimp.subscribe_user(
-                            email=cust_email,
-                            first_name=first_name,
-                            last_name=last_name
-                        )
-                except Exception:
-                    pass
-
-            except Exception as e:
-                order.delete()
-                return HttpResponse(content=f'Error: {str(e)}', status=500)
-
+            return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS', status=200)
         except Exception as e:
             return HttpResponse(content=f'Error: {str(e)}', status=500)
 
-        return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS', status=200)
 
     def handle_payment_intent_payment_failed(self, event):
         """Handle the payment_intent.payment_failed webhook from Stripe"""

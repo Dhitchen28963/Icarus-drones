@@ -23,9 +23,6 @@
             <div class="card border-black rounded-0 p-4 bg-light">
                 <h4 class="logo-font mb-4 text-center">Get in Touch</h4>
 
-                <!-- Debug Info -->
-                <p><strong>Debug Info:</strong> {% if messages %} Messages: {{ messages }} {% else %} No messages found {% endif %}</p>
-
                 <form method="post" action="{% url 'contact_us' %}">
                     {% csrf_token %}
                     <div class="form-group">
@@ -46,11 +43,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block postloadjs %}
-    {{ block.super }}
-    <script>
-        console.log("Contact Us Page Loaded");
-    </script>
 {% endblock %}

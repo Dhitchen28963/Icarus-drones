@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.contrib import messages
 from django.conf import settings
 from decimal import Decimal
@@ -15,6 +16,7 @@ from profiles.forms import UserProfileForm
 from products.constants import ATTACHMENTS
 from bag.contexts import bag_contents
 from utils.mailchimp_utils import Mailchimp
+from django.db import transaction
 
 # Helper functions for attachments
 def get_attachment_name_by_sku(sku):
@@ -33,6 +35,7 @@ def get_attachment_price_by_sku(sku):
 @require_POST
 def cache_checkout_data(request):
     try:
+        # Extract data from the POST request
         client_secret = request.POST.get('client_secret')
         loyalty_points_used = int(request.POST.get('loyalty_points', 0))
 
@@ -40,12 +43,13 @@ def cache_checkout_data(request):
             pid = client_secret.split('_secret')[0]
             stripe.api_key = settings.STRIPE_SECRET_KEY
 
-            # Calculate the new total with loyalty points discount
+            # Retrieve the existing payment intent
             payment_intent = stripe.PaymentIntent.retrieve(pid)
             original_amount = payment_intent.amount
             discount_amount = loyalty_points_used * 10
             new_amount = max(original_amount - discount_amount, 0)
 
+            # Condense the bag data for metadata
             condensed_bag = {
                 item_id: {
                     "quantity": item_data.get("quantity"),
@@ -62,7 +66,7 @@ def cache_checkout_data(request):
                     if len(bag_metadata) <= 500:
                         break
 
-            # Update the payment intent with new amount and metadata
+            # Update the payment intent with the new amount and metadata
             stripe.PaymentIntent.modify(
                 pid,
                 amount=new_amount,
@@ -72,14 +76,15 @@ def cache_checkout_data(request):
                     'username': str(request.user),
                     'loyalty_points_used': str(loyalty_points_used),
                     'original_amount': str(original_amount),
-                    'discount_amount': str(discount_amount)
+                    'discount_amount': str(discount_amount),
                 }
             )
 
         return HttpResponse(status=200)
-    except Exception as e:
+    except Exception:
         messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
-        return HttpResponse(content=e, status=400)
+        return HttpResponse(status=400)
+
 
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
@@ -155,12 +160,54 @@ def checkout(request):
         grand_total = max(order_total + delivery_cost - discount, Decimal('0.00'))
         stripe_total = round(grand_total * 100)
 
-        # Calculate loyalty points earned based on grand total
-        points_earned = int(grand_total // 10)
+        # Condense metadata to include only essential fields
+        condensed_bag = {
+            item_id: {
+                "quantity": item_data.get("quantity"),
+                "sku": item_data.get("sku", "N/A")
+            }
+            for item_id, item_data in bag.items()
+        }
 
-        if not client_secret:
-            messages.error(request, 'There was an issue with the payment process. Please try again.')
-            return redirect(reverse('checkout'))
+        # Truncate metadata to fit within Stripe's 500-character limit
+        bag_metadata = json.dumps(condensed_bag)
+        if len(bag_metadata) > 500:
+            truncated_bag = dict(list(condensed_bag.items())[:max(len(condensed_bag) - 1, 0)])
+            while len(json.dumps(truncated_bag)) > 500:
+                truncated_bag.pop(next(iter(truncated_bag)))
+            bag_metadata = json.dumps(truncated_bag)
+
+        # Condense serialized_bag to include only essential fields
+        condensed_serialized_bag = {
+            item_id: {
+                "quantity": item_data.get("quantity"),
+                "sku": item_data.get("sku", "N/A")
+            }
+            for item_id, item_data in serialized_bag.items()
+        }
+
+        # Truncate serialized_bag to fit within Stripe's 500-character limit
+        serialized_bag_metadata = json.dumps(condensed_serialized_bag)
+        if len(serialized_bag_metadata) > 500:
+            truncated_serialized_bag = dict(list(condensed_serialized_bag.items())[:max(len(condensed_serialized_bag) - 1, 0)])
+            while len(json.dumps(truncated_serialized_bag)) > 500:
+                truncated_serialized_bag.pop(next(iter(truncated_serialized_bag)))
+            serialized_bag_metadata = json.dumps(truncated_serialized_bag)
+
+        stripe.api_key = stripe_secret_key
+        intent = stripe.PaymentIntent.create(
+            amount=stripe_total,
+            currency=settings.STRIPE_CURRENCY,
+            payment_method_types=['card'],
+            capture_method='automatic',
+            confirm=False,
+            metadata={
+                'bag': bag_metadata,
+                'save_info': request.POST.get('save_info', ''),
+                'username': request.user.username if request.user.is_authenticated else 'AnonymousUser',
+                'loyalty_points_used': str(loyalty_points_used),
+            }
+        )
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
@@ -171,7 +218,7 @@ def checkout(request):
             order.delivery_cost = delivery_cost
             order.discount_applied = discount
             order.grand_total = grand_total
-            order.loyalty_points = points_earned
+            order.loyalty_points = int(grand_total // 10)
             order.loyalty_points_used = loyalty_points_used
             order.save()
 
@@ -191,9 +238,8 @@ def checkout(request):
                     order.delete()
                     return redirect(reverse('view_bag'))
 
-            # Update loyalty points
             if request.user.is_authenticated and profile:
-                profile.loyalty_points = max(0, profile.loyalty_points - loyalty_points_used + points_earned)
+                profile.loyalty_points = max(0, profile.loyalty_points - loyalty_points_used + order.loyalty_points)
                 profile.save()
 
             # Redirect to success page
@@ -246,6 +292,23 @@ def checkout(request):
         stripe_total = round(grand_total * 100)
         loyalty_points_earned = int(grand_total // 10)
 
+        # Condense serialized_bag to include only essential fields
+        condensed_serialized_bag = {
+            item_id: {
+                "quantity": item_data.get("quantity"),
+                "sku": item_data.get("sku", "N/A")
+            }
+            for item_id, item_data in serialized_bag.items()
+        }
+
+        # Truncate serialized_bag to fit within Stripe's 500-character limit
+        serialized_bag_metadata = json.dumps(condensed_serialized_bag)
+        if len(serialized_bag_metadata) > 500:
+            truncated_serialized_bag = dict(list(condensed_serialized_bag.items())[:max(len(condensed_serialized_bag) - 1, 0)])
+            while len(json.dumps(truncated_serialized_bag)) > 500:
+                truncated_serialized_bag.pop(next(iter(truncated_serialized_bag)))
+            serialized_bag_metadata = json.dumps(truncated_serialized_bag)
+
         stripe.api_key = stripe_secret_key
         intent = stripe.PaymentIntent.create(
             amount=stripe_total,
@@ -254,7 +317,7 @@ def checkout(request):
             capture_method='automatic',
             confirm=False,
             metadata={
-                'bag': json.dumps(serialized_bag),
+                'bag': serialized_bag_metadata,
                 'save_info': request.POST.get('save_info', ''),
                 'username': request.user.username if request.user.is_authenticated else 'AnonymousUser',
                 'loyalty_points_used': str(loyalty_points_used),
@@ -301,6 +364,18 @@ def checkout(request):
 def checkout_success(request, order_number):
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
+
+    # Calculate loyalty points earned and discount applied
+    loyalty_points_earned = order.loyalty_points
+    discount_applied = order.discount_applied
+
+    # Add success messages for loyalty points
+    if order.loyalty_points_used > 0:
+        messages.success(request, f"You redeemed {order.loyalty_points_used} loyalty points for this purchase, saving ${discount_applied:.2f}.")
+    if loyalty_points_earned > 0:
+        messages.success(request, f"You earned {loyalty_points_earned} loyalty points for this order.")
+
+    # Order confirmation message
     messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.')
 
     # Clear the bag session
@@ -309,89 +384,92 @@ def checkout_success(request, order_number):
     if 'loyalty_points' in request.session:
         del request.session['loyalty_points']
 
-    # If user is authenticated, update profile and loyalty points
-    loyalty_points_earned = 0
-    discount_applied = Decimal(order.loyalty_points_used) * Decimal('0.1')  # Calculate discount from used loyalty points
+    # Associate order with profile but do not adjust loyalty points here
     if request.user.is_authenticated:
-        profile = UserProfile.objects.get(user=request.user)
-        order.user_profile = profile
-        order.save()
-
-        # Calculate loyalty points
-        total_amount = Decimal(order.grand_total)
-        loyalty_points_earned = int(total_amount // 10)
-        
-        # Update profile loyalty points with proper transaction tracking
-        current_points = profile.loyalty_points
-        
-        # First deduct points if any were used
-        if order.loyalty_points_used > 0:
-            profile.loyalty_points = max(0, current_points - order.loyalty_points_used)
-            profile.save()
-            # Create redemption transaction
-            profile.points_transactions.create(
-                transaction_type='REDEEM',
-                points=-order.loyalty_points_used,
-                balance_before=current_points,
-                balance_after=profile.loyalty_points,
-                order=order
-            )
-            current_points = profile.loyalty_points
-
-        # Add earned loyalty points
-        if loyalty_points_earned > 0:
-            profile.loyalty_points = current_points + loyalty_points_earned
-            profile.save()
-            # Create earning transaction
-            profile.points_transactions.create(
-                transaction_type='EARN',
-                points=loyalty_points_earned,
-                balance_before=current_points,
-                balance_after=profile.loyalty_points,
-                order=order
-            )
-
-        # Save user profile info if 'save_info' option was selected
-        if save_info:
-            profile.default_phone_number = order.phone_number
-            profile.default_country = order.country
-            profile.default_postcode = order.postcode
-            profile.default_town_or_city = order.town_or_city
-            profile.default_street_address1 = order.street_address1
-            profile.default_street_address2 = order.street_address2
-            profile.default_county = order.county
-            profile.save()
-
-        # Add success messages for loyalty points
-        if order.loyalty_points_used > 0:
-            messages.success(request, f"You redeemed {order.loyalty_points_used} loyalty points for this purchase, saving ${discount_applied:.2f}.")
-        if loyalty_points_earned > 0:
-            messages.success(request, f"You earned {loyalty_points_earned} loyalty points for this order.")
-
-        # Sync with Mailchimp
         try:
-            mailchimp = Mailchimp()
-            address = {
-                "addr1": order.street_address1,
-                "city": order.town_or_city,
-                "state": order.county or "",
-                "zip": order.postcode,
-                "country": order.country.code,
-            }
-            mailchimp.subscribe_user(
-                email=order.email,
-                first_name=order.full_name.split()[0],
-                last_name=" ".join(order.full_name.split()[1:]),
-                tags=["Purchased"],
-                address=address,
-            )
-        except Exception:
-            pass
+            profile = UserProfile.objects.get(user=request.user)
+            order.user_profile = profile
+            order.save()
+
+            # Save user profile info if 'save-info' was selected
+            if save_info:
+                profile.default_phone_number = order.phone_number
+                profile.default_country = order.country
+                profile.default_postcode = order.postcode
+                profile.default_town_or_city = order.town_or_city
+                profile.default_street_address1 = order.street_address1
+                profile.default_street_address2 = order.street_address2
+                profile.default_county = order.county
+                profile.save()
+
+            # Sync with Mailchimp
+            try:
+                mailchimp = Mailchimp()
+                address = {
+                    "addr1": order.street_address1,
+                    "city": order.town_or_city,
+                    "state": order.county or "",
+                    "zip": order.postcode,
+                    "country": order.country.code,
+                }
+                mailchimp.subscribe_user(
+                    email=order.email,
+                    first_name=order.full_name.split()[0],
+                    last_name=" ".join(order.full_name.split()[1:]),
+                    tags=["Purchased"],
+                    address=address,
+                )
+            except Exception:
+                pass
+
+        except Exception as e:
+            messages.error(request, "There was an error updating your profile.")
 
     context = {
         'order': order,
         'loyalty_points_earned': loyalty_points_earned,
-        'discount_applied': discount_applied.quantize(Decimal('0.01')),
-        'loyalty_points_used': order.loyalty_points_used,
+        'discount_applied': discount_applied,
     }
     return render(request, 'checkout/checkout_success.html', context)
+
+
+@require_POST
+@csrf_protect
+def update_payment_intent(request):
+    try:
+        # Parse the incoming JSON data
+        data = json.loads(request.body)
+
+        client_secret = data.get('client_secret')
+        new_amount = data.get('amount')
+
+        # Validate inputs
+        if not client_secret or not new_amount:
+            return JsonResponse({'error': 'Invalid request parameters'}, status=400)
+
+        # Extract the PaymentIntent ID from the client secret
+        pid = client_secret.split('_secret')[0]
+
+        # Set Stripe secret key
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+
+        try:
+            # Retrieve the existing PaymentIntent
+            payment_intent = stripe.PaymentIntent.retrieve(pid)
+
+            # Update the PaymentIntent
+            updated_intent = stripe.PaymentIntent.modify(
+                pid,
+                amount=new_amount
+            )
+
+            # Return the new client secret
+            return JsonResponse({
+                'client_secret': updated_intent.client_secret
+            })
+
+        except stripe.error.StripeError:
+            return JsonResponse({'error': 'Payment processing error'}, status=400)
+
+    except Exception:
+        return JsonResponse({'error': 'An unexpected error occurred'}, status=500)

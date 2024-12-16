@@ -23,11 +23,6 @@
             <div class="card border-black rounded-0 p-4 bg-light">
                 <h4 class="logo-font mb-4 text-center">Request Repair</h4>
 
-                <!-- Debug Info -->
-                <p><strong>Debug Info:</strong></p>
-                <p>Request Method: {{ request.method }}</p>
-                <p>Form Data: {{ request.POST }}</p>
-
                 <form method="post" action="{% url 'drone_repair' %}">
                     {% csrf_token %}
                     <div class="form-group">
@@ -48,11 +43,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block postloadjs %}
-    {{ block.super }}
-    <script>
-        console.log("Drone Repair Page Loaded");
-    </script>
 {% endblock %}
