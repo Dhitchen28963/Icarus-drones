@@ -10,6 +10,7 @@ from utils.mailchimp_utils import Mailchimp
 import json
 import stripe
 import base64
+import time
 from decimal import Decimal
 from django.db import transaction
 
@@ -53,7 +54,6 @@ class StripeWH_Handler:
             
             print("=========================================\n")
 
-            # Your existing code remains exactly as is
             print(f"Preparing to send confirmation email for order: {order.order_number}")
             print(f"Order email: {order.email}")
             print(f"Loyalty Points Earned: {loyalty_points_earned}, Used: {loyalty_points_used}")
@@ -122,7 +122,6 @@ class StripeWH_Handler:
                 order = Order.objects.get(stripe_pid=pid)
                 print(f"Order found: {order.order_number}")
 
-                # Check if loyalty points have already been adjusted
                 if order.user_profile and order.loyalty_points_used > 0 and order.loyalty_points > 0:
                     print(f"Order {order.order_number} already processed with loyalty points.")
                     return HttpResponse(content=f'Webhook received: {event["type"]} | Order already processed', status=200)
@@ -137,7 +136,6 @@ class StripeWH_Handler:
                             order=order
                         )
 
-                # Ensure email is sent if not already done
                 if not order.email:
                     print("Email not found in order. Extracting from intent.")
                     order.email = intent.charges.data[0].billing_details.email
@@ -155,85 +153,124 @@ class StripeWH_Handler:
 
             except Order.DoesNotExist:
                 print(f"No order found for Payment Intent ID: {pid}")
-                pass
+                # Try up to 3 times with a small delay
+                for attempt in range(3):
+                    time.sleep(1)  # Wait 1 second
+                    try:
+                        order = Order.objects.get(stripe_pid=pid)
+                        print(f"Order found on attempt {attempt + 1}: {order.order_number}")
+                        
+                        if order.user_profile and order.loyalty_points_used > 0 and order.loyalty_points > 0:
+                            print(f"Order {order.order_number} already processed with loyalty points.")
+                            return HttpResponse(content=f'Webhook received: {event["type"]} | Order already processed', status=200)
 
-            # Process new order if not found
-            bag_items = json.loads(bag)
-            order_total = Decimal('0.00')
+                        user_profile = order.user_profile
+                        if user_profile:
+                            print("Adjusting loyalty points for user profile.")
+                            with transaction.atomic():
+                                user_profile.adjust_loyalty_points(
+                                    points_used=order.loyalty_points_used,
+                                    points_earned=order.loyalty_points,
+                                    order=order
+                                )
 
-            for item_data in bag_items.values():
-                product = Product.objects.get(sku=item_data['sku'])
-                quantity = item_data.get('quantity', 0)
-                item_price = product.price
+                        if not order.email:
+                            print("Email not found in order. Extracting from intent.")
+                            order.email = intent.charges.data[0].billing_details.email
+                            order.save()
 
-                if 'attachments' in item_data and item_data['attachments']:
-                    for attachment_sku in item_data['attachments']:
-                        for attachment in ATTACHMENTS:
-                            if attachment['sku'] == attachment_sku:
-                                item_price += Decimal(str(attachment['price']))
+                        self._send_confirmation_email(
+                            order,
+                            order.loyalty_points,
+                            order.loyalty_points_used,
+                            order.discount_applied
+                        )
 
-                order_total += item_price * Decimal(str(quantity))
+                        print(f"Webhook processed successfully for order: {order.order_number}")
+                        return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS: Order processed', status=200)
+                        
+                    except Order.DoesNotExist:
+                        print(f"Order still not found on attempt {attempt + 1}")
+                        continue
+                
+                print("All retry attempts failed, creating new order")
+                # Process new order if not found
+                bag_items = json.loads(bag)
+                order_total = Decimal('0.00')
 
-            delivery_cost = Decimal('10.00') if order_total < Decimal('100.00') else Decimal('0.00')
-            discount = Decimal(loyalty_points_used) * Decimal('0.1')
-            grand_total = max(order_total + delivery_cost - discount, Decimal('0.00'))
-            loyalty_points_earned = int(grand_total // 10)
-
-            print(f"Order Total: {order_total}, Grand Total: {grand_total}, Loyalty Points Earned: {loyalty_points_earned}")
-
-            charge = stripe.Charge.retrieve(intent.latest_charge)
-            billing_details = charge.billing_details
-
-            order, created = Order.objects.get_or_create(
-                stripe_pid=pid,
-                defaults={
-                    'email': billing_details.email,
-                    'full_name': billing_details.name,
-                    'order_total': order_total,
-                    'delivery_cost': delivery_cost,
-                    'grand_total': grand_total,
-                    'discount_applied': discount,
-                    'loyalty_points_used': loyalty_points_used,
-                    'loyalty_points': loyalty_points_earned,
-                    'original_bag': bag,
-                    'phone_number': billing_details.phone,
-                    'country': billing_details.address.country,
-                    'postcode': billing_details.address.postal_code,
-                    'town_or_city': billing_details.address.city,
-                    'street_address1': billing_details.address.line1,
-                    'street_address2': billing_details.address.line2,
-                    'county': billing_details.address.state,
-                }
-            )
-            
-            print("\nDEBUG - Creating Line Items:")
-            print(f"Bag items to process: {bag_items}")
-
-            if created:  # Only create line items if this is a new order
-                for item_id, item_data in bag_items.items():
+                for item_data in bag_items.values():
                     product = Product.objects.get(sku=item_data['sku'])
                     quantity = item_data.get('quantity', 0)
-                    attachments = ','.join(item_data.get('attachments', []))
+                    item_price = product.price
 
-                    print(f"Creating line item for product: {product.name}")
-                    print(f"SKU: {product.sku}, Quantity: {quantity}")
-                    print(f"Attachments: {attachments}")
+                    if 'attachments' in item_data and item_data['attachments']:
+                        for attachment_sku in item_data['attachments']:
+                            for attachment in ATTACHMENTS:
+                                if attachment['sku'] == attachment_sku:
+                                    item_price += Decimal(str(attachment['price']))
 
-                    order_line_item = OrderLineItem(
-                        order=order,
-                        product=product,
-                        quantity=quantity,
-                        attachments=attachments
-                    )
-                    order_line_item.save()
-                    print(f"Line item saved: {order_line_item.id}")
+                    order_total += item_price * Decimal(str(quantity))
 
-                print("Line item creation complete\n")
+                delivery_cost = Decimal('10.00') if order_total < Decimal('100.00') else Decimal('0.00')
+                discount = Decimal(loyalty_points_used) * Decimal('0.1')
+                grand_total = max(order_total + delivery_cost - discount, Decimal('0.00'))
+                loyalty_points_earned = int(grand_total // 10)
 
-            self._send_confirmation_email(order, loyalty_points_earned, loyalty_points_used, discount)
+                print(f"Order Total: {order_total}, Grand Total: {grand_total}, Loyalty Points Earned: {loyalty_points_earned}")
 
-            print(f"New order created and processed successfully for Payment Intent ID: {pid}")
-            return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS', status=200)
+                charge = stripe.Charge.retrieve(intent.latest_charge)
+                billing_details = charge.billing_details
+
+                order, created = Order.objects.get_or_create(
+                    stripe_pid=pid,
+                    defaults={
+                        'email': billing_details.email,
+                        'full_name': billing_details.name,
+                        'order_total': order_total,
+                        'delivery_cost': delivery_cost,
+                        'grand_total': grand_total,
+                        'discount_applied': discount,
+                        'loyalty_points_used': loyalty_points_used,
+                        'loyalty_points': loyalty_points_earned,
+                        'original_bag': bag,
+                        'phone_number': billing_details.phone,
+                        'country': billing_details.address.country,
+                        'postcode': billing_details.address.postal_code,
+                        'town_or_city': billing_details.address.city,
+                        'street_address1': billing_details.address.line1,
+                        'street_address2': billing_details.address.line2,
+                        'county': billing_details.address.state,
+                    }
+                )
+                
+                if created:  # Only create line items if this is a new order
+                    print("\nDEBUG - Creating Line Items:")
+                    print(f"Bag items to process: {bag_items}")
+                    for item_id, item_data in bag_items.items():
+                        product = Product.objects.get(sku=item_data['sku'])
+                        quantity = item_data.get('quantity', 0)
+                        attachments = ','.join(item_data.get('attachments', []))
+
+                        print(f"Creating line item for product: {product.name}")
+                        print(f"SKU: {product.sku}, Quantity: {quantity}")
+                        print(f"Attachments: {attachments}")
+
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            product=product,
+                            quantity=quantity,
+                            attachments=attachments
+                        )
+                        order_line_item.save()
+                        print(f"Line item saved: {order_line_item.id}")
+
+                    print("Line item creation complete\n")
+
+                self._send_confirmation_email(order, loyalty_points_earned, loyalty_points_used, discount)
+
+                print(f"New order created and processed successfully for Payment Intent ID: {pid}")
+                return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS', status=200)
+
         except Exception as e:
             print(f"Error processing webhook: {e}")
             return HttpResponse(content=f'Error: {str(e)}', status=500)
