@@ -149,6 +149,49 @@
     {% block content %}
     {% endblock %}
 
+    <!-- Footer -->
+    <footer class="container-wrapper mt-5">
+      <div class="container content-container">
+        <section class="footer">
+          <div class="row">
+            <div class="col-12 text-center mb-4">
+              <h2 class="text-uppercase">Stay in Touch</h2>
+              <hr class="block-divider block-divider--short">
+            </div>
+          </div>
+          <div class="row">
+            <!-- Social Links -->
+            <div class="col-12 col-md-6 text-center text-md-start">
+              <h3>Social</h3>
+              <p>Follow us for the latest updates, news, and offers:</p>
+              <a href="https://www.facebook.com/signup" target="_blank" class="d-block mb-2">
+                <i class="fab fa-facebook fa-2x"></i> Facebook
+              </a>
+              <a href="https://www.instagram.com/accounts/emailsignup/" target="_blank" class="d-block mb-2">
+                <i class="fab fa-instagram fa-2x"></i> Instagram
+              </a>
+              <a href="https://twitter.com/i/flow/signup" target="_blank" class="d-block mb-2">
+                <i class="fab fa-twitter fa-2x"></i> Twitter
+              </a>
+            </div>
+            <!-- Mailchimp Subscription -->
+            <div class="col-12 col-md-6 text-center text-md-start">
+              <h3>Subscribe</h3>
+              <p>Get exclusive offers and news delivered to your inbox:</p>
+              <form action="https://herokuapp.us22.list-manage.com/subscribe/post?u=f5db82c9626146f4614665166&amp;id=9518ff3c9a" method="post" target="_blank">
+                <div class="input-group mb-3">
+                  <input type="email" name="EMAIL" class="form-control" placeholder="Your email" required>
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-black w-100">Subscribe</button>
+                  </div>
+                </div>
+              </form>
+              <small class="text-muted d-block mt-2">We respect your privacy. Unsubscribe at any time.</small>
+            </div>
+          </div>
+        </section>
+      </div>
+    </footer>
     {% block postloadjs %}
       <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {

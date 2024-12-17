@@ -532,6 +532,92 @@ button.btn-black:hover {
     overflow-wrap: break-word;
 }
 
+/* Footer Container */
+footer.container-wrapper {
+    position: relative;
+    padding: 40px 0;
+}
+
+footer .container.content-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+footer .footer {
+    width: 100%;
+}
+
+footer h2.text-uppercase {
+    color: #000;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+footer .block-divider.block-divider--short {
+    border-top: 2px solid #000;
+    width: 50px;
+    margin: 15px auto;
+}
+
+footer h3 {
+    color: #000;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+footer p {
+    color: #000;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* Social media links */
+footer .col-md-6 a.d-block {
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer .col-md-6 a.d-block:hover {
+    color: #333;
+}
+
+/* Social icons */
+footer .fab {
+    color: #000;
+    margin-right: 10px;
+}
+
+/* Form elements */
+footer .form-control {
+    border: 1px solid #000;
+    border-radius: 4px;
+    padding: 10px;
+    height: auto;
+}
+
+/* Subscribe button */
+footer .btn-black {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+footer .btn-black:hover {
+    background-color: #333;
+    border-color: #333;
+}
+
+/* Small text */
+footer small.text-muted {
+    color: #000 !important;
+    font-size: 12px;
+}
+
 /* -------------------------------- Media Queries */
 
 @media (max-width: 768px) {
@@ -545,6 +631,14 @@ button.btn-black:hover {
         grid-template-columns: repeat(3, 1fr);
         justify-items: center;
         gap: 10px;
+    }
+
+    footer .container.content-container {
+        padding: 20px;
+    }
+
+    footer .col-md-6 {
+        margin-bottom: 30px;
     }
 }
 
