@@ -24,48 +24,50 @@
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-sm table-borderless">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Staff Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                        <tr>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>
-                                {% if user.is_staff %}
-                                    <span class="badge bg-success">Staff</span>
-                                {% else %}
-                                    <span class="badge bg-secondary">Not Staff</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" style="display: inline;">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                                    {% if not user.is_staff %}
-                                        <button type="submit" name="action" value="make_staff" 
-                                                class="btn btn-primary btn-sm rounded-0">
-                                            Make Staff
-                                        </button>
+                <div class="table-responsive">
+                    <table class="table table-sm table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th class="d-none d-md-table-cell">Email</th>
+                                <th>Staff Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td class="d-none d-md-table-cell">{{ user.email }}</td>
+                                <td>
+                                    {% if user.is_staff %}
+                                        <span class="badge bg-success">Staff</span>
                                     {% else %}
-                                        <button type="submit" name="action" value="remove_staff" 
-                                                class="btn btn-danger btn-sm rounded-0">
-                                            Remove Staff
-                                        </button>
+                                        <span class="badge bg-secondary">Not Staff</span>
                                     {% endif %}
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                </td>
+                                <td>
+                                    <form method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                                        {% if not user.is_staff %}
+                                            <button type="submit" name="action" value="make_staff" 
+                                                    class="btn btn-primary btn-sm rounded-0">
+                                                Make Staff
+                                            </button>
+                                        {% else %}
+                                            <button type="submit" name="action" value="remove_staff" 
+                                                    class="btn btn-danger btn-sm rounded-0">
+                                                Remove Staff
+                                            </button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

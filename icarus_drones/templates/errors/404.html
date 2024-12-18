@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} - Page Not Found{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex align-items-center justify-content-center vh-100" style="background: url('https://dhitchen28963-icarus-drones.s3.amazonaws.com/media/homepage_background.webp') no-repeat center center / cover;">
+    <div class="text-center text-white py-5 px-4 bg-dark bg-opacity-75 rounded">
+        <h1 class="display-4 text-danger mb-4">404 - Page Not Found</h1>
+        <p class="lead">Oops! The page you're looking for does not exist.</p>
+        <p>It seems you've encountered an error or a mistyped URL.</p>
+        <div class="d-flex justify-content-center flex-wrap mt-4">
+            <a href="{% url 'home' %}" class="btn btn-primary btn-lg m-2">Return to Home</a>
+            <a href="{% url 'products' %}" class="btn btn-secondary btn-lg m-2">Return to the Shop</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -38,6 +38,7 @@
         </div>
     </div>
 
+
     <!-- Table View -->
     <div id="table-view" class="view-container">
         <!-- Order Issues Section -->
@@ -47,11 +48,11 @@
                 <table class="table table-borderless">
                     <thead>
                         <tr>
-                            <th>Order Number</th>
-                            <th>Issue Type</th>
+                            <th>Order</th>
+                            <th>Type</th>
                             <th>Description</th>
-                            <th>User</th>
-                            <th>Date</th>
+                            <th class="d-none d-md-table-cell">User</th>
+                            <th class="d-none d-md-table-cell">Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -66,11 +67,11 @@
                                 </td>
                                 <td>{{ issue.get_issue_type_display }}</td>
                                 <td>{{ issue.description|truncatechars:50 }}</td>
-                                <td>{{ issue.user.username }}</td>
-                                <td>{{ issue.created_at|date:"F j, Y" }}</td>
+                                <td class="d-none d-md-table-cell">{{ issue.user.username }}</td>
+                                <td class="d-none d-md-table-cell">{{ issue.created_at|date:"m/d/y" }}</td>
                                 <td>
                                     <a href="{% url 'respond_to_issue' issue.id %}" 
-                                       class="btn btn-primary btn-sm mb-2">
+                                       class="btn btn-primary btn-sm">
                                         Respond
                                     </a>
                                 </td>
@@ -85,71 +86,72 @@
 
         <!-- Repair Requests Section -->
         <h3 class="mt-5">Repair Requests</h3>
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>Drone Model</th>
-                    <th>Issue</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in repair_requests %}
-                <tr>
-                    <td>{{ request.drone_model }}</td>
-                    <td>{{ request.issue_description }}</td>
-                    <td>{{ request.email }}</td>
-                    <td>{{ request.get_status_display }}</td>
-                    <td>{{ request.created_at }}</td>
-                    <td>
-                        <a href="{% url 'respond_to_repair_request' request.id %}" class="btn btn-primary btn-sm mb-2">Respond</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center">No repair requests found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>Issue</th>
+                        <th class="d-none d-md-table-cell">Email</th>
+                        <th>Status</th>
+                        <th class="d-none d-md-table-cell">Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in repair_requests %}
+                    <tr>
+                        <td>{{ request.issue_description|truncatechars:50 }}</td>
+                        <td class="d-none d-md-table-cell">{{ request.email }}</td>
+                        <td>{{ request.get_status_display }}</td>
+                        <td class="d-none d-md-table-cell">{{ request.created_at|date:"m/d/y" }}</td>
+                        <td>
+                            <a href="{% url 'respond_to_repair_request' request.id %}" class="btn btn-primary btn-sm">Respond</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No repair requests found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <!-- Contact Messages Section -->
-        <h3>Contact Messages</h3>
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Message</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for message in contact_messages %}
-                <tr>
-                    <td>{{ message.name }}</td>
-                    <td>{{ message.email }}</td>
-                    <td>{{ message.message }}</td>
-                    <td>{{ message.get_status_display }}</td>
-                    <td>{{ message.created_at }}</td>
-                    <td>
-                        <a href="{% url 'respond_to_contact_message' message.id %}" class="btn btn-primary btn-sm mb-2">Respond</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center">No contact messages found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h3 class="mt-5">Contact Messages</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered mt-4 table-sm">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="d-none d-md-table-cell">Email</th>
+                        <th>Message</th>
+                        <th>Status</th>
+                        <th class="d-none d-md-table-cell">Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in contact_messages %}
+                    <tr>
+                        <td class="text-truncate" style="max-width: 100px;" title="{{ message.name }}">{{ message.name }}</td>
+                        <td class="d-none d-md-table-cell">{{ message.email }}</td>
+                        <td class="text-truncate" style="max-width: 120px;" title="{{ message.message }}">{{ message.message|truncatechars:15 }}</td>
+                        <td>{{ message.get_status_display }}</td>
+                        <td class="d-none d-md-table-cell">{{ message.created_at|date:"m/d/y" }}</td>
+                        <td>
+                            <a href="{% url 'respond_to_contact_message' message.id %}" class="btn btn-primary btn-sm">Respond</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No contact messages found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-
     <!-- Card View -->
     <div id="card-view" class="view-container d-none">
         <!-- Order Issues Section -->
@@ -173,7 +175,7 @@
                 <p class="text-center mt-4">No unresolved issues at the moment.</p>
             {% endif %}
         </div>
-    
+
         <!-- Repair Requests Section -->
         <h3 class="mt-5">Repair Requests</h3>
         <div class="row">
@@ -194,7 +196,7 @@
                 <p class="text-center mt-4">No repair requests found.</p>
             {% endif %}
         </div>
-    
+
         <!-- Contact Messages Section -->
         <h3 class="mt-5">Contact Messages</h3>
         <div class="row">
@@ -215,7 +217,7 @@
                 <p class="text-center mt-4">No contact messages found.</p>
             {% endif %}
         </div>
-    </div>   
+    </div>
 
     {% if issue_to_respond %}
     <div class="row mt-5">
@@ -252,37 +254,37 @@
 {% endblock %}
 
 {% block postloadjs %}
-    {{ block.super }}
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            const tableView = document.getElementById('table-view');
-            const cardView = document.getElementById('card-view');
-            const tableButton = document.getElementById('toggle-table-view');
-            const cardButton = document.getElementById('toggle-card-view');
+{{ block.super }}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const tableView = document.getElementById('table-view');
+        const cardView = document.getElementById('card-view');
+        const tableButton = document.getElementById('toggle-table-view');
+        const cardButton = document.getElementById('toggle-card-view');
 
-            // Show Table View by default
+        // Show Table View by default
+        tableView.classList.remove('d-none');
+        cardView.classList.add('d-none');
+
+        // Toggle Table View
+        tableButton.addEventListener('click', function () {
             tableView.classList.remove('d-none');
             cardView.classList.add('d-none');
-
-            // Toggle Table View
-            tableButton.addEventListener('click', function () {
-                tableView.classList.remove('d-none');
-                cardView.classList.add('d-none');
-                tableButton.classList.add('btn-primary');
-                tableButton.classList.remove('btn-secondary');
-                cardButton.classList.add('btn-secondary');
-                cardButton.classList.remove('btn-primary');
-            });
-
-            // Toggle Card View
-            cardButton.addEventListener('click', function () {
-                cardView.classList.remove('d-none');
-                tableView.classList.add('d-none');
-                cardButton.classList.add('btn-primary');
-                cardButton.classList.remove('btn-secondary');
-                tableButton.classList.add('btn-secondary');
-                tableButton.classList.remove('btn-primary');
-            });
+            tableButton.classList.add('btn-primary');
+            tableButton.classList.remove('btn-secondary');
+            cardButton.classList.add('btn-secondary');
+            cardButton.classList.remove('btn-primary');
         });
-    </script>
+
+        // Toggle Card View
+        cardButton.addEventListener('click', function () {
+            cardView.classList.remove('d-none');
+            tableView.classList.add('d-none');
+            cardButton.classList.add('btn-primary');
+            cardButton.classList.remove('btn-secondary');
+            tableButton.classList.add('btn-secondary');
+            tableButton.classList.remove('btn-primary');
+        });
+    });
+</script>
 {% endblock %}
