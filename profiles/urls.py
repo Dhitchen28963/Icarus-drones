@@ -18,4 +18,5 @@ urlpatterns = [
     path('respond_to_repair_request/<int:request_id>/', views.respond_to_repair_request, name='respond_to_repair_request'),
     path('respond_to_contact_message/<int:message_id>/', views.respond_to_contact_message, name='respond_to_contact_message'),
     path('unsubscribe/<str:email>/', views.unsubscribe, name='unsubscribe'),
+    path('toggle-status/<str:item_type>/<int:item_id>/', views.toggle_status, name='toggle_status'),
 ]

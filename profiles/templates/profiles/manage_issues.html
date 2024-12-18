@@ -152,6 +152,7 @@
 
     <!-- Card View -->
     <div id="card-view" class="view-container d-none">
+        <!-- Order Issues Section -->
         <h3>Order Issues</h3>
         <div class="row">
             {% if issues %}
@@ -172,7 +173,49 @@
                 <p class="text-center mt-4">No unresolved issues at the moment.</p>
             {% endif %}
         </div>
-    </div>
+    
+        <!-- Repair Requests Section -->
+        <h3 class="mt-5">Repair Requests</h3>
+        <div class="row">
+            {% if repair_requests %}
+                {% for request in repair_requests %}
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="list-group-item p-4 border">
+                            <h5>Drone Model: {{ request.drone_model }}</h5>
+                            <p><strong>Issue:</strong> {{ request.issue_description }}</p>
+                            <p><strong>Email:</strong> {{ request.email }}</p>
+                            <p><strong>Status:</strong> {{ request.get_status_display }}</p>
+                            <p><strong>Date:</strong> {{ request.created_at|date:"F j, Y" }}</p>
+                            <a href="{% url 'respond_to_repair_request' request.id %}" class="btn btn-primary">Respond</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center mt-4">No repair requests found.</p>
+            {% endif %}
+        </div>
+    
+        <!-- Contact Messages Section -->
+        <h3 class="mt-5">Contact Messages</h3>
+        <div class="row">
+            {% if contact_messages %}
+                {% for message in contact_messages %}
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="list-group-item p-4 border">
+                            <h5>Name: {{ message.name }}</h5>
+                            <p><strong>Email:</strong> {{ message.email }}</p>
+                            <p><strong>Message:</strong> {{ message.message }}</p>
+                            <p><strong>Status:</strong> {{ message.get_status_display }}</p>
+                            <p><strong>Date:</strong> {{ message.created_at|date:"F j, Y" }}</p>
+                            <a href="{% url 'respond_to_contact_message' message.id %}" class="btn btn-primary">Respond</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center mt-4">No contact messages found.</p>
+            {% endif %}
+        </div>
+    </div>   
 
     {% if issue_to_respond %}
     <div class="row mt-5">

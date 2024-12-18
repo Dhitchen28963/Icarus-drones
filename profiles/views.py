@@ -9,8 +9,11 @@ from django.core.mail import send_mail
 from .decorators import superuser_or_staff_required, superuser_required
 from utils.mailchimp_utils import Mailchimp
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404
 import json, re
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.views.decorators.http import require_POST
 
 
 @login_required
@@ -91,6 +94,104 @@ def order_history(request, order_number):
     return render(request, template, context)
 
 
+def get_email_context(request, **kwargs):
+    """Helper function to create consistent email context"""
+    base_context = {
+        'contact_email': 'support@icarusdrones.com',
+        'background_image_url': "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/homepage_background.webp",
+        'facebook_icon_url': "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/facebook.png",
+        'twitter_icon_url': "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/twitter.png",
+        'instagram_icon_url': "https://dhitchen28963-icarus-drones.s3.us-east-1.amazonaws.com/media/instagram.png",
+    }
+    return {**base_context, **kwargs}
+
+
+@login_required
+@require_POST
+def toggle_status(request, item_type, item_id):
+    """Toggle status between 'in_progress' and 'resolved' for various message types."""
+    try:
+        print(f"Processing {item_type} with ID {item_id}")  # Debug log
+
+        if item_type == 'repair':
+            item = get_object_or_404(RepairRequest, id=item_id)
+            print(f"Found repair request: {item}")
+        elif item_type == 'contact':
+            item = get_object_or_404(ContactMessage, id=item_id)
+            print(f"Found contact message: {item}")
+        elif item_type == 'order':
+            item = get_object_or_404(OrderIssue, id=item_id)
+            print(f"Found order issue: {item}")
+            print(f"Current status: {item.status}")
+        else:
+            raise Http404("Invalid item type")
+
+        # Check permissions
+        if not (request.user.is_staff or request.user.is_superuser):
+            if item_type == 'repair':
+                if not hasattr(item, 'user') or item.user != request.user:
+                    return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+            elif item_type == 'contact':
+                if not hasattr(item, 'email') or item.email != request.user.email:
+                    return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+            elif item_type == 'order':
+                if not hasattr(item, 'user') or item.user != request.user:
+                    return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+
+        # Toggle status with explicit handling
+        print(f"Current status before toggle: {item.status}")  # Debug log
+        if item.status == 'in_progress':
+            item.status = 'resolved'
+        else:
+            item.status = 'in_progress'
+        
+        item.save()
+        print(f"New status after toggle: {item.status}")  # Debug log
+
+        # Create a system message to track the status change
+        try:
+            message_content = f"Status changed to: {item.get_status_display()}"
+            if item_type == 'repair':
+                UserMessage.objects.create(
+                    user=item.user if hasattr(item, 'user') else None,
+                    created_by=request.user,
+                    content=message_content,
+                    repair_request=item
+                )
+            elif item_type == 'contact':
+                UserMessage.objects.create(
+                    user=item.user if hasattr(item, 'user') else None,
+                    created_by=request.user,
+                    content=message_content,
+                    contact_message=item
+                )
+            elif item_type == 'order':
+                UserMessage.objects.create(
+                    user=item.user,
+                    created_by=request.user,
+                    content=message_content,
+                    order_issue=item,
+                    parent_message=None
+                )
+            print(f"Created message for {item_type}")  # Debug log
+        except Exception as message_error:
+            print(f"Error creating message: {str(message_error)}")  # Debug log
+            # Continue even if message creation fails
+            pass
+
+        messages.success(request, f'Status updated to {item.get_status_display()}')
+        return JsonResponse({
+            'status': 'success',
+            'new_status': item.status,
+            'display_status': item.get_status_display()
+        })
+    except Exception as e:
+        print(f"Error in toggle_status: {str(e)}")  # Debug log
+        import traceback
+        traceback.print_exc()  # This will print the full error traceback
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
 @login_required
 def report_order_issue(request, order_number):
     """Allow users to report an issue with an order."""
@@ -160,12 +261,14 @@ def manage_issues(request):
 @superuser_or_staff_required
 def respond_to_issue(request, issue_id):
     """View to respond to a specific issue."""
+    print(f"Responding to issue ID: {issue_id}")
     issue = get_object_or_404(OrderIssue, id=issue_id)
 
     if request.method == 'POST':
         form = OrderIssueResponseForm(request.POST, instance=issue)
         if form.is_valid():
             form.save()
+            print(f"Issue status after save: {issue.status}")
 
             parent_message = UserMessage.objects.filter(
                 user=issue.user,
@@ -173,7 +276,7 @@ def respond_to_issue(request, issue_id):
                 content__icontains=issue.description,
             ).order_by('-created_at').first()
 
-            # Add the response to the user's message trail
+            # Create message for user
             UserMessage.objects.create(
                 user=issue.user,
                 created_by=request.user,
@@ -181,22 +284,45 @@ def respond_to_issue(request, issue_id):
                 parent_message=parent_message,
             )
 
-            # Send email notification if the issue is resolved
-            if issue.status == 'resolved':
-                send_mail(
-                    subject=f"Response to your order issue: {issue.order.order_number}",
-                    message=f"Dear {issue.user.username},\n\n{issue.response}\n\nBest regards,\nIcarus Drones Support Team",
-                    from_email='support@icarusdrones.com',
-                    recipient_list=[issue.user.email],
+            # Send email notification for all responses, not just resolved ones
+            try:
+                recipient_email = issue.user.email
+                context = get_email_context(
+                    request,
+                    user=issue.user,
+                    order=issue.order,
+                    original_message=issue.description,
+                    response_message=issue.response,
+                    status=issue.status,
+                    message_type='order_issue',
+                    unsubscribe_url=f'/unsubscribe/{recipient_email}/'
+                )
+                print(f"Email will be sent to: {recipient_email}")
+
+                html_message = render_to_string(
+                    'profiles/confirmation_emails/order_issue_email.html',
+                    context
                 )
 
-            messages.success(request, 'Response saved and message sent to the customer.')
+                send_mail(
+                    subject=f"Response to your order issue: {issue.order.order_number}",
+                    message=strip_tags(html_message),
+                    html_message=html_message,
+                    from_email='support@icarusdrones.com',
+                    recipient_list=[recipient_email],
+                )
+                print("Order issue email sent successfully")
+                messages.success(request, 'Response saved and email sent successfully.')
+            except Exception as e:
+                print(f"Error sending order issue email: {str(e)}")
+                messages.error(request, 'Response saved but there was an error sending the email.')
+            
             return redirect('manage_issues')
         else:
-            messages.error(request, 'There was an error saving your response. Please try again.')
-    else:
-        form = OrderIssueResponseForm(instance=issue)
-
+            messages.error(request, 'There was an error saving your response.')
+            return redirect('manage_issues')
+    
+    form = OrderIssueResponseForm(instance=issue)
     context = {
         'form': form,
         'issue': issue,
@@ -212,8 +338,10 @@ def messages_view(request):
         parent_messages = UserMessage.objects.filter(parent_message__isnull=True).order_by('-created_at')
         unresolved_issues = OrderIssue.objects.filter(status='in_progress')
         resolved_issues = OrderIssue.objects.filter(status='resolved')
-        repair_requests = RepairRequest.objects.all().order_by('-created_at')
-        contact_messages = ContactMessage.objects.all().order_by('-created_at')
+        pending_repair_requests = RepairRequest.objects.filter(status='in_progress').order_by('-created_at')
+        resolved_repair_requests = RepairRequest.objects.filter(status='resolved').order_by('-created_at')
+        pending_contact_messages = ContactMessage.objects.filter(status='in_progress').order_by('-created_at')
+        resolved_contact_messages = ContactMessage.objects.filter(status='resolved').order_by('-created_at')
     else:
         profile = request.user.userprofile
         parent_messages = UserMessage.objects.filter(
@@ -221,8 +349,24 @@ def messages_view(request):
         ).order_by('-created_at')
         unresolved_issues = profile.user.order_issues.filter(status='in_progress')
         resolved_issues = profile.user.order_issues.filter(status='resolved')
-        repair_requests = RepairRequest.objects.filter(user=request.user).order_by('-created_at')
-        contact_messages = ContactMessage.objects.filter(email=request.user.email).order_by('-created_at')
+        pending_repair_requests = RepairRequest.objects.filter(user=request.user, status='in_progress').order_by('-created_at')
+        resolved_repair_requests = RepairRequest.objects.filter(user=request.user, status='resolved').order_by('-created_at')
+        pending_contact_messages = ContactMessage.objects.filter(email=request.user.email, status='in_progress').order_by('-created_at')
+        resolved_contact_messages = ContactMessage.objects.filter(email=request.user.email, status='resolved').order_by('-created_at')
+
+    # Debugging: Print counts for each category
+    print(f"Parent Messages Count: {parent_messages.count()}")
+    print(f"Unresolved Issues Count: {unresolved_issues.count()}")
+    print(f"Resolved Issues Count: {resolved_issues.count()}")
+    print(f"Pending Repair Requests Count: {pending_repair_requests.count()}")
+    print(f"Resolved Repair Requests Count: {resolved_repair_requests.count()}")
+    print(f"Pending Contact Messages Count: {pending_contact_messages.count()}")
+    print(f"Resolved Contact Messages Count: {resolved_contact_messages.count()}")
+
+    # Debugging: Log details of pending repair requests
+    print("Pending Repair Requests Details:")
+    for req in pending_repair_requests:
+        print(f"ID: {req.id}, Model: {req.drone_model}, Status: {req.status}, Created At: {req.created_at}")
 
     # Attach the original report to each parent message
     for message in parent_messages:
@@ -245,40 +389,86 @@ def messages_view(request):
                         content=message.order_issue.description,
                         created_at=message.order_issue.created_at,
                     )
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Error processing message {message.id}: {str(e)}")
 
     context = {
         'parent_messages': parent_messages,
         'unresolved_issues': unresolved_issues,
         'resolved_issues': resolved_issues,
-        'repair_requests': repair_requests,
-        'contact_messages': contact_messages,
+        'pending_repair_requests': pending_repair_requests,
+        'resolved_repair_requests': resolved_repair_requests,
+        'pending_contact_messages': pending_contact_messages,
+        'resolved_contact_messages': resolved_contact_messages,
     }
+
+    # Debugging: Confirm final context data
+    print("Context Data Prepared:")
+    for key, value in context.items():
+        if hasattr(value, 'count'):
+            print(f"{key}: {value.count()}")
+        else:
+            print(f"{key}: {value}")
+
     return render(request, 'profiles/messages.html', context)
 
 
 @login_required
 def respond_to_message(request, message_id):
     """Handle responses to messages."""
+    print(f"Responding to message ID: {message_id}")
     if request.method == "POST":
         original_message = get_object_or_404(UserMessage, id=message_id)
-
         response_content = request.POST.get("response")
+        
         if response_content:
-            # Create a response message linked to the original sender
+            print("Creating user message")
+            # Create message in database
             UserMessage.objects.create(
-                user=original_message.created_by,
+                user=original_message.user,  # Changed from original_message.created_by
                 created_by=request.user,
                 content=response_content,
                 parent_message=original_message
             )
-            messages.success(request, "Your response has been sent successfully.")
+
+            try:
+                recipient_email = original_message.user.email  # Use the user's email directly
+                print(f"Preparing to send message response email to: {recipient_email}")
+                
+                context = get_email_context(
+                    request,
+                    user=original_message.user,  # Changed from original_message.created_by
+                    original_message=original_message.content,
+                    response_message=response_content,
+                    message_type='general_message',
+                    unsubscribe_url=f'/unsubscribe/{recipient_email}/'
+                )
+                print(f"Email will be sent to: {recipient_email}")
+
+                html_message = render_to_string(
+                    'profiles/confirmation_emails/message_response_email.html',
+                    context
+                )
+
+                send_mail(
+                    subject="Response to your message",
+                    message=strip_tags(html_message),
+                    html_message=html_message,
+                    from_email='support@icarusdrones.com',
+                    recipient_list=[recipient_email],
+                )
+                print("Message response email sent successfully")
+                messages.success(request, "Your response has been sent successfully.")
+            except Exception as e:
+                print(f"Error sending message response email: {str(e)}")
+                messages.error(request, "Your response was saved but there was an error sending the email.")
         else:
             messages.error(request, "Your response cannot be empty.")
-
-        return redirect("messages")
-
+        
+        return redirect('messages')
+    
+    return redirect('messages')
+                
 
 @superuser_required
 def manage_staff(request):
@@ -340,18 +530,18 @@ def toggle_wishlist(request):
 @login_required
 def manage_messages(request):
     """View to display and manage repair requests and contact messages."""
-    repair_requests = RepairRequest.objects.all().order_by('-created_at')
-    contact_messages = ContactMessage.objects.all().order_by('-created_at')
+    pending_repair_requests = RepairRequest.objects.filter(status='in_progress').order_by('-created_at')
+    resolved_repair_requests = RepairRequest.objects.filter(status='resolved').order_by('-created_at')
+    pending_contact_messages = ContactMessage.objects.filter(status='in_progress').order_by('-created_at')
+    resolved_contact_messages = ContactMessage.objects.filter(status='resolved').order_by('-created_at')
 
     context = {
-        'repair_requests': repair_requests,
-        'contact_messages': contact_messages,
-        'unresolved_issues': [],
-        'resolved_issues': [],
-        'parent_messages': [],
+        'pending_repair_requests': pending_repair_requests,
+        'resolved_repair_requests': resolved_repair_requests,
+        'pending_contact_messages': pending_contact_messages,
+        'resolved_contact_messages': resolved_contact_messages,
     }
     return render(request, 'profiles/manage_messages.html', context)
-
 
 
 @login_required
@@ -412,11 +602,9 @@ def respond_to_repair_request(request, request_id):
     if request.method == 'POST':
         form = RepairRequestResponseForm(request.POST, instance=repair_request)
         if form.is_valid():
-            # Save status update
             repair_request.status = form.cleaned_data['status']
             repair_request.save()
 
-            # Create message
             response_message = form.cleaned_data['response']
             UserMessage.objects.create(
                 repair_request=repair_request,
@@ -425,23 +613,34 @@ def respond_to_repair_request(request, request_id):
                 content=response_message,
             )
 
-            # Determine how to address the recipient
-            user_info = f"Dear {repair_request.user.username}," if repair_request.user else "Dear Customer,"
+            # Send HTML email
+            context = get_email_context(
+                request,
+                user=repair_request.user,
+                name=repair_request.user.username if repair_request.user else "Customer",
+                original_message=repair_request.issue_description,
+                response_message=response_message,
+                status=repair_request.status,
+                message_type='repair_request',
+                repair_details={
+                    'model': repair_request.drone_model,
+                },
+                unsubscribe_url=f'/unsubscribe/{repair_request.email}/'
+            )
 
-            # Send email notification
+            html_message = render_to_string(
+                'profiles/confirmation_emails/repair_request_email.html',
+                context
+            )
+
             send_mail(
                 subject="Repair Request Update",
-                message=(
-                    f"{user_info}\n\n"
-                    f"We have reviewed your repair request:\n\n"
-                    f"\"{repair_request.issue_description}\"\n\n"
-                    f"Our response:\n\n"
-                    f"\"{response_message}\"\n\n"
-                    f"Best regards,\nIcarus Drones Support Team"
-                ),
+                message=strip_tags(html_message),
+                html_message=html_message,
                 from_email='support@icarusdrones.com',
                 recipient_list=[repair_request.email],
             )
+
             messages.success(request, 'Response sent successfully.')
             return redirect('manage_issues')
         else:
@@ -450,7 +649,7 @@ def respond_to_repair_request(request, request_id):
         form = RepairRequestResponseForm(instance=repair_request)
 
     return render(request, 'profiles/repair_response.html', {
-        'form': form, 
+        'form': form,
         'repair_request': repair_request,
         'messages_history': messages_history,
     })
@@ -464,11 +663,9 @@ def respond_to_contact_message(request, message_id):
     if request.method == 'POST':
         form = ContactMessageResponseForm(request.POST, instance=contact_message)
         if form.is_valid():
-            # Save status update
             contact_message.status = form.cleaned_data['status']
             contact_message.save()
 
-            # Create message
             response_message = form.cleaned_data['response']
             UserMessage.objects.create(
                 user=contact_message.user,
@@ -477,20 +674,31 @@ def respond_to_contact_message(request, message_id):
                 contact_message=contact_message
             )
 
-            # Send email notification
+            # Send HTML email
+            context = get_email_context(
+                request,
+                user=contact_message.user,
+                name=contact_message.name,
+                original_message=contact_message.message,
+                response_message=response_message,
+                status=contact_message.status,
+                message_type='contact_message',
+                unsubscribe_url=f'/unsubscribe/{contact_message.email}/'
+            )
+
+            html_message = render_to_string(
+                'profiles/confirmation_emails/contact_response_email.html',
+                context
+            )
+
             send_mail(
                 subject="Response to your inquiry",
-                message=(
-                    f"Dear {contact_message.name},\n\n"
-                    f"We have reviewed your inquiry:\n\n"
-                    f"\"{contact_message.message}\"\n\n"
-                    f"Our response:\n\n"
-                    f"\"{response_message}\"\n\n"
-                    f"Best regards,\nIcarus Drones Support Team"
-                ),
+                message=strip_tags(html_message),
+                html_message=html_message,
                 from_email='support@icarusdrones.com',
                 recipient_list=[contact_message.email],
             )
+
             messages.success(request, 'Response sent successfully.')
             return redirect('manage_issues')
         else:
@@ -503,7 +711,7 @@ def respond_to_contact_message(request, message_id):
         'message': contact_message,
         'messages_history': messages_history,
     })
-
+    
 
 def unsubscribe(request, email):
     """Handle user unsubscribe requests"""
