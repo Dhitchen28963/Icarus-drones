@@ -230,6 +230,7 @@ def report_order_issue(request, order_number):
     return render(request, 'profiles/report_issue.html', {'form': form, 'order': order})
 
 
+@superuser_or_staff_required
 def manage_issues(request):
     """View to list all order issues, repair requests, and contact messages."""
     # Filter issues, repair requests, and contact messages based on status
@@ -257,6 +258,7 @@ def manage_issues(request):
     return render(request, 'profiles/manage_issues.html', context)
 
 
+@superuser_or_staff_required
 def respond_to_issue(request, issue_id):
     """View to respond to a specific issue."""
     print(f"Responding to issue ID: {issue_id}")
@@ -592,6 +594,7 @@ def handle_repair_submission(request):
     return render(request, 'profiles/drone_repair.html')
 
 
+@superuser_or_staff_required
 def respond_to_repair_request(request, request_id):
     repair_request = get_object_or_404(RepairRequest, id=request_id)
     messages_history = UserMessage.objects.filter(repair_request=repair_request).order_by('created_at')
@@ -652,6 +655,7 @@ def respond_to_repair_request(request, request_id):
     })
 
 
+@superuser_or_staff_required
 def respond_to_contact_message(request, message_id):
     contact_message = get_object_or_404(ContactMessage, id=message_id)
     messages_history = UserMessage.objects.filter(contact_message=contact_message).order_by('created_at')
