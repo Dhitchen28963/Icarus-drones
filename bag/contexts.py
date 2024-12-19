@@ -7,12 +7,12 @@ from profiles.models import UserProfile
 
 
 def get_attachment_name_by_sku(sku):
-    """Helper function to return the human-readable name of an attachment given its SKU"""
+    """Helper function to return human-readable name of an attachment"""
     for attachment in ATTACHMENTS:
         if attachment['sku'] == sku:
             return attachment['name']
     return sku
-    
+
 
 def bag_contents(request):
     bag_items = []
@@ -51,7 +51,9 @@ def bag_contents(request):
 
                 # Convert attachment SKUs to human-readable names
                 attachments = item_data.get('attachments', [])
-                attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
+                attachment_names = [
+                    get_attachment_name_by_sku(att) for att in attachments
+                ]
 
                 bag_items.append({
                     'item_id': item_id,
@@ -68,7 +70,8 @@ def bag_contents(request):
     # Calculate delivery and grand total
     free_delivery_threshold = Decimal(str(settings.FREE_DELIVERY_THRESHOLD))
     if total < free_delivery_threshold:
-        delivery = total * Decimal(str(settings.STANDARD_DELIVERY_PERCENTAGE)) / 100
+        delivery = (total *
+                    Decimal(str(settings.STANDARD_DELIVERY_PERCENTAGE)) / 100)
         free_delivery_delta = free_delivery_threshold - total
     else:
         delivery = Decimal(0)
@@ -79,7 +82,7 @@ def bag_contents(request):
     # Apply loyalty points discount
     if 'loyalty_points' in request.session:
         loyalty_points_used = Decimal(request.session.get('loyalty_points', 0))
-        loyalty_discount = loyalty_points_used * Decimal(0.1)  # $0.10 per point
+        loyalty_discount = loyalty_points_used * Decimal(0.1)
         grand_total = max(grand_total - loyalty_discount, Decimal(0))
 
     context = {

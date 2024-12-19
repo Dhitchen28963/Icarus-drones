@@ -5,12 +5,14 @@ from django.contrib import messages
 from products.constants import ATTACHMENTS
 from products.models import Product
 
+
 def get_attachment_name_by_sku(sku):
-    """ Helper function to return the human-readable name of an attachment given its SKU """
+    """ Helper function to return human-readable name of attachment"""
     for attachment in ATTACHMENTS:
         if attachment['sku'] == sku:
             return attachment['name']
     return sku
+
 
 def view_bag(request):
     """ A view that renders the bag contents page with loyalty points """
@@ -39,6 +41,7 @@ def view_bag(request):
 
     return render(request, 'bag/bag.html', context)
 
+
 def add_to_bag(request, item_id):
     """ Add a quantity of the specified product to the shopping bag """
     quantity = int(request.POST.get('quantity'))
@@ -48,15 +51,27 @@ def add_to_bag(request, item_id):
 
     if str(item_id) in bag and isinstance(bag[str(item_id)], dict):
         bag[str(item_id)]['quantity'] += quantity
-        messages.success(request, f'Updated {product.name} quantity to {bag[str(item_id)]["quantity"]}.')
+        messages.success(
+            request,
+            f"Updated {product.name} quantity to "
+            f"{bag[str(item_id)]['quantity']}."
+        )
     else:
-        bag[str(item_id)] = {'quantity': quantity, 'price': float(product.price), 'sku': product.sku}
-        messages.success(request, f'Added {product.name} to your bag.')
+        bag[str(item_id)] = {
+            'quantity': quantity,
+            'price': float(product.price),
+            'sku': product.sku,
+        }
+        messages.success(
+            request,
+            f"Added {product.name} to your bag."
+        )
 
     # Clear loyalty points if the bag changes
     request.session.pop('loyalty_points', None)
     request.session['bag'] = bag
     return redirect(redirect_url)
+
 
 def add_custom_drone_to_bag(request):
     """Add a custom drone to the shopping bag with debugging"""
@@ -79,7 +94,10 @@ def add_custom_drone_to_bag(request):
             sku = product.sku
             drone_type = product.name.split(' - ')[0]
         except Product.DoesNotExist:
-            messages.error(request, "The product you tried to add was not found.")
+            messages.error(
+                request,
+                "The product you tried to add was not found."
+            )
             return redirect('view_bag')
 
         # Create a unique key based on SKU and color
@@ -90,15 +108,27 @@ def add_custom_drone_to_bag(request):
         bag = request.session.get('bag', {})
 
         # Calculate attachment costs and the final price
-        extra_cost = sum(float(att['price']) for att in ATTACHMENTS if att['sku'] in attachments)
+        extra_cost = sum(
+            float(att['price']) for att in ATTACHMENTS
+            if att['sku'] in attachments
+        )
         final_price = float(product.price) + extra_cost
 
         # Add or update the custom item in the bag
         if custom_key in bag:
             bag[custom_key]['quantity'] += quantity
-            attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
+            attachment_names = [
+                get_attachment_name_by_sku(att) for att in attachments
+            ]
             attachments_text = ', '.join(attachment_names)
-            messages.success(request, f'Updated {drone_type} - {color} with attachments: {attachments_text} quantity to {bag[custom_key]["quantity"]}.')
+            messages.success(
+                request,
+                (
+                    f'Updated {drone_type} - {color} with attachments: '
+                    f'{attachments_text} quantity to '
+                    f'{bag[custom_key]["quantity"]}.'
+                )
+            )
         else:
             bag[custom_key] = {
                 'quantity': quantity,
@@ -110,12 +140,24 @@ def add_custom_drone_to_bag(request):
                 'image_url': f"/media/{product.image}",
                 'name': f"{drone_type} - {color}"
             }
-            attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
+            attachment_names = [
+                get_attachment_name_by_sku(att) for att in attachments
+            ]
             attachments_text = ', '.join(attachment_names)
+
             if attachments:
-                messages.success(request, f"{drone_type} - {color} with attachments: {attachments_text} added to your bag.")
+                messages.success(
+                    request,
+                    (
+                        f"{drone_type} - {color} with attachments: "
+                        f"{attachments_text} added to your bag."
+                    )
+                )
             else:
-                messages.success(request, f"{drone_type} - {color} added to your bag.")
+                messages.success(
+                    request,
+                    f"{drone_type} - {color} added to your bag."
+                )
 
         # Clear loyalty points if the bag changes
         request.session.pop('loyalty_points', None)
@@ -123,6 +165,7 @@ def add_custom_drone_to_bag(request):
         # Update the session
         request.session['bag'] = bag
         return redirect('view_bag')
+
 
 def adjust_bag(request, item_id):
     """Adjust the quantity of the specified product to the specified amount"""
@@ -134,41 +177,65 @@ def adjust_bag(request, item_id):
             product = get_object_or_404(Product, pk=item_id)
             if quantity > 0:
                 bag[str(item_id)]['quantity'] = quantity
-                messages.success(request, f'Updated {product.name} quantity to {quantity}.')
+                messages.success(
+                    request,
+                    f'Updated {product.name} quantity to {quantity}.'
+                )
             else:
                 bag.pop(str(item_id))
-                messages.success(request, f'Removed {product.name} from your bag.')
+                messages.success(
+                    request,
+                    f'Removed {product.name} from your bag.'
+                )
         else:
             if quantity > 0:
                 bag[item_id]['quantity'] = quantity
-                messages.success(request, f'Updated {item_id} quantity to {quantity}.')
+                messages.success(
+                    request,
+                    f'Updated {item_id} quantity to {quantity}.'
+                )
             else:
                 bag.pop(item_id)
-                messages.success(request, f'Removed {item_id} from your bag.')
+                messages.success(
+                    request,
+                    f'Removed {item_id} from your bag.'
+                )
     else:
-        messages.error(request, "Error adjusting the bag. Item not found or is invalid.")
+        messages.error(
+            request,
+            "Error adjusting the bag. Item not found or is invalid."
+        )
 
     # Clear loyalty points if the bag changes
     request.session.pop('loyalty_points', None)
     request.session['bag'] = bag
     return redirect(reverse('view_bag'))
 
+
 def remove_from_bag(request, item_id):
     """Remove the item from the shopping bag"""
     try:
         bag = request.session.get('bag', {})
-        
+
         if item_id in bag:
             item_data = bag[item_id]
             sku = item_data.get('sku', item_id)
             attachments = item_data.get('attachments', [])
 
             if attachments:
-                attachment_names = [get_attachment_name_by_sku(att) for att in attachments]
+                attachment_names = [
+                    get_attachment_name_by_sku(att) for att in attachments
+                ]
                 formatted_attachments = ", ".join(attachment_names)
-                message = f"Removed {sku} with attachments ({formatted_attachments}) from your bag."
+                message = (
+                    f"Removed {sku} with attachments "
+                    f"({formatted_attachments}) from your bag."
+                )
             else:
-                product = get_object_or_404(Product, sku=sku) if sku else None
+                product = (
+                    get_object_or_404(Product, sku=sku)
+                    if sku else None
+                )
                 if product:
                     message = f"Removed {product.name} from your bag."
                 else:
