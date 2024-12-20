@@ -264,214 +264,220 @@
 {% block postloadjs %}
 {{ block.super }}
 <script>
-   document.addEventListener('DOMContentLoaded', function () {
-       // Wishlist Toggle Logic
-       const wishlistToggleUrl = "{% url 'products_toggle_wishlist' %}";
-       document.querySelectorAll('.wishlist-icon').forEach(icon => {
-           icon.addEventListener('click', function () {
-               const productId = this.getAttribute('data-product-id');
+    document.addEventListener('DOMContentLoaded', function () {
+        // Wishlist Toggle Logic
+        const wishlistToggleUrl = "{% url 'products_toggle_wishlist' %}";
+        document.querySelectorAll('.wishlist-icon').forEach(icon => {
+            icon.addEventListener('click', function () {
+                const productId = this.getAttribute('data-product-id');
 
-               fetch(wishlistToggleUrl, {
-                   method: 'POST',
-                   headers: {
-                       'X-CSRFToken': '{{ csrf_token }}',
-                       'Content-Type': 'application/json',
-                   },
-                   body: JSON.stringify({ product_id: productId }),
-               })
-               .then(response => response.json())
-               .then(data => {
-                   if (data.status === 'added') {
-                       this.classList.add('wishlist-active');
-                       this.style.color = '#8B0000';
-                   } else if (data.status === 'removed') {
-                       this.classList.remove('wishlist-active');
-                       this.style.color = 'gray';
-                   }
+                fetch(wishlistToggleUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ product_id: productId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'added') {
+                        this.classList.add('wishlist-active');
+                        this.style.color = '#8B0000';
+                    } else if (data.status === 'removed') {
+                        this.classList.remove('wishlist-active');
+                        this.style.color = 'gray';
+                    }
 
-                   // Show the success toast and update its message
-                   setTimeout(function () {
-                       const toastElement = document.querySelector('.toast.custom-toast');
-                       if (toastElement) {
-                           toastElement.classList.remove('d-none');
-                           const toastBody = toastElement.querySelector('.toast-body .col');
-                           toastBody.innerHTML = data.message || 'Action completed successfully!';
-                           const successToast = new bootstrap.Toast(toastElement, {
-                               autohide: true,
-                               delay: 3000
-                           });
-                           successToast.show();
+                    // Show the success toast and update its message
+                    setTimeout(function () {
+                        const toastElement = document.querySelector('.toast.custom-toast');
+                        if (toastElement) {
+                            toastElement.classList.remove('d-none');
+                            const toastBody = toastElement.querySelector('.toast-body .col');
+                            toastBody.innerHTML = data.message || 'Action completed successfully!';
+                            const successToast = new bootstrap.Toast(toastElement, {
+                                autohide: true,
+                                delay: 3000,
+                            });
+                            successToast.show();
 
-                           setTimeout(() => {
-                               toastElement.classList.add('d-none');
-                           }, 3500);
-                       }
-                   }, 500);
-               })
-               .catch(error => console.error('Error:', error));
-           });
-       });
+                            setTimeout(() => {
+                                toastElement.classList.add('d-none');
+                            }, 3500);
+                        }
+                    }, 500);
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
 
-       // Stars filter and scroll position adjustment
-       const container = document.body;
-       container.addEventListener('change', function (event) {
-           if (event.target && event.target.id === 'stars') {
-               const starsDropdown = event.target;
-               const selectedRating = starsDropdown.value;
-               const currentUrl = new URL(window.location.href);
+        // Stars filter and scroll position adjustment
+        const container = document.body;
+        container.addEventListener('change', function (event) {
+            if (event.target && event.target.id === 'stars') {
+                const starsDropdown = event.target;
+                const selectedRating = starsDropdown.value;
+                const currentUrl = new URL(window.location.href);
 
-               // Update the URL parameter for stars
-               if (selectedRating) {
-                   currentUrl.searchParams.set('stars', selectedRating);
-               } else {
-                   currentUrl.searchParams.delete('stars');
-               }
+                // Update the URL parameter for stars
+                if (selectedRating) {
+                    currentUrl.searchParams.set('stars', selectedRating);
+                } else {
+                    // Explicitly set a flag for "All Ratings"
+                    currentUrl.searchParams.set('stars', 'all');
+                }
 
-               // Reload the page with updated parameters
-               window.location.href = currentUrl.toString();
-           }
-       });
+                // Reload the page with updated parameters
+                window.location.href = currentUrl.toString();
+            }
+        });
 
-       // Adjust scroll position to account for the fixed header
-       const reviewsSection = document.getElementById('reviews-section');
-       if (reviewsSection) {
-           const urlParams = new URLSearchParams(window.location.search);
-           const headerOffset = document.querySelector('.navbar').offsetHeight || 100;
-           const sectionTop = reviewsSection.getBoundingClientRect().top + window.scrollY;
-           const adjustedPosition = sectionTop - headerOffset - 50;
+        // Adjust scroll position to account for the fixed header only for filtering
+        const reviewsSection = document.getElementById('reviews-section');
+        if (reviewsSection) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const starsFilter = urlParams.get('stars');
 
-           // Scroll to the reviews section on page load
-           window.scrollTo({
-               top: adjustedPosition,
-               behavior: 'smooth',
-           });
-       }
+            // Scroll to the reviews section if a specific filter is applied (including "All Ratings")
+            if (starsFilter) {
+                const headerOffset = document.querySelector('.navbar').offsetHeight || 100;
+                const sectionTop = reviewsSection.getBoundingClientRect().top + window.scrollY;
+                const adjustedPosition = sectionTop - headerOffset - 50;
 
-       // Quantity adjustment logic
-       const incrementQtyButtons = document.querySelectorAll('.increment-qty');
-       const decrementQtyButtons = document.querySelectorAll('.decrement-qty');
-       const qtyInputs = document.querySelectorAll('.qty_input');
-       let selectedProductId = null;
+                // Scroll to the adjusted position
+                window.scrollTo({
+                    top: adjustedPosition,
+                    behavior: 'smooth',
+                });
+            }
+        }
 
-       incrementQtyButtons.forEach(button => {
-           button.addEventListener('click', function (e) {
-               e.preventDefault();
-               const itemId = this.dataset.item_id;
-               const qtyInput = document.getElementById('id_qty_' + itemId);
-               let currentQty = parseInt(qtyInput.value);
-               if (currentQty < 99) {
-                   qtyInput.value = currentQty + 1;
-               }
-           });
-       });
+        // Quantity adjustment logic
+        const incrementQtyButtons = document.querySelectorAll('.increment-qty');
+        const decrementQtyButtons = document.querySelectorAll('.decrement-qty');
+        const qtyInputs = document.querySelectorAll('.qty_input');
+        let selectedProductId = null;
 
-       decrementQtyButtons.forEach(button => {
-           button.addEventListener('click', function (e) {
-               e.preventDefault();
-               const itemId = this.dataset.item_id;
-               const qtyInput = document.getElementById('id_qty_' + itemId);
-               let currentQty = parseInt(qtyInput.value);
-               if (currentQty > 1) {
-                   qtyInput.value = currentQty - 1;
-               }
-           });
-       });
+        incrementQtyButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const itemId = this.dataset.item_id;
+                const qtyInput = document.getElementById('id_qty_' + itemId);
+                let currentQty = parseInt(qtyInput.value);
+                if (currentQty < 99) {
+                    qtyInput.value = currentQty + 1;
+                }
+            });
+        });
 
-       // Delete product functionality
-       document.querySelectorAll('.delete-product-button').forEach(button => {
-           button.addEventListener('click', function (event) {
-               event.preventDefault();
-               selectedProductId = this.getAttribute('data-product-id');
-               $('#deleteConfirmationModal').modal('show');
-           });
-       });
+        decrementQtyButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const itemId = this.dataset.item_id;
+                const qtyInput = document.getElementById('id_qty_' + itemId);
+                let currentQty = parseInt(qtyInput.value);
+                if (currentQty > 1) {
+                    qtyInput.value = currentQty - 1;
+                }
+            });
+        });
 
-       document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-           if (selectedProductId) {
-               fetch(`/products/delete/${selectedProductId}/`, {
-                   method: 'POST',
-                   headers: {
-                       'X-CSRFToken': '{{ csrf_token }}',
-                       'Content-Type': 'application/json'
-                   },
-               }).then(response => {
-                   if (response.ok) {
-                       // Hide the modal
-                       $('#deleteConfirmationModal').modal('hide');
+        // Delete product functionality
+        document.querySelectorAll('.delete-product-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                selectedProductId = this.getAttribute('data-product-id');
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
 
-                       // Trigger the toast display
-                       const toastElement = document.querySelector('.toast.custom-toast');
-                       if (toastElement) {
-                           const toastBody = toastElement.querySelector('.toast-body');
-                           toastBody.innerHTML = 'Product deleted successfully!';
-                           const successToast = new bootstrap.Toast(toastElement);
-                           successToast.show();
-                       }
+        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+            if (selectedProductId) {
+                fetch(`/products/delete/${selectedProductId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(response => {
+                    if (response.ok) {
+                        // Hide the modal
+                        $('#deleteConfirmationModal').modal('hide');
 
-                       // Redirect to the products page
-                       setTimeout(() => {
-                           window.location.href = "{% url 'products' %}";
-                       }, 5000);
-                   }
-               });
-           }
-       });
+                        // Trigger the toast display
+                        const toastElement = document.querySelector('.toast.custom-toast');
+                        if (toastElement) {
+                            const toastBody = toastElement.querySelector('.toast-body');
+                            toastBody.innerHTML = 'Product deleted successfully!';
+                            const successToast = new bootstrap.Toast(toastElement);
+                            successToast.show();
+                        }
 
-       // Review form functionality
-       const commentField = document.getElementById('id_comment');
-       const ratingField = document.getElementById('id_rating');
+                        // Redirect to the products page
+                        setTimeout(() => {
+                            window.location.href = "{% url 'products' %}";
+                        }, 5000);
+                    }
+                });
+            }
+        });
 
-       if (commentField) {
-           commentField.addEventListener('input', (e) => console.log('Comment Field Input Event:', e.target.value));
-       }
+        // Review form functionality
+        const commentField = document.getElementById('id_comment');
+        const ratingField = document.getElementById('id_rating');
 
-       if (ratingField) {
-           ratingField.addEventListener('change', (e) => console.log('Rating Field Change Event:', e.target.value));
-       }
+        if (commentField) {
+            commentField.addEventListener('input', (e) => console.log('Comment Field Input Event:', e.target.value));
+        }
 
-       // Star Rating Logic
-       const stars = document.querySelectorAll('#star-rating .star');
-       const ratingInput = document.querySelector('#id_rating');
+        if (ratingField) {
+            ratingField.addEventListener('change', (e) => console.log('Rating Field Change Event:', e.target.value));
+        }
 
-       if (stars && ratingInput) {
-           stars.forEach((star) => {
-               star.addEventListener('click', function () {
-                   const selectedValue = this.getAttribute('data-value');
-                   ratingInput.value = selectedValue;
+        // Star Rating Logic
+        const stars = document.querySelectorAll('#star-rating .star');
+        const ratingInput = document.querySelector('#id_rating');
 
-                   // Highlight selected stars
-                   stars.forEach((s, index) => {
-                       if (index < selectedValue) {
-                           s.classList.add('selected');
-                       } else {
-                           s.classList.remove('selected');
-                       }
-                   });
-               });
+        if (stars && ratingInput) {
+            stars.forEach((star) => {
+                star.addEventListener('click', function () {
+                    const selectedValue = this.getAttribute('data-value');
+                    ratingInput.value = selectedValue;
 
-               star.addEventListener('mouseover', function () {
-                   const hoverValue = this.getAttribute('data-value');
-                   stars.forEach((s, index) => {
-                       if (index < hoverValue) {
-                           s.classList.add('selected');
-                       } else {
-                           s.classList.remove('selected');
-                       }
-                   });
-               });
+                    // Highlight selected stars
+                    stars.forEach((s, index) => {
+                        if (index < selectedValue) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
 
-               star.addEventListener('mouseout', function () {
-                   const selectedValue = ratingInput.value || 0;
-                   stars.forEach((s, index) => {
-                       if (index < selectedValue) {
-                           s.classList.add('selected');
-                       } else {
-                           s.classList.remove('selected');
-                       }
-                   });
-               });
-           });
-       }
-   });
+                star.addEventListener('mouseover', function () {
+                    const hoverValue = this.getAttribute('data-value');
+                    stars.forEach((s, index) => {
+                        if (index < hoverValue) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseout', function () {
+                    const selectedValue = ratingInput.value || 0;
+                    stars.forEach((s, index) => {
+                        if (index < selectedValue) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
+            });
+        }
+    });
 </script>
 {% endblock %}

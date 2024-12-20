@@ -122,7 +122,8 @@ def product_detail(request, product_id):
     # Ensure consistent ordering for pagination
     reviews = reviews.order_by('-created_at')
 
-    if star_filter:
+    # Handle specific star filter, excluding 'all'
+    if star_filter and star_filter != 'all':
         reviews = reviews.filter(rating=star_filter)
 
     # Paginate reviews
