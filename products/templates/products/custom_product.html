@@ -123,6 +123,7 @@
         const editButton = document.getElementById('editCustomProductButton');
         const leftArrow = document.getElementById('left-arrow');
         const rightArrow = document.getElementById('right-arrow');
+        const form = document.querySelector('.form');
         let currentColorIndex = 0;
 
         // Create an array of all color options for easy navigation
@@ -131,16 +132,57 @@
         // Function to update the drone image and SKU based on selected type and color
         function updateDroneImage() {
             const selectedType = droneTypeSelect.value;
-            const selectedColor = document.querySelector('input[name="color"]:checked').value;
+            const selectedColor = document.querySelector('input[name="color"]:checked')?.value;
 
-            selectedSkuInput.value = `${selectedType}-${selectedColor}`;
-            selectedColorInput.value = selectedColor;
-            document.getElementById('drone-type-hidden').value = selectedType;
+            if (selectedType && selectedColor) {
+                selectedSkuInput.value = `${selectedType}-${selectedColor}`;
+                selectedColorInput.value = selectedColor;
+                document.getElementById('drone-type-hidden').value = selectedType;
 
-            // Update image URL dynamically based on type and color
-            const newImageUrl = "{{ MEDIA_URL }}" + `${selectedType}-${selectedColor}.webp`;
-            droneImage.src = newImageUrl;
+                // Update image URL dynamically based on type and color
+                const newImageUrl = "{{ MEDIA_URL }}" + `${selectedType}-${selectedColor}.webp`;
+                droneImage.src = newImageUrl;
+            }
         }
+
+        // Form submission handler
+        form.addEventListener('submit', function(event) {
+            const selectedColor = document.querySelector('input[name="color"]:checked');
+            const selectedType = droneTypeSelect.value;
+            const hiddenColor = selectedColorInput.value;
+            const hiddenType = document.getElementById('drone-type-hidden').value;
+
+            if (!selectedColor || !selectedType || !hiddenColor || !hiddenType) {
+                event.preventDefault();
+                
+                // Create and show toast message
+                const toastDiv = document.createElement('div');
+                toastDiv.className = 'position-fixed top-0 end-0 p-3';
+                toastDiv.style.zIndex = '9999';
+                toastDiv.innerHTML = `
+                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header bg-danger text-white">
+                            <strong class="me-auto">Error</strong>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            Please select a color for your drone before adding to bag.
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(toastDiv);
+                const toast = new bootstrap.Toast(toastDiv.querySelector('.toast'));
+                toast.show();
+
+                // Remove toast after it's hidden
+                toastDiv.querySelector('.toast').addEventListener('hidden.bs.toast', function() {
+                    toastDiv.remove();
+                });
+                
+                return false;
+            }
+        });
 
         // Set initial state on load
         function setInitialState() {
@@ -165,6 +207,9 @@
                         option.checked = true;
                     }
                 });
+                
+                // Initialize hidden inputs
+                updateDroneImage();
             }
         }
 

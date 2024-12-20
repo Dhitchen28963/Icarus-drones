@@ -101,7 +101,7 @@
                 <div class="row text-black text-right mb-3">
                     <div class="col-7 offset-2">
                         <p class="my-0">Available Loyalty Points:</p>
-                        <p class="my-0">Redeemed Loyalty Points:</p>
+                        <p class="my-0 mt-2">Redeemed Loyalty Points:</p>
                     </div>
                     <div class="col-3">
                         <p class="my-0">{{ request.user.userprofile.loyalty_points }}</p>
@@ -222,6 +222,9 @@
             if (overlay) {
                 overlay.style.display = "none";
             }
+
+            // Scroll to the top of the page on load for phones
+            window.scrollTo(0, 0);
         });
 
         // Show the loading overlay on form submission

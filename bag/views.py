@@ -219,7 +219,9 @@ def remove_from_bag(request, item_id):
 
         if item_id in bag:
             item_data = bag[item_id]
-            sku = item_data.get('sku', item_id)
+            
+            # Use the stored name if available, otherwise fall back to SKU
+            item_name = item_data.get('name') or item_data.get('sku', item_id)
             attachments = item_data.get('attachments', [])
 
             if attachments:
@@ -228,18 +230,19 @@ def remove_from_bag(request, item_id):
                 ]
                 formatted_attachments = ", ".join(attachment_names)
                 message = (
-                    f"Removed {sku} with attachments "
+                    f"Removed {item_name} with attachments "
                     f"({formatted_attachments}) from your bag."
                 )
             else:
+                # If it's a regular product, try to get the name from the database
                 product = (
-                    get_object_or_404(Product, sku=sku)
-                    if sku else None
+                    get_object_or_404(Product, sku=item_data.get('sku'))
+                    if item_data.get('sku') else None
                 )
                 if product:
                     message = f"Removed {product.name} from your bag."
                 else:
-                    message = f"Removed {item_id} from your bag."
+                    message = f"Removed {item_name} from your bag."
 
             bag.pop(item_id)
             messages.success(request, message)

@@ -3,32 +3,35 @@
 {% load static %}
 
 {% block page_header %}
-<div class="container header-container">
+<div class="container-fluid bg-primary text-white py-3 header-container">
     <div class="row">
-        <div class="col"></div>
+        <div class="col text-center">
+            <h1 class="logo-font">Manage Products</h1>
+            <p class="lead">Add Product</p>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <hr>
-            <h2 class="logo-font mb-4">Product Management</h2>
-            <h5 class="text-muted">Add a Product</h5>
-            <hr>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <hr class="bg-secondary">
+            <h2 class="logo-font mb-4 text-center">Product Management</h2>
+            <h5 class="text-muted text-center">Add a Product</h5>
+            <hr class="bg-secondary">
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <form method="POST" action="{% url 'add_product' %}" class="form mb-2" enctype="multipart/form-data">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <form method="POST" action="{% url 'add_product' %}" class="form p-4 shadow rounded bg-light" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 <!-- Main Category Selection -->
-                <div id="div_id_category" class="form-group">
-                    <label for="id_category" class="form-label">Category</label>
+                <div id="div_id_category" class="form-group mb-3">
+                    <label for="id_category" class="form-label fw-bold">Category</label>
                     <select name="category" id="id_category" class="border-black rounded-0 select form-select">
                         <option value="1">Drones</option>
                         <option value="2">Accessories</option>
@@ -48,8 +51,8 @@
                 </div>
 
                 <!-- Subcategory for "New Arrivals" and "Deals" -->
-                <div id="div_id_subcategory" class="form-group" style="display: none;">
-                    <label for="id_subcategory" class="form-label">Subcategory</label>
+                <div id="div_id_subcategory" class="form-group mb-3" style="display: none;">
+                    <label for="id_subcategory" class="form-label fw-bold">Subcategory</label>
                     <select name="subcategory" id="id_subcategory" class="border-black rounded-0 select form-select">
                         <option value="">Select a subcategory</option>
                         <option value="1">Drones</option>
@@ -68,115 +71,159 @@
                 </div>
 
                 <!-- General Fields -->
-                <div id="div_id_sku" class="form-group">
-                    <label for="id_sku" class="form-label">Sku</label>
-                    <input type="text" name="sku" id="id_sku" class="border-black rounded-0 textinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_sku" class="form-group mb-3">
+                            <label for="id_sku" class="form-label fw-bold">SKU</label>
+                            <input type="text" name="sku" id="id_sku" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_name" class="form-group mb-3">
+                            <label for="id_name" class="form-label fw-bold">Name<span class="asteriskField text-danger">*</span></label>
+                            <input type="text" name="name" id="id_name" class="border-black rounded-0 textinput form-control" required>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="div_id_name" class="form-group">
-                    <label for="id_name" class="form-label requiredField">Name<span class="asteriskField">*</span></label>
-                    <input type="text" name="name" id="id_name" class="border-black rounded-0 textinput form-control" required>
-                </div>
-
-                <div id="div_id_description" class="form-group">
-                    <label for="id_description" class="form-label requiredField">Description<span class="asteriskField">*</span></label>
+                <div id="div_id_description" class="form-group mb-3">
+                    <label for="id_description" class="form-label fw-bold">Description<span class="asteriskField text-danger">*</span></label>
                     <textarea name="description" id="id_description" class="border-black rounded-0 textarea form-control" required></textarea>
                 </div>
 
-                <div id="div_id_price" class="form-group">
-                    <label for="id_price" class="form-label requiredField">Price<span class="asteriskField">*</span></label>
-                    <input type="number" name="price" id="id_price" class="border-black rounded-0 numberinput form-control" step="0.01" required>
-                </div>
-
-                <div id="div_id_image" class="form-group">
-                    <label for="id_image" class="form-label">Image</label>
-                    <input type="file" name="image" id="id_image" class="border-black rounded-0 form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_price" class="form-group mb-3">
+                            <label for="id_price" class="form-label fw-bold">Price<span class="asteriskField text-danger">*</span></label>
+                            <input type="number" name="price" id="id_price" class="border-black rounded-0 numberinput form-control" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_image" class="form-group mb-3">
+                            <label for="id_image" class="form-label fw-bold">Image</label>
+                            <input type="file" name="image" id="id_image" class="border-black rounded-0 form-control">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Category-specific fields -->
-                <div id="div_id_color" class="form-group">
-                    <label for="id_color" class="form-label">Color</label>
-                    <input type="text" name="color" id="id_color" class="border-black rounded-0 textinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_color" class="form-group mb-3">
+                            <label for="id_color" class="form-label fw-bold">Color</label>
+                            <input type="text" name="color" id="id_color" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_rotors" class="form-group mb-3">
+                            <label for="id_rotors" class="form-label fw-bold">Rotors</label>
+                            <input type="number" name="rotors" id="id_rotors" class="border-black rounded-0 numberinput form-control">
+                        </div>
+                    </div>
                 </div>
 
-                <div id="div_id_rotors" class="form-group">
-                    <label for="id_rotors" class="form-label">Rotors</label>
-                    <input type="number" name="rotors" id="id_rotors" class="border-black rounded-0 numberinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_speed" class="form-group mb-3">
+                            <label for="id_speed" class="form-label fw-bold">Speed</label>
+                            <input type="text" name="speed" id="id_speed" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_weight" class="form-group mb-3">
+                            <label for="id_weight" class="form-label fw-bold">Weight</label>
+                            <input type="text" name="weight" id="id_weight" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
                 </div>
 
-                <div id="div_id_speed" class="form-group">
-                    <label for="id_speed" class="form-label">Speed</label>
-                    <input type="text" name="speed" id="id_speed" class="border-black rounded-0 textinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_flight_time" class="form-group mb-3">
+                            <label for="id_flight_time" class="form-label fw-bold">Flight Time</label>
+                            <input type="text" name="flight_time" id="id_flight_time" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_camera" class="form-group mb-3">
+                            <label for="id_camera" class="form-label fw-bold">Camera</label>
+                            <select name="camera" id="id_camera" class="border-black rounded-0 select form-select">
+                                <option value="" selected>---------</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="div_id_weight" class="form-group">
-                    <label for="id_weight" class="form-label">Weight</label>
-                    <input type="text" name="weight" id="id_weight" class="border-black rounded-0 textinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_camera_quality" class="form-group mb-3">
+                            <label for="id_camera_quality" class="form-label fw-bold">Camera Quality</label>
+                            <input type="text" name="camera_quality" id="id_camera_quality" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_compatibility" class="form-group mb-3">
+                            <label for="id_compatibility" class="form-label fw-bold">Compatibility</label>
+                            <input type="text" name="compatibility" id="id_compatibility" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
                 </div>
 
-                <div id="div_id_flight_time" class="form-group">
-                    <label for="id_flight_time" class="form-label">Flight Time</label>
-                    <input type="text" name="flight_time" id="id_flight_time" class="border-black rounded-0 textinput form-control">
-                </div>
-
-                <div id="div_id_camera" class="form-group">
-                    <label for="id_camera" class="form-label">Camera</label>
-                    <select name="camera" id="id_camera" class="border-black rounded-0 select form-select">
-                        <option value="" selected>---------</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
-
-                <div id="div_id_camera_quality" class="form-group">
-                    <label for="id_camera_quality" class="form-label">Camera Quality</label>
-                    <input type="text" name="camera_quality" id="id_camera_quality" class="border-black rounded-0 textinput form-control">
-                </div>
-
-                <div id="div_id_compatibility" class="form-group">
-                    <label for="id_compatibility" class="form-label">Compatibility</label>
-                    <input type="text" name="compatibility" id="id_compatibility" class="border-black rounded-0 textinput form-control">
-                </div>
-
-                <div id="div_id_package_contents" class="form-group">
-                    <label for="id_package_contents" class="form-label">Package Contents</label>
+                <div id="div_id_package_contents" class="form-group mb-3">
+                    <label for="id_package_contents" class="form-label fw-bold">Package Contents</label>
                     <textarea name="package_contents" id="id_package_contents" class="border-black rounded-0 textarea form-control"></textarea>
                 </div>
 
-                <div id="div_id_warranty" class="form-group">
-                    <label for="id_warranty" class="form-label">Warranty</label>
-                    <input type="text" name="warranty" id="id_warranty" class="border-black rounded-0 textinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_warranty" class="form-group mb-3">
+                            <label for="id_warranty" class="form-label fw-bold">Warranty</label>
+                            <input type="text" name="warranty" id="id_warranty" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_material" class="form-group mb-3">
+                            <label for="id_material" class="form-label fw-bold">Material</label>
+                            <input type="text" name="material" id="id_material" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
                 </div>
 
-                <div id="div_id_material" class="form-group">
-                    <label for="id_material" class="form-label">Material</label>
-                    <input type="text" name="material" id="id_material" class="border-black rounded-0 textinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_control_range" class="form-group mb-3">
+                            <label for="id_control_range" class="form-label fw-bold">Control Range</label>
+                            <input type="text" name="control_range" id="id_control_range" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_drones_included" class="form-group mb-3">
+                            <label for="id_drones_included" class="form-label fw-bold">Drones Included</label>
+                            <input type="number" name="drones_included" id="id_drones_included" class="border-black rounded-0 numberinput form-control">
+                        </div>
+                    </div>
                 </div>
 
-                <div id="div_id_control_range" class="form-group">
-                    <label for="id_control_range" class="form-label">Control Range</label>
-                    <input type="text" name="control_range" id="id_control_range" class="border-black rounded-0 textinput form-control">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_drone_model" class="form-group mb-3">
+                            <label for="id_drone_model" class="form-label fw-bold">Drone Model</label>
+                            <input type="text" name="drone_model" id="id_drone_model" class="border-black rounded-0 textinput form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_accessories_included" class="form-group mb-3">
+                            <label for="id_accessories_included" class="form-label fw-bold">Accessories Included</label>
+                            <textarea name="accessories_included" id="id_accessories_included" class="border-black rounded-0 textarea form-control"></textarea>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Additional fields for Bundles -->
-                <div id="div_id_drones_included" class="form-group">
-                    <label for="id_drones_included" class="form-label">Drones Included</label>
-                    <input type="number" name="drones_included" id="id_drones_included" class="border-black rounded-0 numberinput form-control">
-                </div>
-
-                <div id="div_id_drone_model" class="form-group">
-                    <label for="id_drone_model" class="form-label">Drone Model</label>
-                    <input type="text" name="drone_model" id="id_drone_model" class="border-black rounded-0 textinput form-control">
-                </div>
-
-                <div id="div_id_accessories_included" class="form-group">
-                    <label for="id_accessories_included" class="form-label">Accessories Included</label>
-                    <textarea name="accessories_included" id="id_accessories_included" class="border-black rounded-0 textarea form-control"></textarea>
-                </div>
-
-                <div class="text-right mt-3">
-                    <a class="btn btn-outline-black rounded-0" href="{% url 'products' %}">Cancel</a>
-                    <button class="btn btn-black rounded-0" type="submit">Add Product</button>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a class="btn btn-outline-secondary" href="{% url 'products' %}">Cancel</a>
+                    <button class="btn btn-primary" type="submit">Add Product</button>
                 </div>
             </form>
         </div>

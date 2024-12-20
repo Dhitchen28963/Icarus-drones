@@ -634,6 +634,91 @@ footer small.text-muted {
 
 /* -------------------------------- Media Queries */
 
+@media (max-width: 991px) {
+    .header-container {
+        padding-top: 116px;
+    }
+
+    body {
+        height: calc(100vh - 116px);
+    }
+
+    .navbar > .container {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    /* Mobile navigation list */
+    .list-inline.d-flex {
+        margin: 0;
+        padding: 0;
+        align-items: center;
+        height: 38px;
+        width: auto;
+        margin-bottom: 10px;
+        justify-content: flex-end;
+        margin-left: auto;
+        gap: 0;
+    }
+
+    .list-inline-item {
+        margin: 0;
+        flex: 0 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 0 2px;
+    }
+
+    .list-inline-item .nav-link {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.25rem;
+        height: 100%;
+    }
+
+    .list-inline-item .text-center {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 38px;
+        gap: 2px;
+    }
+
+    /* Icons sizing */
+    .list-inline-item .fas,
+    .list-inline-item .fa-lg,
+    .list-inline-item i {
+        font-size: 16px !important;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .list-inline-item p.my-0,
+    .list-inline-item .nav-link p,
+    .list-inline-item .text-center p,
+    .fas.fa-shopping-bag + p.my-0 {
+        font-size: 14px !important;
+        margin: 0;
+        line-height: 1;
+        text-align: center;
+    }
+
+    #mobile-user-options + .dropdown-menu {
+        right: -70px;
+        left: auto;
+    }
+}
+
 @media (max-width: 768px) {
     .color-option {
         width: 25px;
@@ -743,27 +828,6 @@ footer small.text-muted {
     }
 }
 
-@media (max-width: 469px) {
-    h2.logo-font {
-        margin-top: 20px;
-    }
-
-    .custom-margin {
-        margin-top: -2rem;
-        margin-bottom: 1rem;
-    }
-
-    .image-preview {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        z-index: -1;
-    }
-
-    h2.logo-font {
-        margin-bottom: 1rem;
-    }
-}
-
 @media (max-width: 480px) {
     .color-option {
         width: 20px;
@@ -813,6 +877,27 @@ footer small.text-muted {
 @media (max-width: 478px) {
     .hide-on-small {
         display: none;
+    }
+}
+
+@media (max-width: 469px) {
+    h2.logo-font {
+        margin-top: 20px;
+    }
+
+    .custom-margin {
+        margin-top: -2rem;
+        margin-bottom: 1rem;
+    }
+
+    .image-preview {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        z-index: -1;
+    }
+
+    h2.logo-font {
+        margin-bottom: 1rem;
     }
 }
 
@@ -936,134 +1021,9 @@ footer small.text-muted {
     }
 }
 
-/* Slightly larger container on xl screens */
-@media (min-width: 1200px) {
-  .container {
-    max-width: 80%;
-  }
-}
-
-/* fixed top navbar only on medium and up */
-@media (min-width: 992px) {
-    .fixed-top-desktop-only {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 1030;
-    }
-
-    .header-container {
-        padding-top: 164px;
-    }
-}
-
-@media (max-width: 991px) {
-    .header-container {
-        padding-top: 116px;
-    }
-
-    body {
-        height: calc(100vh - 116px);
-    }
-
-    .navbar > .container {
-        flex-wrap: nowrap;
-        justify-content: space-between;
-    }
-
-    /* Mobile navigation list */
-    .list-inline.d-flex {
-        margin: 0;
-        padding: 0;
-        align-items: center;
-        height: 38px;
-        width: auto;
-        margin-bottom: 10px;
-        justify-content: flex-end;
-        margin-left: auto;
-        gap: 0;
-    }
-
-    .list-inline-item {
-        margin: 0;
-        flex: 0 1 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        padding: 0 2px;
-    }
-
-    .list-inline-item .nav-link {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0.25rem;
-        height: 100%;
-    }
-
-    .list-inline-item .text-center {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 38px;
-        gap: 2px;
-    }
-
-    /* Icons sizing */
-    .list-inline-item .fas,
-    .list-inline-item .fa-lg,
-    .list-inline-item i {
-        font-size: 16px !important;
-        height: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0;
-        line-height: 1;
-    }
-
-    .list-inline-item p.my-0,
-    .list-inline-item .nav-link p,
-    .list-inline-item .text-center p,
-    .fas.fa-shopping-bag + p.my-0 {
-        font-size: 14px !important;
-        margin: 0;
-        line-height: 1;
-        text-align: center;
-    }
-
-    #mobile-user-options + .dropdown-menu {
-        right: -70px;
-        left: auto;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1004px) {
-    .image-preview {
-        margin-top: 0.2rem;
-    }
-}
-
 @media (min-width: 436px) and (max-width: 600px) {
     .list-inline.d-flex {
         gap: 35px;
-    }
-}
-
-@media (min-width: 601px) and (max-width: 800px) {
-    .list-inline.d-flex {
-        gap: 80px;
-    }
-}
-
-@media (min-width: 801px) and (max-width: 991px) {
-    .list-inline.d-flex {
-        gap: 150px;
     }
 }
 
@@ -1083,5 +1043,51 @@ footer small.text-muted {
     #user-options p,
     .fas.fa-shopping-bag + p.my-0 {
         font-size: 16px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 800px) {
+    .list-inline.d-flex {
+        gap: 80px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1004px) {
+    .image-preview {
+        margin-top: 0.2rem;
+    }
+}
+
+@media (min-width: 801px) and (max-width: 991px) {
+    .list-inline.d-flex {
+        gap: 150px;
+    }
+}
+
+/* fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+    .fixed-top-desktop-only {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+
+    .header-container {
+        padding-top: 164px;
+    }
+}
+
+/* Slightly larger container on xl screens */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 344px) and (max-width: 360px) {
+    #loyalty-points-input {
+        margin-top: 10px;
     }
 }
