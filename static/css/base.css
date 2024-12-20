@@ -330,6 +330,10 @@ button.btn-black:hover {
     color: #8B0000;
 }
 
+.wishlist-text {
+    display: none;
+}
+
 .card {
     border: none;
     border-radius: 0;

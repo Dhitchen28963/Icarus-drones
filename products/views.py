@@ -27,6 +27,7 @@ def all_products(request):
     categories = None
     sort = None
     direction = None
+    per_page = request.GET.get('per_page', '20')
 
     if request.GET:
         if 'sort' in request.GET:
@@ -64,6 +65,9 @@ def all_products(request):
             )
             products = products.filter(queries)
 
+    # Ensure default ordering for consistent pagination
+    products = products.order_by('id')
+
     # Get the user's wishlist if authenticated
     wishlist_products = []
     if request.user.is_authenticated:
@@ -72,6 +76,20 @@ def all_products(request):
             .values_list('id', flat=True)
         )
 
+    # Pagination logic
+    if per_page != 'all':
+        try:
+            per_page = int(per_page)
+        except ValueError:
+            per_page = 20
+        paginator = Paginator(products, per_page)
+        page = request.GET.get('page')
+        try:
+            products = paginator.page(page)
+        except PageNotAnInteger:
+            products = paginator.page(1)
+        except EmptyPage:
+            products = paginator.page(paginator.num_pages)
     current_sorting = f'{sort}_{direction}'
 
     context = {
@@ -79,7 +97,7 @@ def all_products(request):
         'search_term': query,
         'current_categories': categories,
         'current_sorting': current_sorting,
-        'wishlist_products': wishlist_products, 
+        'wishlist_products': wishlist_products,
     }
 
     return render(request, 'products/products.html', context)
@@ -101,6 +119,9 @@ def product_detail(request, product_id):
     star_filter = request.GET.get('stars')
     reviews = product.reviews.all()
 
+    # Ensure consistent ordering for pagination
+    reviews = reviews.order_by('-created_at')
+
     if star_filter:
         reviews = reviews.filter(rating=star_filter)
 
@@ -120,6 +141,7 @@ def product_detail(request, product_id):
         'reviews': reviews,
         'star_filter': star_filter,
         'is_in_wishlist': is_in_wishlist,
+        'range': range(1, 6),
     }
 
     return render(request, 'products/product_detail.html', context)

@@ -87,9 +87,8 @@
                         class="fas fa-heart wishlist-icon {% if product in request.user.userprofile.wishlist.products.all %}wishlist-active{% else %}wishlist-inactive{% endif %}" 
                         data-product-id="{{ product.id }}">
                     </i>
-                    <span class="ml-2 small">
+                    <span class="ml-2 small wishlist-text">
                         {% if product in request.user.userprofile.wishlist.products.all %}
-                            Added to Wishlist
                         {% else %}
                             Add to Wishlist
                         {% endif %}
@@ -181,9 +180,15 @@
                                         <span class="text-muted small">{{ review.created_at|date:"F j, Y" }}</span>
                                     </div>
                                     <div class="mt-2">
-                                        <span class="text-muted small">
-                                            <i class="fas fa-star"></i> {{ review.rating }} / 5
-                                        </span>
+                                        <div class="review-stars">
+                                            {% for i in range %}
+                                                {% if i <= review.rating %}
+                                                    <i class="fas fa-star text-warning"></i>
+                                                {% else %}
+                                                    <i class="fas fa-star text-muted"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
                                         <p class="mt-2">{{ review.comment }}</p>
                                     </div>
                                 </div>
@@ -231,7 +236,7 @@
             <form method="post" action="{% url 'add_product_review' product.id %}" class="p-4 border-black rounded-0 bg-white">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="id_rating" class="small text-muted">Rating (1-5)</label>
+                    <label for="id_rating" class="small text-muted">Rating</label>
                     <div id="star-rating" class="star-rating">
                         <span data-value="1" class="star">&#9733;</span>
                         <span data-value="2" class="star">&#9733;</span>
@@ -260,7 +265,6 @@
 {{ block.super }}
 <script>
    document.addEventListener('DOMContentLoaded', function () {
-
        // Wishlist Toggle Logic
        const wishlistToggleUrl = "{% url 'products_toggle_wishlist' %}";
        document.querySelectorAll('.wishlist-icon').forEach(icon => {
@@ -308,9 +312,8 @@
            });
        });
 
-
+       // Stars filter and scroll position adjustment
        const container = document.body;
-
        container.addEventListener('change', function (event) {
            if (event.target && event.target.id === 'stars') {
                const starsDropdown = event.target;
@@ -324,24 +327,27 @@
                    currentUrl.searchParams.delete('stars');
                }
 
-               // Use fetch for AJAX-like behavior
-               fetch(currentUrl.toString(), { headers: { "X-Requested-With": "XMLHttpRequest" } })
-                   .then(response => response.text())
-                   .then(html => {
-                       const reviewsSection = document.querySelector('#reviews-section');
-                       const parser = new DOMParser();
-                       const newDocument = parser.parseFromString(html, 'text/html');
-                       const newReviewsSection = newDocument.querySelector('#reviews-section');
-
-                       reviewsSection.innerHTML = newReviewsSection.innerHTML;
-
-                       // Smooth scrolling to reviews section
-                       reviewsSection.scrollIntoView({ behavior: 'smooth' });
-                   })
-                   .catch(error => console.error('Error fetching reviews:', error));
+               // Reload the page with updated parameters
+               window.location.href = currentUrl.toString();
            }
        });
 
+       // Adjust scroll position to account for the fixed header
+       const reviewsSection = document.getElementById('reviews-section');
+       if (reviewsSection) {
+           const urlParams = new URLSearchParams(window.location.search);
+           const headerOffset = document.querySelector('.navbar').offsetHeight || 100;
+           const sectionTop = reviewsSection.getBoundingClientRect().top + window.scrollY;
+           const adjustedPosition = sectionTop - headerOffset - 50;
+
+           // Scroll to the reviews section on page load
+           window.scrollTo({
+               top: adjustedPosition,
+               behavior: 'smooth',
+           });
+       }
+
+       // Quantity adjustment logic
        const incrementQtyButtons = document.querySelectorAll('.increment-qty');
        const decrementQtyButtons = document.querySelectorAll('.decrement-qty');
        const qtyInputs = document.querySelectorAll('.qty_input');
@@ -371,7 +377,7 @@
            });
        });
 
-       // Open modal when delete button is clicked
+       // Delete product functionality
        document.querySelectorAll('.delete-product-button').forEach(button => {
            button.addEventListener('click', function (event) {
                event.preventDefault();
@@ -380,7 +386,6 @@
            });
        });
 
-       // Confirm deletion on modal confirmation
        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
            if (selectedProductId) {
                fetch(`/products/delete/${selectedProductId}/`, {
@@ -412,6 +417,7 @@
            }
        });
 
+       // Review form functionality
        const commentField = document.getElementById('id_comment');
        const ratingField = document.getElementById('id_rating');
 
