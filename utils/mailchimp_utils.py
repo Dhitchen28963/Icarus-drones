@@ -15,7 +15,8 @@ class Mailchimp:
             "Content-Type": "application/json",
         }
 
-    def subscribe_user(self, email, first_name='', last_name='', tags=None, address=None):
+    def subscribe_user(self, email, first_name='', last_name='',
+                       tags=None, address=None):
         """
         Add or update a user subscription in the Mailchimp audience.
         If the user already exists, their information will be updated.
@@ -26,9 +27,9 @@ class Mailchimp:
             last_name (str): The user's last name (optional).
             tags (list): Tags to associate with the user (optional).
             address (dict): Address details (optional). Format:
-                            {'addr1': '123 Street Name', 'city': 'City', 'state': 'State', 'zip': '12345', 'country': 'US'}
+                            {'addr1': '123 Street Name', 'city': 'City',
+                            'state': 'State', 'zip': '12345', 'country': 'US'}
         """
-        print(f"Subscribing user: {email}, First Name: {first_name}, Last Name: {last_name}, Tags: {tags}")
         url = f"{self.base_url}/lists/{self.audience_id}/members"
         subscriber_hash = self._get_subscriber_hash(email)
         data = {
@@ -46,14 +47,15 @@ class Mailchimp:
                 },
             },
         }
-        
+
         if tags:
             data["tags"] = tags
 
-        response = requests.put(f"{url}/{subscriber_hash}", json=data, headers=self.headers)
-        print(f"Mailchimp response: {response.status_code}, {response.text}")
+        response = requests.put(f"{url}/{subscriber_hash}", json=data,
+                                headers=self.headers)
         if response.status_code not in (200, 204):
-            raise Exception(f"Mailchimp API error: {response.status_code} {response.text}")
+            raise Exception(
+                f"Mailchimp API error: {response.status_code} {response.text}")
         return response.json()
 
     def add_tags_to_user(self, email, tags):
@@ -67,14 +69,16 @@ class Mailchimp:
         Returns:
             dict: API response from Mailchimp.
         """
-        url = f"{self.base_url}/lists/{self.audience_id}/members/{self._get_subscriber_hash(email)}/tags"
+        url = (f"{self.base_url}/lists/{self.audience_id}/members/"
+               f"{self._get_subscriber_hash(email)}/tags")
         data = {
             "tags": [{"name": tag, "status": "active"} for tag in tags]
         }
 
         response = requests.post(url, json=data, headers=self.headers)
         if response.status_code != 200:
-            raise Exception(f"Mailchimp API error: {response.status_code} {response.text}")
+            raise Exception(
+                f"Mailchimp API error: {response.status_code} {response.text}")
         return response.json()
 
     def remove_tags_from_user(self, email, tags):
@@ -88,19 +92,22 @@ class Mailchimp:
         Returns:
             dict: API response from Mailchimp.
         """
-        url = f"{self.base_url}/lists/{self.audience_id}/members/{self._get_subscriber_hash(email)}/tags"
+        url = (f"{self.base_url}/lists/{self.audience_id}/members/"
+               f"{self._get_subscriber_hash(email)}/tags")
         data = {
             "tags": [{"name": tag, "status": "inactive"} for tag in tags]
         }
 
         response = requests.post(url, json=data, headers=self.headers)
         if response.status_code != 200:
-            raise Exception(f"Mailchimp API error: {response.status_code} {response.text}")
+            raise Exception(
+                f"Mailchimp API error: {response.status_code} {response.text}")
         return response.json()
 
     def _get_subscriber_hash(self, email):
         """
-        Generate the MD5 hash of the user's email address as required by Mailchimp API.
+        Generate the MD5 hash of the user's email address as required
+        by Mailchimp API.
 
         Args:
             email (str): The user's email address.

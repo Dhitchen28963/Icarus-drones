@@ -16,14 +16,22 @@ class LoyaltyPointsTransaction(models.Model):
     ]
 
     user_profile = models.ForeignKey(
-        'UserProfile', on_delete=models.CASCADE, related_name='points_transactions'
+        'UserProfile',
+        on_delete=models.CASCADE,
+        related_name='points_transactions'
     )
-    transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
+    transaction_type = models.CharField(
+        max_length=10,
+        choices=TRANSACTION_TYPES
+    )
     points = models.IntegerField()
     balance_before = models.IntegerField()
     balance_after = models.IntegerField()
     order = models.ForeignKey(
-        'checkout.Order', on_delete=models.SET_NULL, null=True, blank=True
+        'checkout.Order',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -36,22 +44,41 @@ class LoyaltyPointsTransaction(models.Model):
 
 class UserProfile(models.Model):
     """
-    A user profile model for maintaining default delivery information and order history
+    A user profile model for default delivery information and order history
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=100, blank=True, null=True)
-    default_phone_number = models.CharField(max_length=20, blank=True, null=True)
-    default_street_address1 = models.CharField(max_length=80, blank=True, null=True)
-    default_street_address2 = models.CharField(max_length=80, blank=True, null=True)
-    default_town_or_city = models.CharField(max_length=40, blank=True, null=True)
+    default_phone_number = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+    default_street_address1 = models.CharField(
+        max_length=80,
+        blank=True,
+        null=True
+    )
+    default_street_address2 = models.CharField(
+        max_length=80,
+        blank=True,
+        null=True
+    )
+    default_town_or_city = models.CharField(
+        max_length=40,
+        blank=True,
+        null=True
+    )
     default_county = models.CharField(max_length=80, blank=True, null=True)
     default_postcode = models.CharField(max_length=20, blank=True, null=True)
-    default_country = CountryField(blank_label='Country', null=True, blank=True)
+    default_country = CountryField(
+        blank_label='Country',
+        null=True,
+        blank=True
+    )
     loyalty_points = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return self.user.username
-
 
     def adjust_loyalty_points(self, points_used, points_earned, order=None):
         """
@@ -78,7 +105,7 @@ class UserProfile(models.Model):
                     current_points -= points_used
                     points_deducted = points_used
                 else:
-                    raise ValueError("Insufficient loyalty points for redemption")
+                    raise ValueError("Insufficient loyalty points to redeem")
 
             # Add earned points
             if points_earned > 0:
@@ -123,21 +150,32 @@ class OrderIssue(models.Model):
         ('resolved', 'Resolved'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='order_issues')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='order_issues'
+    )
     order = models.ForeignKey(
-        'checkout.Order', on_delete=models.CASCADE, related_name='issues'
+        'checkout.Order',
+        on_delete=models.CASCADE,
+        related_name='issues'
     )
     issue_type = models.CharField(max_length=20, choices=ISSUE_CHOICES)
     description = models.TextField()
     response = models.TextField(blank=True, null=True)
     status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default='in_progress'
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='in_progress'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Issue - {self.issue_type} (Order: {self.order.order_number}) - {self.get_status_display()}"
+        return (
+            f"Issue - {self.issue_type} (Order: {self.order.order_number}) - "
+            f"{self.get_status_display()}"
+        )
 
     class Meta:
         permissions = [
@@ -146,8 +184,16 @@ class OrderIssue(models.Model):
 
 
 class Wishlist(models.Model):
-    user_profile = models.OneToOneField('UserProfile', on_delete=models.CASCADE, related_name='wishlist')
-    products = models.ManyToManyField(Product, related_name='wishlisted_by', blank=True)
+    user_profile = models.OneToOneField(
+        'UserProfile',
+        on_delete=models.CASCADE,
+        related_name='wishlist'
+    )
+    products = models.ManyToManyField(
+        Product,
+        related_name='wishlisted_by',
+        blank=True
+    )
 
     def __str__(self):
         return f"{self.user_profile.user.username}'s Wishlist"
@@ -168,11 +214,19 @@ class RepairRequest(models.Model):
         ('resolved', 'Resolved'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repair_requests')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='repair_requests'
+    )
     drone_model = models.CharField(max_length=255)
     issue_description = models.TextField()
     email = models.EmailField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='in_progress'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -185,36 +239,72 @@ class ContactMessage(models.Model):
         ('resolved', 'Resolved'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contact_messages')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='contact_messages'
+    )
     name = models.CharField(max_length=255)
     email = models.EmailField()
     message = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='in_progress'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Contact - {self.name} ({self.get_status_display()})"
 
 
-
 class UserMessage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="messages"
+    )
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="sent_messages"
+    )
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     parent_message = models.ForeignKey(
-        'self', null=True, blank=True, on_delete=models.CASCADE, related_name="responses"
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="responses"
     )
     repair_request = models.ForeignKey(
-        'profiles.RepairRequest', null=True, blank=True, on_delete=models.CASCADE, related_name='messages'
+        'profiles.RepairRequest',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='messages'
     )
     contact_message = models.ForeignKey(
-        'profiles.ContactMessage', null=True, blank=True, on_delete=models.CASCADE, related_name='messages'
+        'profiles.ContactMessage',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='messages'
     )
 
     def __str__(self):
         if self.repair_request:
-            return f"Message for Repair Request {self.repair_request.id} from {self.created_by.username}"
+            return (
+                f"Message for Repair Request {self.repair_request.id} "
+                f"from {self.created_by.username}"
+            )
         elif self.contact_message:
-            return f"Message for Contact Message {self.contact_message.id} from {self.created_by.username}"
-        return f"Message from {self.created_by.username} to {self.user.username}"
+            return (
+                f"Message for Contact Message {self.contact_message.id} "
+                f"from {self.created_by.username}"
+            )
+        return (
+            f"Message from {self.created_by.username} "
+            f"to {self.user.username}"
+        )

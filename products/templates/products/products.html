@@ -96,8 +96,10 @@
                 <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3" data-product-id="{{ product.id }}">
                     <div class="card h-100 border-0">
                         <div class="d-flex justify-content-end p-2">
-                            <i class="fas fa-heart wishlist-icon {% if product in user.wishlist.products.all %}wishlist-active{% endif %}" 
-                               data-product-id="{{ product.id }}"></i>
+                            <i 
+                                class="fas fa-heart wishlist-icon {% if product in request.user.userprofile.wishlist.products.all %}wishlist-active{% else %}wishlist-inactive{% endif %}" 
+                                data-product-id="{{ product.id }}">
+                            </i>
                         </div>
                         <a href="{% url 'product_detail' product.id %}">
                             {% if product.image %}
@@ -126,9 +128,7 @@
                                         <small class="text-muted">No Rating</small>
                                     {% endif %}
                                     <small class="ml-3">
-                                        <i class="fas fa-heart wishlist-icon {% if product in user.wishlist.products.all %}wishlist-active{% endif %}" 
-                                           data-product-id="{{ product.id }}"></i>
-                                        {% if request.user.is_authenticated and not request.user.is_superuser %}
+                                        {% if request.user.is_authenticated and not request.user.is_superuser and product.category.name == 'drones' %}
                                             <a href="{% url 'compare_product' product.id %}" class="text-info">Compare</a>
                                         {% elif request.user.is_superuser %}
                                             <a href="{% url 'edit_product' product.id %}">Edit</a> | 
@@ -175,127 +175,120 @@
 {% block postloadjs %}
 {{ block.super }}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+   document.addEventListener('DOMContentLoaded', function () {
+       // Wishlist Toggle Logic for compare pages
+       const wishlistToggleUrl = "{% url 'products_toggle_wishlist' %}";
+       document.querySelectorAll('.wishlist-icon').forEach(icon => {
+           icon.addEventListener('click', function () {
+               const productId = this.getAttribute('data-product-id');
+               fetch(wishlistToggleUrl, {
+                   method: 'POST',
+                   headers: {
+                       'X-CSRFToken': '{{ csrf_token }}',
+                       'Content-Type': 'application/json',
+                   },
+                   body: JSON.stringify({ product_id: productId }),
+               })
+               .then(response => response.json())
+               .then(data => {
+                   if (data.status === 'added') {
+                       this.classList.add('wishlist-active');
+                       this.style.color = '#8B0000';
+                   } else if (data.status === 'removed') {
+                       this.classList.remove('wishlist-active');
+                       this.style.color = 'gray';
+                   }
+                   const toastElement = document.querySelector('.toast.custom-toast');
+                   if (toastElement) {
+                       toastElement.classList.remove('d-none');
+                       const toastBody = toastElement.querySelector('.toast-body .col');
+                       toastBody.innerHTML = data.message || 'Action completed successfully!';
+                       const successToast = new bootstrap.Toast(toastElement, {
+                           autohide: true,
+                           delay: 3000,
+                       });
+                       successToast.show();
+                       setTimeout(() => {
+                           toastElement.classList.add('d-none');
+                       }, 3500);
+                   }
+               })
+               .catch(error => console.error('Error:', error));
+           });
+       });
 
-        let selectedProductId = null;
+       let selectedProductId = null;
 
-        // Wishlist Toggle Logic
-        const wishlistToggleUrl = "{% url 'products_toggle_wishlist' %}";
-        document.querySelectorAll('.wishlist-icon').forEach(icon => {
-            icon.addEventListener('click', function () {
-                const productId = this.getAttribute('data-product-id');
+       // Delete product logic
+       document.querySelectorAll('.delete-product-button').forEach(button => {
+           button.addEventListener('click', function (event) {
+               event.preventDefault();
+               selectedProductId = this.getAttribute('data-product-id');
+               $('#deleteConfirmationModal').modal('show');
+           });
+       });
 
-                fetch(wishlistToggleUrl, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ product_id: productId }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'added') {
-                        this.classList.add('wishlist-active');
-                    } else if (data.status === 'removed') {
-                        this.classList.remove('wishlist-active');
-                    }
+       document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+           if (selectedProductId) {
+               fetch(`/products/delete/${selectedProductId}/`, {
+                   method: 'POST',
+                   headers: {
+                       'X-CSRFToken': '{{ csrf_token }}',
+                       'Content-Type': 'application/json'
+                   },
+               }).then(response => {
+                   if (response.ok) {
+                       $('#deleteConfirmationModal').modal('hide');
 
-                    // Show the success toast and update its message
-                    setTimeout(function () {
-                        const toastElement = document.querySelector('.toast.custom-toast');
-                        if (toastElement) {
-                            toastElement.classList.remove('d-none');
-                            const toastBody = toastElement.querySelector('.toast-body .col');
-                            toastBody.innerHTML = data.message || 'Action completed successfully!';
-                            const successToast = new bootstrap.Toast(toastElement, {
-                                autohide: true,
-                                delay: 3000
-                            });
-                            successToast.show();
+                       const productCard = document.querySelector(`[data-product-id="${selectedProductId}"]`);
+                       if (productCard) {
+                           productCard.remove();
+                       }
 
-                            setTimeout(() => {
-                                toastElement.classList.add('d-none');
-                            }, 3500);
-                        }
-                    }, 500);
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        });
+                       setTimeout(function () {
+                           const toastElement = document.querySelector('.toast.custom-toast');
+                           if (toastElement) {
+                               toastElement.classList.remove('d-none');
+                               const successToast = new bootstrap.Toast(toastElement, {
+                                   autohide: true,
+                                   delay: 3000
+                               });
+                               successToast.show();
 
-        document.querySelectorAll('.delete-product-button').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                selectedProductId = this.getAttribute('data-product-id');
-                $('#deleteConfirmationModal').modal('show');
-            });
-        });
+                               setTimeout(() => {
+                                   toastElement.classList.add('d-none');
+                               }, 3500);
+                           }
+                       }, 500);
+                   }
+               }).catch(error => console.error('Error:', error));
+           }
+       });
 
-        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-            if (selectedProductId) {
-                fetch(`/products/delete/${selectedProductId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'
-                    },
-                }).then(response => {
-                    if (response.ok) {
-                        $('#deleteConfirmationModal').modal('hide');
+       // Scroll to top functionality
+       $('.btt-link').click(function (e) {
+           window.scrollTo(0, 0);
+       });
 
-                        // Remove the deleted product's card from the DOM
-                        const productCard = document.querySelector(`[data-product-id="${selectedProductId}"]`);
-                        if (productCard) {
-                            productCard.remove();
-                        }
+       // Sorting functionality
+       $('#sort-selector').change(function () {
+           var selector = $(this);
+           var currentUrl = new URL(window.location);
 
-                        // Show the success toast and then remove it from the DOM after a timeout
-                        setTimeout(function () {
-                            const toastElement = document.querySelector('.toast.custom-toast');
-                            if (toastElement) {
-                                toastElement.classList.remove('d-none');
-                                const successToast = new bootstrap.Toast(toastElement, {
-                                    autohide: true,
-                                    delay: 3000
-                                });
-                                successToast.show();
+           var selectedVal = selector.val();
+           if (selectedVal != "reset") {
+               var sort = selectedVal.split("_")[0];
+               var direction = selectedVal.split("_")[1];
 
-                                // Remove the toast after it’s been shown
-                                setTimeout(() => {
-                                    toastElement.classList.add('d-none');
-                                }, 3500);
-                            }
-                        }, 500);
-                    }
-                }).catch(error => console.error('Error:', error));
-            }
-        });
-    });
-
-    // Scroll to top functionality
-    $('.btt-link').click(function (e) {
-        window.scrollTo(0, 0);
-    });
-
-    // Sorting functionality
-    $('#sort-selector').change(function () {
-        var selector = $(this);
-        var currentUrl = new URL(window.location);
-
-        var selectedVal = selector.val();
-        if (selectedVal != "reset") {
-            var sort = selectedVal.split("_")[0];
-            var direction = selectedVal.split("_")[1];
-
-            currentUrl.searchParams.set("sort", sort);
-            currentUrl.searchParams.set("direction", direction);
-            window.location.replace(currentUrl);
-        } else {
-            currentUrl.searchParams.delete("sort");
-            currentUrl.searchParams.delete("direction");
-            window.location.replace(currentUrl);
-        }
-    });
+               currentUrl.searchParams.set("sort", sort);
+               currentUrl.searchParams.set("direction", direction);
+               window.location.replace(currentUrl);
+           } else {
+               currentUrl.searchParams.delete("sort");
+               currentUrl.searchParams.delete("direction");
+               window.location.replace(currentUrl);
+           }
+       });
+   });
 </script>
 {% endblock %}

@@ -1,11 +1,11 @@
 from django.contrib import admin
 from .models import Category, Product, Attachment, ProductReview
 
-# Admin for Category
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('friendly_name', 'name')
 
-# Admin for Product
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'sku', 'name', 'category', 'price', 'rating', 'image', 'color'
@@ -15,16 +15,18 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'sku', 'category__name')
     list_editable = ('price', 'rating', 'color')
 
-    # Updated fieldsets to avoid duplication
     fieldsets = (
         (None, {
-            'fields': ('sku', 'name', 'description', 'price', 'rating', 'image', 'category')
+            'fields': (
+                'sku', 'name', 'description', 'price', 'rating', 'image',
+                'category'
+            )
         }),
         ('Drone Fields', {
             'fields': (
-                'color', 'rotors', 'speed', 'weight', 'flight_time', 
-                'camera', 'camera_quality', 'collision_avoidance', 
-                'gps', 'control_range', 'max_altitude', 'wind_resistance', 
+                'color', 'rotors', 'speed', 'weight', 'flight_time',
+                'camera', 'camera_quality', 'collision_avoidance', 'gps',
+                'control_range', 'max_altitude', 'wind_resistance',
                 'material', 'remote_control', 'mobile_app_support'
             ),
             'classes': ('collapse',),
@@ -35,13 +37,14 @@ class ProductAdmin(admin.ModelAdmin):
         }),
         ('Bundle Fields', {
             'fields': (
-                'drones_included', 'drone_model', 'accessories_included', 'warranty'
+                'drones_included', 'drone_model', 'accessories_included',
+                'warranty'
             ),
             'classes': ('collapse',),
         }),
     )
 
-# Admin for Attachment
+
 class AttachmentAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'price', 'sku', 'image')
     search_fields = ('name', 'sku')

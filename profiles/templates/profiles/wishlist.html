@@ -41,7 +41,7 @@
                                         <p class="mb-0 text-center text-muted">${{ product.price }}</p>
                                     </div>
                                     <div class="card-footer bg-white border-0 text-center">
-                                        <i class="fas fa-heart wishlist-icon {% if product in wishlist_products %}wishlist-active{% endif %}" 
+                                        <i class="fas fa-heart wishlist-icon {% if product in request.user.userprofile.wishlist.products.all %}wishlist-active{% else %}wishlist-inactive{% endif %}" 
                                            data-product-id="{{ product.id }}"></i>
                                         <a href="{% url 'product_detail' product.id %}" class="btn btn-black btn-sm rounded-0">
                                             View Details
@@ -124,6 +124,15 @@
                         }
                     }
 
+                    // Toggle wishlist classes
+                    if (data.status === 'added') {
+                        this.classList.add('wishlist-active');
+                        this.classList.remove('wishlist-inactive');
+                    } else if (data.status === 'removed') {
+                        this.classList.add('wishlist-inactive');
+                        this.classList.remove('wishlist-active');
+                    }
+
                     // Show the success toast with the message
                     if (toastElement) {
                         toastElement.classList.remove('d-none');
@@ -131,7 +140,7 @@
                         toastBody.innerHTML = data.message || 'Item removed from wishlist!';
                         const successToast = new bootstrap.Toast(toastElement, {
                             autohide: true,
-                            delay: 3000
+                            delay: 3000,
                         });
                         successToast.show();
 
@@ -139,7 +148,8 @@
                             toastElement.classList.add('d-none');
                         }, 3500);
                     }
-                });
+                })
+                .catch(error => console.error('Error:', error));
             });
         });
     });

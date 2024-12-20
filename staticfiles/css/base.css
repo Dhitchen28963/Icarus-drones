@@ -322,14 +322,12 @@ button.btn-black:hover {
     cursor: pointer;
 }
 
-.wishlist-icon .fa-heart {
+.wishlist-inactive {
     color: gray;
-    font-size: 20px;
-    transition: color 0.3s ease;
 }
 
-.wishlist-icon .fa-heart.wishlist-active {
-    color: red;
+.wishlist-active {
+    color: #8B0000;
 }
 
 .card {

@@ -6,7 +6,12 @@ class OrderLineItemAdminInline(admin.TabularInline):
     model = OrderLineItem
     readonly_fields = ('lineitem_total', 'get_readable_attachments',)
     extra = 0
-    fields = ('product', 'quantity', 'get_readable_attachments', 'lineitem_total')
+    fields = (
+        'product',
+        'quantity',
+        'get_readable_attachments',
+        'lineitem_total'
+    )
 
     def get_readable_attachments(self, obj):
         """Use human-readable names for attachments."""
@@ -25,7 +30,7 @@ class OrderAdmin(admin.ModelAdmin):
     fields = ('order_number', 'user_profile', 'date', 'full_name',
               'email', 'phone_number', 'country',
               'postcode', 'town_or_city', 'street_address1',
-              'street_address2', 'county', 'delivery_cost', 
+              'street_address2', 'county', 'delivery_cost',
               'order_total', 'grand_total',
               'loyalty_points_used', 'loyalty_points_earned',
               'original_bag', 'stripe_pid')

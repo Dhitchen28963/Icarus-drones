@@ -1,4 +1,10 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
+from django.shortcuts import (
+    render,
+    redirect,
+    reverse,
+    get_object_or_404,
+    HttpResponse
+)
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -18,12 +24,14 @@ from bag.contexts import bag_contents
 from utils.mailchimp_utils import Mailchimp
 from django.db import transaction
 
+
 # Helper functions for attachments
 def get_attachment_name_by_sku(sku):
     for attachment in ATTACHMENTS:
         if attachment['sku'] == sku:
             return attachment['name']
     return sku
+
 
 def get_attachment_price_by_sku(sku):
     for attachment in ATTACHMENTS:
@@ -55,7 +63,9 @@ def cache_checkout_data(request):
                     "quantity": item_data.get("quantity"),
                     "sku": item_data.get("sku", "N/A")
                 }
-                for item_id, item_data in request.session.get('bag', {}).items()
+                for item_id, item_data in request.session.get(
+                    'bag', {}
+                ).items()
             }
 
             bag_metadata = json.dumps(condensed_bag)
@@ -82,7 +92,11 @@ def cache_checkout_data(request):
 
         return HttpResponse(status=200)
     except Exception:
-        messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
+        messages.error(
+            request,
+            'Sorry, your payment cannot be processed right now. '
+            'Please try again later.'
+        )
         return HttpResponse(status=400)
 
 
@@ -132,8 +146,14 @@ def checkout(request):
         loyalty_points_used = int(request.POST.get('loyalty_points', 0))
 
         # Ensure valid loyalty points
-        if loyalty_points_used < 0 or loyalty_points_used > user_loyalty_points:
-            messages.error(request, "Invalid loyalty points. Points must be between 0 and your available points.")
+        if (
+            loyalty_points_used < 0 or
+            loyalty_points_used > user_loyalty_points
+        ):
+            messages.error(
+                request,
+                "Invalid. Points must be between 0 and your available points."
+            )
             return redirect(reverse('checkout'))
 
         # Store applied loyalty points in session
@@ -155,9 +175,16 @@ def checkout(request):
 
             order_total += price * Decimal(str(quantity))
 
-        delivery_cost = Decimal('10.00') if order_total < Decimal('100.00') else Decimal('0.00')
+        delivery_cost = (
+            Decimal('10.00')
+            if order_total < Decimal('100.00')
+            else Decimal('0.00')
+        )
         discount = Decimal(loyalty_points_used) * Decimal('0.1')
-        grand_total = max(order_total + delivery_cost - discount, Decimal('0.00'))
+        grand_total = max(
+            order_total + delivery_cost - discount,
+            Decimal('0.00')
+        )
         stripe_total = round(grand_total * 100)
 
         # Condense metadata to include only essential fields
@@ -172,7 +199,9 @@ def checkout(request):
         # Truncate metadata to fit within Stripe's 500-character limit
         bag_metadata = json.dumps(condensed_bag)
         if len(bag_metadata) > 500:
-            truncated_bag = dict(list(condensed_bag.items())[:max(len(condensed_bag) - 1, 0)])
+            truncated_bag = dict(
+                list(condensed_bag.items())[:max(len(condensed_bag) - 1, 0)]
+            )
             while len(json.dumps(truncated_bag)) > 500:
                 truncated_bag.pop(next(iter(truncated_bag)))
             bag_metadata = json.dumps(truncated_bag)
@@ -189,9 +218,15 @@ def checkout(request):
         # Truncate serialized_bag to fit within Stripe's 500-character limit
         serialized_bag_metadata = json.dumps(condensed_serialized_bag)
         if len(serialized_bag_metadata) > 500:
-            truncated_serialized_bag = dict(list(condensed_serialized_bag.items())[:max(len(condensed_serialized_bag) - 1, 0)])
+            truncated_serialized_bag = dict(
+                list(condensed_serialized_bag.items())[
+                    :max(len(condensed_serialized_bag) - 1, 0)
+                ]
+            )
             while len(json.dumps(truncated_serialized_bag)) > 500:
-                truncated_serialized_bag.pop(next(iter(truncated_serialized_bag)))
+                truncated_serialized_bag.pop(
+                    next(iter(truncated_serialized_bag))
+                )
             serialized_bag_metadata = json.dumps(truncated_serialized_bag)
 
         stripe.api_key = stripe_secret_key
@@ -204,7 +239,11 @@ def checkout(request):
             metadata={
                 'bag': bag_metadata,
                 'save_info': request.POST.get('save_info', ''),
-                'username': request.user.username if request.user.is_authenticated else 'AnonymousUser',
+                'username': (
+                    request.user.username
+                    if request.user.is_authenticated
+                    else 'AnonymousUser'
+                ),
                 'loyalty_points_used': str(loyalty_points_used),
             }
         )
@@ -230,23 +269,38 @@ def checkout(request):
                         order=order,
                         product=product,
                         quantity=item_data['quantity'],
-                        attachments=','.join(item_data.get('attachments', []))
+                        attachments=','.join(item_data.get('attachments', [])),
                     )
                     order_line_item.save()
                 except Product.DoesNotExist:
-                    messages.error(request, "One of the products wasn't found in our database. Please call us for assistance!")
+                    messages.error(
+                        request,
+                        "One of the products wasn't found in our database. "
+                        "Please call us for assistance!"
+                    )
                     order.delete()
                     return redirect(reverse('view_bag'))
 
             if request.user.is_authenticated and profile:
-                profile.loyalty_points = max(0, profile.loyalty_points - loyalty_points_used + order.loyalty_points)
+                profile.loyalty_points = max(
+                    0,
+                    profile.loyalty_points
+                    - loyalty_points_used
+                    + order.loyalty_points,
+                )
                 profile.save()
 
             # Redirect to success page
             request.session['save_info'] = 'save-info' in request.POST
-            return redirect(reverse('checkout_success', args=[order.order_number]))
-        else:
-            messages.error(request, 'There was an error with your form. Please double-check your information.')
+            return redirect(
+                reverse('checkout_success', args=[order.order_number])
+            )
+
+            # Error with the form
+            messages.error(
+                request,
+                'Theres an error with the form. Please review the information.'
+            )
 
     else:
         total = Decimal('0.00')
@@ -267,30 +321,46 @@ def checkout(request):
             total += price * Decimal(str(quantity))
 
             try:
-                image_url = product.image.url if product.image else f"{settings.MEDIA_URL}noimage.webp"
-                
+                image_url = (
+                    product.image.url
+                    if product.image
+                    else f"{settings.MEDIA_URL}noimage.webp"
+                )
                 item_data.update({
                     'name': product.name,
                     'product': product,
                     'image': image_url,
-                    'attachment_list': [get_attachment_name_by_sku(att) for att in item_data.get('attachments', [])]
+                    'attachment_list': [
+                        get_attachment_name_by_sku(att)
+                        for att in item_data.get('attachments', [])
+                    ]
                 })
             except Exception:
                 item_data.update({
                     'name': product.name,
                     'product': product,
                     'image': f"{settings.MEDIA_URL}noimage.webp",
-                    'attachment_list': [get_attachment_name_by_sku(att) for att in item_data.get('attachments', [])]
+                    'attachment_list': [
+                        get_attachment_name_by_sku(att)
+                        for att in item_data.get('attachments', [])
+                    ]
                 })
-            
+
             bag_items.append(item_data)
 
-        delivery_cost = Decimal('10.00') if total < Decimal('100.00') else Decimal('0.00')
-        loyalty_points_used = int(request.session.get('loyalty_points', 0))
-        discount = Decimal(loyalty_points_used) * Decimal('0.1')
-        grand_total = max(total + delivery_cost - discount, Decimal('0.00'))
-        stripe_total = round(grand_total * 100)
-        loyalty_points_earned = int(grand_total // 10)
+            delivery_cost = (
+                Decimal('10.00')
+                if total < Decimal('100.00')
+                else Decimal('0.00')
+            )
+            loyalty_points_used = int(request.session.get('loyalty_points', 0))
+            discount = Decimal(loyalty_points_used) * Decimal('0.1')
+            grand_total = max(
+                total + delivery_cost - discount,
+                Decimal('0.00')
+            )
+            stripe_total = round(grand_total * 100)
+            loyalty_points_earned = int(grand_total // 10)
 
         # Condense serialized_bag to include only essential fields
         condensed_serialized_bag = {
@@ -304,9 +374,15 @@ def checkout(request):
         # Truncate serialized_bag to fit within Stripe's 500-character limit
         serialized_bag_metadata = json.dumps(condensed_serialized_bag)
         if len(serialized_bag_metadata) > 500:
-            truncated_serialized_bag = dict(list(condensed_serialized_bag.items())[:max(len(condensed_serialized_bag) - 1, 0)])
+            truncated_serialized_bag = dict(
+                list(condensed_serialized_bag.items())[:max(
+                    len(condensed_serialized_bag) - 1, 0
+                )]
+            )
             while len(json.dumps(truncated_serialized_bag)) > 500:
-                truncated_serialized_bag.pop(next(iter(truncated_serialized_bag)))
+                truncated_serialized_bag.pop(
+                    next(iter(truncated_serialized_bag))
+                )
             serialized_bag_metadata = json.dumps(truncated_serialized_bag)
 
         stripe.api_key = stripe_secret_key
@@ -319,7 +395,11 @@ def checkout(request):
             metadata={
                 'bag': serialized_bag_metadata,
                 'save_info': request.POST.get('save_info', ''),
-                'username': request.user.username if request.user.is_authenticated else 'AnonymousUser',
+                'username': (
+                    request.user.username
+                    if request.user.is_authenticated
+                    else 'AnonymousUser'
+                ),
                 'loyalty_points_used': str(loyalty_points_used),
             }
         )
@@ -341,7 +421,13 @@ def checkout(request):
 
         # Warn if Stripe public key is missing
         if not stripe_public_key:
-            messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
+            messages.warning(
+                request,
+                (
+                    'Stripe public key is missing. Did you forget to set it '
+                    'in your environment?'
+                )
+            )
 
         context = {
             'order_form': order_form,
@@ -371,12 +457,31 @@ def checkout_success(request, order_number):
 
     # Add success messages for loyalty points
     if order.loyalty_points_used > 0:
-        messages.success(request, f"You redeemed {order.loyalty_points_used} loyalty points for this purchase, saving ${discount_applied:.2f}.")
+        messages.success(
+            request,
+            (
+                f"You redeemed {order.loyalty_points_used} loyalty points "
+                f"for this purchase, saving ${discount_applied:.2f}."
+            )
+        )
     if loyalty_points_earned > 0:
-        messages.success(request, f"You earned {loyalty_points_earned} loyalty points for this order.")
+        messages.success(
+            request,
+            (
+                f"You earned {loyalty_points_earned} loyalty points "
+                f"for this order."
+            )
+        )
 
     # Order confirmation message
-    messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.')
+    messages.success(
+        request,
+        (
+            "Order successfully processed! "
+            f"Your order number is {order_number}. "
+            f"A confirmation email will be sent to {order.email}."
+        )
+    )
 
     # Clear the bag session
     if 'bag' in request.session:
@@ -423,7 +528,10 @@ def checkout_success(request, order_number):
                 pass
 
         except Exception as e:
-            messages.error(request, "There was an error updating your profile.")
+            messages.error(
+                request,
+                "There was an error updating your profile."
+            )
 
     context = {
         'order': order,
@@ -445,7 +553,10 @@ def update_payment_intent(request):
 
         # Validate inputs
         if not client_secret or not new_amount:
-            return JsonResponse({'error': 'Invalid request parameters'}, status=400)
+            return JsonResponse(
+                {'error': 'Invalid request parameters'},
+                status=400
+            )
 
         # Extract the PaymentIntent ID from the client secret
         pid = client_secret.split('_secret')[0]
@@ -469,7 +580,12 @@ def update_payment_intent(request):
             })
 
         except stripe.error.StripeError:
-            return JsonResponse({'error': 'Payment processing error'}, status=400)
-
+            return JsonResponse(
+                {'error': 'Payment processing error'},
+                status=400
+            )
     except Exception:
-        return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
+        return JsonResponse(
+            {'error': 'An unexpected error occurred'},
+            status=500
+        )

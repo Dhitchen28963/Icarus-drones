@@ -11,8 +11,10 @@ from products.constants import ATTACHMENTS
 
 class Order(models.Model):
     order_number = models.CharField(max_length=32, null=False, editable=False)
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.SET_NULL,
-                                     null=True, blank=True, related_name='orders')
+    user_profile = models.ForeignKey(
+        UserProfile, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='orders'
+    )
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=False, blank=False)
@@ -23,16 +25,26 @@ class Order(models.Model):
     street_address2 = models.CharField(max_length=80, null=True, blank=True)
     county = models.CharField(max_length=80, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    delivery_cost = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
-    order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
-    grand_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    delivery_cost = models.DecimalField(
+        max_digits=6, decimal_places=2, null=False, default=0
+    )
+    order_total = models.DecimalField(
+        max_digits=10, decimal_places=2, null=False, default=0
+    )
+    grand_total = models.DecimalField(
+        max_digits=10, decimal_places=2, null=False, default=0
+    )
     discount_applied = models.DecimalField(
         max_digits=10, decimal_places=2, default=0, blank=True, null=True
     )
     original_bag = models.TextField(null=False, blank=False, default='')
-    stripe_pid = models.CharField(max_length=254, null=False, blank=False, default='')
+    stripe_pid = models.CharField(
+        max_length=254, null=False, blank=False, default=''
+    )
     loyalty_points = models.IntegerField(null=False, blank=False, default=0)
-    loyalty_points_used = models.IntegerField(null=False, blank=False, default=0)
+    loyalty_points_used = models.IntegerField(
+        null=False, blank=False, default=0
+    )
 
     def _generate_order_number(self):
         """
@@ -52,12 +64,16 @@ class Order(models.Model):
         accounting for delivery costs and adjusting for loyalty points used.
         """
         # Reset totals before recalculating
-        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
+        self.order_total = self.lineitems.aggregate(
+            Sum('lineitem_total')
+        )['lineitem_total__sum'] or 0
         self.delivery_cost = 0
 
         # Recalculate delivery costs
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-            self.delivery_cost = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
+            self.delivery_cost = (
+                self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
+            )
 
         # Calculate grand total before applying loyalty points
         self.grand_total = self.order_total + self.delivery_cost
@@ -65,7 +81,9 @@ class Order(models.Model):
         # Deduct loyalty points discount
         discount = Decimal(loyalty_points_used) * Decimal('0.1')
         self.discount_applied = discount
-        self.grand_total = max(self.grand_total - discount, Decimal('0.00'))
+        self.grand_total = max(
+            self.grand_total - discount, Decimal('0.00')
+        )
 
         # Update loyalty points earned
         self.loyalty_points = int(self.grand_total // 10)
@@ -88,11 +106,19 @@ class Order(models.Model):
 
 
 class OrderLineItem(models.Model):
-    order = models.ForeignKey(Order, null=False, blank=False, on_delete=models.CASCADE, related_name='lineitems')
-    product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        Order, null=False, blank=False,
+        on_delete=models.CASCADE, related_name='lineitems'
+    )
+    product = models.ForeignKey(
+        Product, null=False, blank=False, on_delete=models.CASCADE
+    )
     quantity = models.IntegerField(null=False, blank=False, default=0)
     attachments = models.TextField(null=True, blank=True)
-    lineitem_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False, editable=False)
+    lineitem_total = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        null=False, blank=False, editable=False
+    )
 
     def get_attachment_price(self):
         """
@@ -105,7 +131,9 @@ class OrderLineItem(models.Model):
             for attachment_sku in attachment_skus:
                 for attachment in ATTACHMENTS:
                     if attachment['sku'] == attachment_sku:
-                        total_attachment_price += Decimal(attachment['price'])
+                        total_attachment_price += Decimal(
+                            attachment['price']
+                        )
         return total_attachment_price
 
     def save(self, *args, **kwargs):
@@ -119,7 +147,9 @@ class OrderLineItem(models.Model):
         self.lineitem_total += attachment_total * self.quantity
 
         super().save(*args, **kwargs)
-        self.order.update_total(loyalty_points_used=self.order.loyalty_points_used)
+        self.order.update_total(
+            loyalty_points_used=self.order.loyalty_points_used
+        )
 
     def get_readable_attachments(self):
         """

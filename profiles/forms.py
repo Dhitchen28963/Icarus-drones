@@ -1,6 +1,7 @@
 from django import forms
 from .models import UserProfile, OrderIssue, ContactMessage, RepairRequest
 
+
 class UserProfileForm(forms.ModelForm):
     full_name = forms.CharField(
         max_length=100,
@@ -32,12 +33,17 @@ class UserProfileForm(forms.ModelForm):
 
         for field in self.fields:
             if field != 'default_country':
-                placeholder = f"{placeholders.get(field, field)}{' *' if self.fields[field].required else ''}"
+                placeholder = (
+                    f"{placeholders.get(field, field)}"
+                    f"{' *' if self.fields[field].required else ''}"
+                )
                 self.fields[field].widget.attrs['placeholder'] = placeholder
             elif field == 'default_country':
                 self.fields[field].widget.attrs['style'] = 'color: #aab7c4;'
 
-            self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
+            self.fields[field].widget.attrs['class'] = (
+                'border-black rounded-0 profile-form-input'
+            )
             self.fields[field].label = False
 
 

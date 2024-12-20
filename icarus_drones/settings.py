@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')  # Fallback in case env var is missing
+SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 'DEVELOPMENT' in os.environ
@@ -29,7 +29,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')  # Fallback in case e
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
+    '8000-dhitchen289-icarusdrone-5dxslm03s3y.'
+    'ws.codeinstitute-ide.net',
     'icarus-drones-d492afe10809.herokuapp.com',
     'localhost',
 ]
@@ -52,7 +53,6 @@ INSTALLED_APPS = [
     'bag',
     'checkout',
     'profiles',
-
 
     # Other
     'crispy_forms',
@@ -104,10 +104,13 @@ TEMPLATES = [
     },
 ]
 
-MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+MESSAGE_STORAGE = (
+    'django.contrib.messages.storage.session.SessionStorage'
+)
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-dhitchen289-icarusdrone-5dxslm03s3y.ws.codeinstitute-ide.net',
+    'https://8000-dhitchen289-icarusdrone-5dxs'
+    'lm03s3y.ws.codeinstitute-ide.net',
     'https://icarus-drones-d492afe10809.herokuapp.com',
     'http://localhost:8000',
 ]
@@ -131,7 +134,9 @@ WSGI_APPLICATION = 'icarus_drones.wsgi.application'
 # Database
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+        'default': dj_database_url.parse(
+            os.environ.get('DATABASE_URL')
+        )
     }
 else:
     DATABASES = {
@@ -144,16 +149,28 @@ else:
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation'
+            '.UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation'
+            '.MinimumLengthValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation'
+            '.CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation'
+            '.NumericPasswordValidator'
+        ),
     },
 ]
 
@@ -167,48 +184,43 @@ USE_TZ = True
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Debugging
-print(f"DEBUG mode is: {DEBUG}")
-print(f"DEVELOPMENT in environment: {'DEVELOPMENT' in os.environ}")
-
 if 'USE_AWS' in os.environ:
-    
     # Bucket Config
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get(
+        'AWS_STORAGE_BUCKET_NAME'
+    )
     AWS_S3_REGION_NAME = 'us-east-1'
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_SECRET_ACCESS_KEY = os.environ.get(
+        'AWS_SECRET_ACCESS_KEY'
+    )
+    AWS_S3_CUSTOM_DOMAIN = (
+        f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    )
 
     # Static and media files
     STATICFILES_LOCATION = 'static'
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
-    
+    STATIC_URL = (
+        f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+    )
+
     MEDIAFILES_LOCATION = 'media'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
-
-    print("AWS Configuration is active")
-    print(f"AWS Bucket Name: {AWS_STORAGE_BUCKET_NAME}")
-    print(f"Static Files URL: {STATIC_URL}")
-    print(f"Media Files URL: {MEDIA_URL}")
+    MEDIA_URL = (
+        f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+    )
 
     # Cache control
     AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'no-cache, no-store, must-revalidate, max-age=0',
+        'CacheControl': (
+            'no-cache, no-store, must-revalidate, max-age=0'
+        ),
     }
 else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-    print("Local storage configuration is active")
-    print(f"Static URL: {STATIC_URL}")
-    print(f"Media URL: {MEDIA_URL}")
-
-print(f"Template Dirs: {TEMPLATES[0]['DIRS']}")
-print(f"Template Context Processors: {TEMPLATES[0]['OPTIONS']['context_processors']}")
 
 # Stripe Configuration
 FREE_DELIVERY_THRESHOLD = 200
@@ -236,7 +248,9 @@ else:
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
-    DEFAULT_FROM_EMAIL = f"Icarus Drones <{os.environ.get('EMAIL_HOST_USER')}>"
+    DEFAULT_FROM_EMAIL = (
+        f"Icarus Drones <{os.environ.get('EMAIL_HOST_USER')}>"
+    )
 
 # Mailchimp Configuration
 MAILCHIMP_API_KEY = os.getenv('MAILCHIMP_API_KEY')
@@ -246,18 +260,3 @@ MAILCHIMP_AUDIENCE_ID = os.getenv('MAILCHIMP_AUDIENCE_ID')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Dynamic SITE_URL configuration
 SITE_URL = os.getenv('SITE_URL', 'http://localhost:8000')
-print(f"Site URL is set to: {SITE_URL}")
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
