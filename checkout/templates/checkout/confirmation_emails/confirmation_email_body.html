@@ -1,32 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        @media only screen and (max-width: 600px) {
-            .table th.quantity, .table th.total {
-                display: none; /* Hide Quantity and Total headers */
-            }
-            .product-name {
-                display: block;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-            .product-price {
-                display: block;
-                font-size: 14px;
-                color: #333;
-            }
-            .attachment-list {
-                margin: 5px 0 0;
-                padding: 0;
-                list-style: none;
-            }
-            .attachment-list li {
-                font-size: 14px;
-                color: #666;
-            }
-        }
-    </style>
 </head>
 <body style="font-family: Arial, sans-serif; background: url('{{ background_image_url }}') no-repeat center center; background-size: cover; background-position: center;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -61,33 +35,27 @@
                     <!-- Updated Section for Purchased Products -->
                     <div style="background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 5px;">
                         <h3>Items Purchased</h3>
-                        <table class="table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
                             <thead>
                                 <tr>
                                     <th style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Product</th>
-                                    <th class="quantity" style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Quantity</th>
-                                    <th class="total" style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for item in lineitems %}
                                 <tr>
                                     <td style="padding: 8px; border-bottom: 1px solid #ddd;">
-                                        <span class="product-name">{{ item.product_name }}</span>
-                                        <span class="product-price">${{ item.lineitem_total|floatformat:2 }}</span>
+                                        <p><strong>{{ item.product_name }}</strong></p>
+                                        <p>Quantity: {{ item.quantity }}</p>
+                                        <p>Total: ${{ item.lineitem_total|floatformat:2 }}</p>
                                         {% if item.attachments %}
-                                            <ul class="attachment-list">
-                                                {% for attachment in item.attachments.split(',') %}
-                                                <li>{{ attachment }}</li>
-                                                {% endfor %}
-                                            </ul>
+                                        <p>Attachments:</p>
+                                        <ul style="margin: 0; padding: 0; list-style-type: none;">
+                                            {% for attachment in item.attachments.split(',') %}
+                                            <li style="font-size: 12px; color: #666;">{{ attachment }}</li>
+                                            {% endfor %}
+                                        </ul>
                                         {% endif %}
-                                    </td>
-                                    <td class="quantity" style="padding: 8px; border-bottom: 1px solid #ddd;">
-                                        {{ item.quantity }}
-                                    </td>
-                                    <td class="total" style="padding: 8px; border-bottom: 1px solid #ddd;">
-                                        ${{ item.lineitem_total|floatformat:2 }}
                                     </td>
                                 </tr>
                                 {% endfor %}
