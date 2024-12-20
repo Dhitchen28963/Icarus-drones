@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
 from django.contrib import messages
 from .models import (
     UserProfile, OrderIssue, Wishlist, UserMessage,
@@ -27,6 +28,9 @@ from django.views.decorators.http import require_POST
 def profile(request):
     """ Display the user's profile. """
     profile = get_object_or_404(UserProfile, user=request.user)
+
+    # Fetch orders sorted by date in descending order
+    orders = profile.orders.all().order_by('-date')
 
     # Retrieve unresolved and resolved issues using `status`
     unresolved_issues = profile.user.order_issues.filter(status='in_progress')
@@ -58,9 +62,6 @@ def profile(request):
             )
     else:
         form = UserProfileForm(instance=profile)
-
-    # Retrieve orders without recalculating loyalty points
-    orders = profile.orders.all()
 
     template = 'profiles/profile.html'
     context = {
@@ -485,6 +486,10 @@ def respond_to_message(request, message_id):
                 parent_message=original_message
             )
 
+            # Update the parent message's updated_at field
+            original_message.updated_at = now()
+            original_message.save()
+
             try:
                 recipient_email = original_message.user.email
                 context = get_email_context(
@@ -519,11 +524,11 @@ def respond_to_message(request, message_id):
                         "sending the email."
                     )
                 )
-            else:
-                messages.error(
-                    request,
-                    "Your response cannot be empty."
-                )
+        else:
+            messages.error(
+                request,
+                "Your response cannot be empty."
+            )
 
     return redirect('messages')
 

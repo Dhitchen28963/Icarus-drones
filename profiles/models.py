@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_countries.fields import CountryField
+from django.utils.timezone import now
 from decimal import Decimal
 from django.db import transaction
 from products.models import Product
@@ -271,6 +272,7 @@ class UserMessage(models.Model):
     )
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     parent_message = models.ForeignKey(
         'self',
         null=True,

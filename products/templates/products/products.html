@@ -250,7 +250,7 @@
                .then(data => {
                    if (data.status === 'added') {
                        this.classList.add('wishlist-active');
-                       this.style.color = '#8B0000';
+                       this.style.color = 'red';
                    } else if (data.status === 'removed') {
                        this.classList.remove('wishlist-active');
                        this.style.color = 'gray';

@@ -88,6 +88,7 @@
                         <p class="my-0">Delivery:</p>
                         <p class="my-0">Discount Applied:</p>
                         <p class="my-0">Grand Total:</p>
+                        <p class="my-0">Loyalty Points Earned:</p>
                     </div>
                     <div class="col-3">
                         <p class="my-0" data-total="{{ total|floatformat:2|default_if_none:'0.00' }}">${{ total|floatformat:2|default_if_none:'0.00' }}</p>
@@ -109,8 +110,14 @@
                                    id="loyalty-points-input" 
                                    name="loyalty_points" 
                                    class="form-control" 
-                                   min="0" 
+                                   min="0"
+                                   class="form-control" 
+                                   step="1
                                    max="{{ request.user.userprofile.loyalty_points }}">
+                            <!-- Error message for invalid input -->
+                            <div id="loyalty-points-error" class="text-danger d-none mt-2">
+                                Only whole numbers are allowed for loyalty points.
+                            </div>
                         </p>
                     </div>
                 </div>          
@@ -216,7 +223,7 @@
                 overlay.style.display = "none";
             }
         });
-        
+
         // Show the loading overlay on form submission
         document.getElementById('payment-form').addEventListener('submit', function () {
             document.getElementById('loading-overlay').style.display = 'flex';
@@ -254,6 +261,28 @@
                 subtotalElement.dataset.subtotal = grandTotal.toFixed(2);
                 subtotalElement.textContent = `$${grandTotal.toFixed(2)}`;
             }
+        });
+
+        // Ensure only whole numbers are allowed for loyalty points input
+        function validateLoyaltyPoints(input) {
+            const errorElement = document.getElementById('loyalty-points-error');
+            const points = input.value;
+
+            // Check if input is a whole number
+            if (points % 1 !== 0) {
+                // Show error message
+                errorElement.classList.remove('d-none');
+                input.value = Math.floor(points); // Automatically round down to nearest whole number
+            } else {
+                // Hide error message
+                errorElement.classList.add('d-none');
+            }
+        }
+
+        // Attach validation to the input field
+        const loyaltyPointsInput = document.getElementById('loyalty-points-input');
+        loyaltyPointsInput.addEventListener('input', function () {
+            validateLoyaltyPoints(this);
         });
     </script>
 {% endblock %}
