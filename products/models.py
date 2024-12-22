@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+import logging
+from django.conf import settings
+from custom_storages import MediaStorage
+
+logger = logging.getLogger(__name__)
 
 
 class Category(models.Model):
@@ -33,7 +38,11 @@ class Product(models.Model):
         max_digits=6, decimal_places=2,
         null=True, blank=True
     )
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(
+        null=True,
+        blank=True,
+        storage=MediaStorage(),
+    )
     color = models.CharField(max_length=50, null=True, blank=True)
     rotors = models.IntegerField(null=True, blank=True)
     speed = models.CharField(max_length=50, null=True, blank=True)
@@ -92,8 +101,35 @@ class Product(models.Model):
     )
     accessories_included = models.TextField(null=True, blank=True)
 
-    def __str__(self):
-        return self.name
+    def save(self, *args, **kwargs):
+        """Override save method to add logging"""
+        logger.info(f"Saving product: {self.name}")
+
+        if self.image:
+            logger.info(f"Image details:")
+            logger.info(f"  - Name: {self.image.name}")
+            logger.info(f"  - Size: {getattr(self.image, 'size', 'N/A')}")
+
+            # Enhanced storage logging
+            storage = self.image.storage
+            logger.info(f"Storage details:")
+            logger.info(f"  - Class: {storage.__class__.__name__}")
+            logger.info(f"  - Location: {getattr(storage, 'location', 'N/A')}")
+
+            try:
+                logger.info(f"  - URL: {self.image.url}")
+            except Exception as e:
+                logger.error(f"Error getting URL: {str(e)}")
+
+        try:
+            super().save(*args, **kwargs)
+            logger.info(f"Successfully saved product {self.name}")
+
+            if self.image:
+                logger.info(f"Final image URL: {self.image.url}")
+        except Exception as e:
+            logger.error(f"Error saving product: {str(e)}")
+            raise
 
 
 class Attachment(models.Model):
@@ -104,6 +140,13 @@ class Attachment(models.Model):
     image = models.ImageField(
         upload_to='attachments/', null=True, blank=True
     )
+
+    def save(self, *args, **kwargs):
+        """Override save method to add logging"""
+        logger.info(f"Saving attachment: {self.name}")
+        if self.image:
+            logger.info(f"Attachment image: {self.image.name}")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -126,3 +169,7 @@ class ProductReview(models.Model):
             f"{self.user.username} - "
             f"{self.product.name} ({self.rating} stars)"
         )
+
+    def save(self, *args, **kwargs):
+        """Override save method to add logging"""
+        super().save(*args, **kwargs)

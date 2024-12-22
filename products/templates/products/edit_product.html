@@ -1,41 +1,66 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block page_header %}
-    <div class="container-fluid bg-primary text-white py-3 header-container">
-        <div class="row">
-            <div class="col text-center">
-                <h1 class="logo-font">Manage Products</h1>
-                <p class="lead">Edit Product</p>
-            </div>
+<div class="container-fluid bg-primary text-white py-3 header-container">
+    <div class="row">
+        <div class="col text-center">
+            <h1 class="logo-font">Manage Products</h1>
+            <p class="lead">Edit Product</p>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block content %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8">
-                <hr class="bg-secondary">
-                <h2 class="logo-font mb-4 text-center">Product Management</h2>
-                <h5 class="text-muted text-center">Edit a Product</h5>
-                <hr class="bg-secondary">
-            </div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <hr class="bg-secondary">
+            <h2 class="logo-font mb-4 text-center">Product Management</h2>
+            <h5 class="text-muted text-center">Edit {{ product.name }}</h5>
+            <hr class="bg-secondary">
         </div>
+    </div>
 
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8">
-                <form method="POST" action="{% url 'edit_product' product.id %}" class="form p-4 shadow rounded bg-light" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        {{ form | crispy }}
-                    </div>
-                    <div class="text-right">
-                        <a class="btn btn-outline-secondary rounded-0 me-2" href="{% url 'products' %}">Cancel</a>
-                        <button class="btn btn-primary rounded-0" type="submit">Update Product</button>
-                    </div>
-                </form>
+    <!-- Image Display Section -->
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+            <div class="image-container my-5">
+                {% if product.image %}
+                    <a href="{{ product.image.url }}" target="_blank">
+                        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </a>
+                {% else %}
+                    <a href="{{ MEDIA_URL }}noimage.webp" target="_blank">
+                        <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <form method="POST" action="{% url 'edit_product' product.id %}" class="form p-4 shadow rounded bg-light" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Form Fields -->
+                {{ form|crispy }}
+
+                <!-- Image Clear Option -->
+                <div class="form-group">
+                    <label for="id_image-clear">Clear Image</label>
+                    <input type="checkbox" id="id_image-clear" name="image-clear">
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a class="btn btn-outline-secondary" href="{% url 'products' %}">Cancel</a>
+                    <button class="btn btn-primary" type="submit">Update Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

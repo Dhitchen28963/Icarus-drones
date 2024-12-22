@@ -1,14 +1,16 @@
-"""
-For more information on this file, see
-https://docs.djangoproject.com/en/5.1/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/5.1/ref/settings/
-"""
-
 from pathlib import Path
 import dj_database_url
 import os
+
+# Environment Check for AWS
+print("\nAWS Configuration Check:")
+print(f"AWS_ACCESS_KEY_ID exists: {'AWS_ACCESS_KEY_ID' in os.environ}")
+print(f"AWS_SECRET_ACCESS_KEY exists: {'AWS_SECRET_ACCESS_KEY' in os.environ}")
+print(f"AWS_STORAGE_BUCKET_NAME: {os.getenv('AWS_STORAGE_BUCKET_NAME')}")
+print(f"AWS_S3_REGION_NAME: 'us-east-1'")
+print("Environment Check:")
+print(f"USE_AWS: {os.getenv('USE_AWS')}")
+print(f"AWS Bucket: {os.getenv('AWS_STORAGE_BUCKET_NAME')}")
 
 # Load environment variables from env.py if it exists
 if os.path.isfile('env.py'):
@@ -17,14 +19,7 @@ if os.path.isfile('env.py'):
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = 'DEVELOPMENT' in os.environ
 
 DEBUG = False
 
@@ -36,7 +31,6 @@ ALLOWED_HOSTS = [
 ]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,9 +66,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'icarus_drones.urls'
-
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
-
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 TEMPLATES = [
@@ -104,9 +96,7 @@ TEMPLATES = [
     },
 ]
 
-MESSAGE_STORAGE = (
-    'django.contrib.messages.storage.session.SessionStorage'
-)
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-dhitchen289-icarusdrone-5dxs'
@@ -120,6 +110,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+# AllAuth Configuration
 SITE_ID = 1
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -131,12 +122,10 @@ LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'icarus_drones.wsgi.application'
 
-# Database
+# Database Configuration
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
-        'default': dj_database_url.parse(
-            os.environ.get('DATABASE_URL')
-        )
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
 else:
     DATABASES = {
@@ -149,28 +138,16 @@ else:
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': (
-            'django.contrib.auth.password_validation'
-            '.UserAttributeSimilarityValidator'
-        ),
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': (
-            'django.contrib.auth.password_validation'
-            '.MinimumLengthValidator'
-        ),
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': (
-            'django.contrib.auth.password_validation'
-            '.CommonPasswordValidator'
-        ),
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': (
-            'django.contrib.auth.password_validation'
-            '.NumericPasswordValidator'
-        ),
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -180,47 +157,53 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static files configuration
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-if 'USE_AWS' in os.environ:
-    # Bucket Config
-    AWS_STORAGE_BUCKET_NAME = os.environ.get(
-        'AWS_STORAGE_BUCKET_NAME'
-    )
-    AWS_S3_REGION_NAME = 'us-east-1'
+# AWS Configuration
+USE_AWS = os.getenv('USE_AWS', 'False') == 'True' or 'HEROKU' in os.environ
+
+if USE_AWS:
+    print("\nAWS Configuration Active:")
+    print(f"AWS_ACCESS_KEY_ID exists: {'AWS_ACCESS_KEY_ID' in os.environ}")
+    print(f"AWS_SECRET_ACCESS_KEY exists: {'AWS_SECRET_ACCESS_KEY' in os.environ}")
+    print(f"AWS_STORAGE_BUCKET_NAME: {os.getenv('AWS_STORAGE_BUCKET_NAME')}")
+    
+    # AWS Credentials
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get(
-        'AWS_SECRET_ACCESS_KEY'
-    )
-    AWS_S3_CUSTOM_DOMAIN = (
-        f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-    )
-
-    # Static and media files
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    
+    # S3 Configuration
+    AWS_S3_REGION_NAME = 'us-east-1'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = False
+    
+    # Storage paths
     STATICFILES_LOCATION = 'static'
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-    STATIC_URL = (
-        f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
-    )
-
     MEDIAFILES_LOCATION = 'media'
+    
+    # Storage backends
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
-    MEDIA_URL = (
-        f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
-    )
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    
+    # URLs
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 
-    # Cache control
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': (
-            'no-cache, no-store, must-revalidate, max-age=0'
-        ),
-    }
+    print(f"Storage Configuration:")
+    print(f"STATICFILES_STORAGE: {STATICFILES_STORAGE}")
+    print(f"DEFAULT_FILE_STORAGE: {DEFAULT_FILE_STORAGE}")
+    print(f"STATIC_URL: {STATIC_URL}")
+    print(f"MEDIA_URL: {MEDIA_URL}")
 else:
+    print("AWS settings block not active. Using local storage.")
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Stripe Configuration
 FREE_DELIVERY_THRESHOLD = 200
@@ -228,13 +211,7 @@ STANDARD_DELIVERY_PERCENTAGE = 10
 STRIPE_CURRENCY = 'usd'
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
-
-if 'DEVELOPMENT' in os.environ:
-    STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
-else:
-    STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET_HEROKU', '')
-
-DEFAULT_FROM_EMAIL = 'icarusdrones@example.com'
+STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET_HEROKU', '') if not 'DEVELOPMENT' in os.environ else os.getenv('STRIPE_WH_SECRET', '')
 
 # Email Configuration
 if 'DEVELOPMENT' in os.environ:
@@ -248,9 +225,7 @@ else:
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
-    DEFAULT_FROM_EMAIL = (
-        f"Icarus Drones <{os.environ.get('EMAIL_HOST_USER')}>"
-    )
+    DEFAULT_FROM_EMAIL = f"Icarus Drones <{os.environ.get('EMAIL_HOST_USER')}>"
 
 # Mailchimp Configuration
 MAILCHIMP_API_KEY = os.getenv('MAILCHIMP_API_KEY')
@@ -258,5 +233,39 @@ MAILCHIMP_SERVER_PREFIX = os.getenv('MAILCHIMP_SERVER_PREFIX')
 MAILCHIMP_AUDIENCE_ID = os.getenv('MAILCHIMP_AUDIENCE_ID')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# Dynamic SITE_URL configuration
 SITE_URL = os.getenv('SITE_URL', 'http://localhost:8000')
+
+# Logging Configuration
+# Update your LOGGING configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {name} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'products': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
