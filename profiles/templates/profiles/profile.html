@@ -118,6 +118,18 @@
                 {% endif %}
             </div>
         </div>
+
+        <!-- Delete Account Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3>Account Actions</h3>
+                <p class="text-danger">
+                    Deleting your account is permanent and will result in the loss of all your loyalty points
+                    ({{ form.instance.loyalty_points }} points).
+                </p>
+                <a href="{% url 'delete_account' %}" class="btn btn-danger">Delete My Account</a>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

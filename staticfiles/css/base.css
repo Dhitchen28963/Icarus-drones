@@ -1077,6 +1077,10 @@ footer small.text-muted {
     .header-container {
         padding-top: 164px;
     }
+
+    .edit-product-container, .add-product-container {
+        margin-top: calc(6rem + 2.5rem) !important;
+    }
 }
 
 /* Slightly larger container on xl screens */

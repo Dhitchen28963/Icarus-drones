@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Delete Your Account</h2>
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Important Notice</h4>
+        <p>Deleting your account is a permanent action and <strong>cannot</strong> be undone.</p>
+        <p>You will lose all your saved data, including:</p>
+        <ul>
+            <li>Your loyalty points: <strong>{{ request.user.userprofile.loyalty_points_earned }}</strong></li>
+            <li>Your order history</li>
+            <li>Your wishlist</li>
+        </ul>
+    </div>
+    <p class="text-center">
+        If you are sure you want to proceed, please confirm below.
+    </p>
+    <form method="post" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-lg">Delete My Account</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary btn-lg ml-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}

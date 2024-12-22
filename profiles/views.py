@@ -842,3 +842,16 @@ def unsubscribe(request, email):
         )
 
     return redirect('home')
+
+
+@login_required
+def delete_account(request):
+    """Allow a user to delete their account"""
+    if request.method == 'POST':
+        user = request.user
+        username = user.username
+        user.delete()
+        messages.success(request, f"Account '{username}' has been deleted.")
+        return redirect('home')
+
+    return render(request, 'profiles/delete_account.html')

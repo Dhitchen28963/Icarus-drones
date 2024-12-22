@@ -18,6 +18,7 @@
             crossorigin="anonymous">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
       <link rel="stylesheet" href="{% static 'css/base.css' %}">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-d9t5yKRwYxzCWqh7aJ9tnOEpBwlQkN+OYhwlQjaFqHO7r3ylmDF0hE8BSijh3byxDjzqZkeJURwCBu5ObmDjBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     {% endblock %}
 
     {% block extra_css %}
@@ -72,25 +73,42 @@
                   <p class="my-0">My Account</p>
                 </div>
               </a>
-              <div class="dropdown-menu border-0" aria-labelledby="user-options">
+              <div class="dropdown-menu border-0" aria-labelledby="mobile-user-options">
                 {% if request.user.is_authenticated %}
-                  {% if request.user.is_superuser %}
-                    <a href="{% url 'add_product' %}" class="dropdown-item">Product Management</a>
-                    <a href="{% url 'manage_staff' %}" class="dropdown-item">Manage Staff</a>
-                  {% endif %}
-                  <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
-                  {% load permissions %}
-                  {% if can_manage_issues %}
-                      <a href="{% url 'manage_issues' %}" class="dropdown-item">Manage Issues</a>
-                  {% endif %}
-                  <a href="{% url 'wishlist' %}" class="dropdown-item">Wishlist</a>
-                  <a href="{% url 'messages' %}" class="dropdown-item">Messages</a>
-                  <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
+                    {% if can_manage_issues %}
+                        <a href="{% url 'manage_issues' %}" class="dropdown-item">
+                            <i class="fa fa-handshake me-2"></i> Manage Issues
+                        </a>
+                    {% endif %}
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'add_product' %}" class="dropdown-item">
+                            <i class="fa fa-list-check me-2"></i> Product Management
+                        </a>
+                        <a href="{% url 'manage_staff' %}" class="dropdown-item">
+                            <i class="fa fa-users me-2"></i> Manage Staff
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'profile' %}" class="dropdown-item">
+                        <i class="fa fa-user me-2"></i> My Profile
+                    </a>
+                    <a href="{% url 'wishlist' %}" class="dropdown-item">
+                        <i class="fa fa-star me-2"></i> Wishlist
+                    </a>
+                    <a href="{% url 'messages' %}" class="dropdown-item">
+                        <i class="fa fa-envelope me-2"></i> Messages
+                    </a>
+                    <a href="{% url 'account_logout' %}" class="dropdown-item">
+                        <i class="fa fa-right-from-bracket me-2"></i> Logout
+                    </a>
                 {% else %}
-                  <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
-                  <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
+                    <a href="{% url 'account_signup' %}" class="dropdown-item">
+                        <i class="fa fa-user-plus me-2"></i> Register
+                    </a>
+                    <a href="{% url 'account_login' %}" class="dropdown-item">
+                        <i class="fa fa-key me-2"></i> Login
+                    </a>
                 {% endif %}
-              </div>
+            </div>            
             </li>
             <li class="list-inline-item">
               <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link" href="{% url 'view_bag' %}">

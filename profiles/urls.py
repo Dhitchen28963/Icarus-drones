@@ -83,4 +83,9 @@ urlpatterns = [
         views.toggle_status,
         name='toggle_status'
     ),
+    path(
+        'delete-account/',
+        views.delete_account,
+        name='delete_account',
+    ),
 ]

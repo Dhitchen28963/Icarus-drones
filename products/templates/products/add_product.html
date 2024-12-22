@@ -2,20 +2,9 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block page_header %}
-<div class="container-fluid bg-primary text-white py-3 header-container">
-    <div class="row">
-        <div class="col text-center">
-            <h1 class="logo-font">Manage Products</h1>
-            <p class="lead">Add Product</p>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
+<div class="container mt-5 add-product-container">
+    <div class="row justify-content-center" style="margin-top: 6rem;">
         <div class="col-12 col-lg-8">
             <hr class="bg-secondary">
             <h2 class="logo-font mb-4 text-center">Product Management</h2>
@@ -24,24 +13,25 @@
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
-        <div class="image-container my-5">
-            {% if product.image %}
-                <a href="{{ product.image.url }}" target="_blank">
-                    <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                </a>
-            {% else %}
-                <a href="{{ MEDIA_URL }}noimage.webp" target="_blank">
-                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
-                </a>
-            {% endif %}
-        </div>
-    </div>
-
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <form method="POST" action="{% url 'add_product' %}" class="form p-4 shadow rounded bg-light" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                <!-- Image Display Section -->
+                <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+                    <div class="image-container my-5">
+                        {% if product.image %}
+                            <a href="{{ product.image.url }}" target="_blank">
+                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            </a>
+                        {% else %}
+                            <a href="{{ MEDIA_URL }}noimage.webp" target="_blank">
+                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
                 
                 <!-- Main Category Selection -->
                 <div id="div_id_category" class="form-group mb-3">

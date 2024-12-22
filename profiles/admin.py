@@ -11,7 +11,7 @@ class UserMessageInline(admin.TabularInline):
     readonly_fields = (
         'user', 'created_by', 'content', 'created_at'
     )
-    ordering = ('created_at',)
+    ordering = ('-created_at',)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -29,7 +29,7 @@ class LoyaltyPointsTransactionInline(admin.TabularInline):
         'user_profile', 'transaction_type', 'points',
         'balance_before', 'balance_after', 'created_at'
     )
-    ordering = ('created_at',)
+    ordering = ('-created_at',)
 
 
 @admin.register(OrderIssue)
@@ -37,12 +37,14 @@ class OrderIssueAdmin(admin.ModelAdmin):
     list_display = ('order', 'user', 'issue_type', 'created_at', 'status')
     list_filter = ('issue_type', 'status', 'created_at')
     search_fields = ('order__order_number', 'user__username')
+    ordering = ('-created_at',)
 
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'full_name', 'loyalty_points')
     search_fields = ('user__username', 'full_name')
+    inlines = [LoyaltyPointsTransactionInline]
 
 
 @admin.register(Wishlist)
@@ -57,6 +59,8 @@ class RepairRequestAdmin(admin.ModelAdmin):
     list_filter = ('status', 'created_at')
     search_fields = ('user__username', 'drone_model')
     inlines = [UserMessageInline]
+    ordering = ('-created_at',)
+    date_hierarchy = 'created_at'
 
 
 @admin.register(ContactMessage)
@@ -65,6 +69,8 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_filter = ('status', 'created_at')
     search_fields = ('user__username', 'name', 'email')
     inlines = [UserMessageInline]
+    ordering = ('-created_at',)
+    date_hierarchy = 'created_at'
 
 
 @admin.register(UserMessage)
@@ -77,3 +83,4 @@ class UserMessageAdmin(admin.ModelAdmin):
     search_fields = (
         'user__username', 'created_by__username', 'content'
     )
+    ordering = ('-created_at',)
