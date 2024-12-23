@@ -27,6 +27,15 @@ html body.home-page {
     text-transform: uppercase;
 }
 
+.responsive-heading {
+    font-size: 2.5rem;
+}
+
+.responsive-button {
+    font-size: 1.25rem;
+    padding: 1rem 1.5rem;
+}
+
 .main-logo-link {
     width: fit-content;
 }
@@ -256,6 +265,43 @@ a.category-badge > span.badge:hover {
     padding: 10px;
 }
 
+/* Edit Product form - for custom drones category */
+.guidance-box {
+    background-color: #f8f9fa;
+    border-left: 4px solid #0d6efd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}
+
+.guidance-text {
+    margin-top: 0.5rem;
+}
+
+.guidance-text small {
+    display: block;
+    line-height: 1.6;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Add product - custom drone category */
+custom-drones-guidance {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+    display: block;
+}
+
+.show-field {
+    display: block !important;
+}
+
+.custom-drones-guidance {
+    color: #dc3545;
+}
 
 /* Product review form */
 .pagination .btn-outline-black {
@@ -500,6 +546,7 @@ button.btn-black:hover {
 #compare-drone-dropdown {
     margin: auto;
     max-width: 300px;
+    height: 45px;
 }
 
 .row.align-items-center {
@@ -732,6 +779,15 @@ footer small.text-muted {
         gap: 10px;
     }
 
+    .responsive-heading {
+        font-size: 1.8rem;
+    }
+
+    .responsive-button {
+        font-size: 1rem;
+        padding: 0.75rem 1.25rem;
+    }
+
     footer .container.content-container {
         padding: 20px;
     }
@@ -776,13 +832,14 @@ footer small.text-muted {
     }
 
     .table th, .table td {
-        padding: 5px;
+        padding: 3px;
         white-space: nowrap;
     }
 
     .table td img {
         max-width: 60px;
         height: auto;
+        margin-left: -15px;
     }
 
     .input-group {
@@ -802,7 +859,7 @@ footer small.text-muted {
     }
 
     .input-group .form-control {
-        width: 50px;
+        width: 45px;
         height: 28px;
         font-size: 0.8rem;
         text-align: center;
@@ -825,6 +882,15 @@ footer small.text-muted {
         display: inline-block;
         width: auto;
         margin: 5px;
+    }
+
+    .responsive-heading {
+        font-size: 1.5rem;
+    }
+
+    .responsive-button {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
     }
 }
 

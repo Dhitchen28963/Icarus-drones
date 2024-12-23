@@ -15,6 +15,7 @@ from profiles.models import Wishlist, UserProfile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 from decimal import Decimal
+import decimal
 import os
 
 import logging
@@ -354,138 +355,6 @@ def delete_product(request, product_id):
 
 @user_passes_test(is_staff_or_superuser)
 @login_required
-def edit_custom_product(request, product_id):
-    """ Edit a custom drone with attachment management functionality """
-    product = get_object_or_404(Product, pk=product_id)
-    form = ProductForm(instance=product)
-    attachment_form = AttachmentForm(
-        request.POST or None,
-        request.FILES or None
-    )
-
-    if request.method == 'POST':
-        if 'update_product' in request.POST:
-            form = ProductForm(request.POST, request.FILES, instance=product)
-            if form.is_valid():
-                form.save()
-                messages.success(
-                    request,
-                    f'Successfully updated {product.name}!'
-                )
-                return redirect(
-                    f"{reverse('edit_custom_product', args=[product.id])}?"
-                    f"drone_type={product.sku.split('-')[0].lower()}&"
-                    f"drone_color={product.sku.split('-')[-1].lower()}&"
-                    f"show_toast=true"
-                )
-            else:
-                messages.error(
-                    request,
-                    'Failed to update custom drone, ensure the form is valid.'
-                )
-
-        elif 'add_attachment' in request.POST and attachment_form.is_valid():
-            new_attachment = attachment_form.save(commit=False)
-            new_attachment.product = product
-            new_attachment.save()
-            messages.success(request, 'New attachment added successfully!')
-            return redirect(
-                f"{reverse('edit_custom_product', args=[product.id])}?"
-                f"drone_type={product.sku.split('-')[0].lower()}&"
-                f"drone_color={product.sku.split('-')[-1].lower()}&"
-                f"show_toast=true"
-            )
-
-        elif 'remove_attachments' in request.POST:
-            removed_attachments = request.POST.getlist('remove_attachments')
-            for attachment_id in removed_attachments:
-                attachment = get_object_or_404(Attachment, id=attachment_id)
-                attachment.delete()
-                messages.success(
-                    request,
-                    f'Attachment "{attachment.name}" removed successfully!'
-                )
-            return redirect(
-                f"{reverse('edit_custom_product', args=[product.id])}?"
-                f"drone_type={product.sku.split('-')[0].lower()}&"
-                f"drone_color={product.sku.split('-')[-1].lower()}&"
-                f"show_toast=true"
-            )
-
-    else:
-        form = ProductForm(instance=product)
-        messages.info(request, f'You are editing {product.name}')
-
-    # Handle SKU extraction and prioritize URL parameters
-    sku_parts = product.sku.split('-') if product.sku else ['unknown']
-    product_type = request.GET.get('drone_type', sku_parts[0]).lower()
-    product_color = request.GET.get('drone_color', sku_parts[-1]).lower()
-
-    # Map each drone to a full identifier for consistency with product_type
-    custom_drones = Product.objects.filter(
-        category__name="custom_drones").values('name', 'sku')
-    unique_drones = []
-    seen_drones = set()
-    for drone in custom_drones:
-        # Ensure 'name' and 'sku' are not None to avoid AttributeError
-        if drone['name'] and drone['sku']:
-            drone_name_parts = drone['name'].split(' ')
-            if len(drone_name_parts) > 1:
-                # Create a consistent format
-                drone_base_model = (
-                    f"{drone_name_parts[0].lower()}-"
-                    f"{drone_name_parts[1].lower()}"
-                )
-            else:
-                drone_base_model = drone['sku'].split('-')[0].lower()
-        elif drone['sku']:
-            drone_base_model = drone['sku'].split('-')[0].lower()
-        else:
-            drone_base_model = 'unknown'
-
-        if drone_base_model not in seen_drones:
-            seen_drones.add(drone_base_model)
-            unique_drones.append({
-                'name': drone['name'].split(' - ')[0] if drone['name']
-                else 'Unnamed Drone',
-                'value': drone_base_model
-            })
-
-    # Filter attachments to exclude removed ones
-    removed_attachments = request.session.get('removed_attachments', [])
-    filtered_attachments = [
-        att for att in ATTACHMENTS if att["id"] not in removed_attachments]
-    available_attachments = [
-        att for att in ATTACHMENTS
-        if att["id"] not in [a["id"] for a in filtered_attachments]]
-
-    context = {
-        'form': form,
-        'product': product,
-        'attachment_form': attachment_form,
-        'attachments': filtered_attachments,
-        'available_attachments': available_attachments,
-        'product_type': product_type,
-        'product_color': product_color,
-        'drones': unique_drones,
-        'colors': [
-            ('black', 'Black'),
-            ('white', 'White'),
-            ('blue', 'Blue'),
-            ('green', 'Green'),
-            ('pink', 'Pink'),
-            ('purple', 'Purple'),
-            ('red', 'Red'),
-            ('yellow', 'Yellow'),
-            ('orange', 'Orange'),
-        ],
-    }
-
-    return render(request, 'products/edit_custom_drone.html', context)
-
-
-@user_passes_test(is_staff_or_superuser)
-@login_required
 def delete_custom_product(request, product_id):
     """ Delete a custom drone and redirect to the products page """
     product = get_object_or_404(Product, pk=product_id)
@@ -502,16 +371,41 @@ def compare_products(request, product_id):
     """
     View to compare a selected drone against others.
     """
-    def sanitize_weight(value):
-        if value:
-            return Decimal(value.lower().replace('g', '').strip())
-        return Decimal('0')
+
+    def sanitize_value(value, spec):
+        """Sanitize and normalize values for comparison."""
+        if value in [None, "", "Not Available"]:
+            return "Not Available"
+
+        try:
+            if spec == "Weight" and isinstance(value, str):
+                return Decimal(
+                    ''.join(
+                        filter(
+                            str.isdigit, value.lower().replace('g', '').strip()
+                        )
+                    )
+                )
+            elif spec in [
+                "Flight Time", "Control Range", "Max Altitude", "Speed"
+            ] and isinstance(value, str):
+                return float(''.join(filter(str.isdigit, value)))
+            elif isinstance(value, (int, float, Decimal)):
+                return value
+            else:
+                # For string fields, return the value as-is
+                return value
+        except (ValueError, TypeError, InvalidOperation):
+            return "Not Available"
 
     selected_drone = get_object_or_404(Product, pk=product_id)
     drones = Product.objects.filter(category__name="drones")
     compare_drone_id = request.GET.get('compare_drone')
-    compare_drone = get_object_or_404(
-        Product, pk=compare_drone_id) if compare_drone_id else drones.first()
+    compare_drone = (
+        get_object_or_404(Product, pk=compare_drone_id)
+        if compare_drone_id
+        else drones.first()
+    )
 
     specifications = [
         ('Price', selected_drone.price, compare_drone.price, False),
@@ -529,17 +423,24 @@ def compare_products(request, product_id):
          compare_drone.collision_avoidance, True),
         ('Wind Resistance', selected_drone.wind_resistance,
          compare_drone.wind_resistance, True),
-        ('Weight', sanitize_weight(selected_drone.weight),
-         sanitize_weight(compare_drone.weight), False),
+        ('Weight', sanitize_value(selected_drone.weight, "Weight"),
+         sanitize_value(compare_drone.weight, "Weight"), False),
         ('Rotors', selected_drone.rotors, compare_drone.rotors, True),
         ('GPS', selected_drone.gps, compare_drone.gps, True),
     ]
 
     specifications_with_colors = []
     for spec, left_value, right_value, better_is_higher in specifications:
-        if left_value == right_value:
+        left_value = sanitize_value(left_value, spec)
+        right_value = sanitize_value(right_value, spec)
+
+        if left_value == "Not Available" or right_value == "Not Available":
+            left_color = right_color = "text-muted"
+        elif left_value == right_value:
             left_color = right_color = ""
-        elif spec == "Weight":
+        elif spec == "Weight" and isinstance(
+            left_value, (int, float, Decimal)
+        ):
             left_color = (
                 "text-success" if left_value < right_value
                 else "text-danger"
@@ -548,7 +449,9 @@ def compare_products(request, product_id):
                 "text-success" if right_value < left_value
                 else "text-danger"
             )
-        else:
+        elif isinstance(left_value, (int, float, Decimal)) and isinstance(
+            right_value, (int, float, Decimal)
+        ):
             left_color = (
                 "text-success"
                 if (better_is_higher and left_value > right_value)
@@ -561,9 +464,12 @@ def compare_products(request, product_id):
                 or (not better_is_higher and right_value < left_value)
                 else "text-danger"
             )
+        else:
+            left_color = right_color = ""
 
         specifications_with_colors.append(
-            (spec, left_value, left_color, right_value, right_color))
+            (spec, left_value, left_color, right_value, right_color)
+        )
 
     context = {
         'selected_drone': selected_drone,

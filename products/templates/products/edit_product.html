@@ -19,6 +19,17 @@
             <form method="POST" action="{% url 'edit_product' product.id %}" class="form p-4 shadow rounded bg-light" enctype="multipart/form-data">
                 {% csrf_token %}
 
+                <!-- Custom Drones Guidance Box (Initially Hidden) -->
+                <div id="custom-drones-main-guidance" class="guidance-box mb-4" style="display: none;">
+                    <h6 class="fw-bold mb-3">Custom Drones Product Guidelines</h6>
+                    <p class="mb-2">Please follow these guidelines when editing a custom drone product:</p>
+                    <ul class="mb-0">
+                        <li>Maintain consistent naming and SKU formats</li>
+                        <li>Please ensure to add a different colored image for each drone color</li>
+                        <li>Available colors: Black, White, Blue, Green, Pink, Purple, Red, Yellow, Orange</li>
+                    </ul>
+                </div>
+
                 <!-- Image Display Section -->
                 <div class="text-center mb-4">
                     {% if product.image %}
@@ -32,8 +43,149 @@
                     {% endif %}
                 </div>
 
-                <!-- Form Fields -->
-                {{ form|crispy }}
+                <!-- Category Field (Hidden input to store category) -->
+                <input type="hidden" id="product_category" value="{{ product.category.id }}">
+
+                <!-- Basic Fields -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_sku" class="form-group mb-3">
+                            <label for="id_sku" class="form-label fw-bold">SKU</label>
+                            <input type="text" name="sku" id="id_sku" class="form-control" value="{{ product.sku }}">
+                            <div id="sku-guidance" class="guidance-text" style="display: none;">
+                                <small class="form-text text-muted">
+                                    Format: [product-name]-[sequential-number]-[color]<br>
+                                    Example: flying-orb-10004-green
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_name" class="form-group mb-3">
+                            <label for="id_name" class="form-label fw-bold">Name</label>
+                            <input type="text" name="name" id="id_name" class="form-control" value="{{ product.name }}">
+                            <div id="name-guidance" class="guidance-text" style="display: none;">
+                                <small class="form-text text-muted">
+                                    Format: [Product Name] - [Color]<br>
+                                    Example: Flying Orb - Green
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="div_id_description" class="form-group mb-3">
+                    <label for="id_description" class="form-label fw-bold">Description</label>
+                    <textarea name="description" id="id_description" class="form-control">{{ product.description }}</textarea>
+                </div>
+
+                <!-- Price and Image -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_price" class="form-group mb-3">
+                            <label for="id_price" class="form-label fw-bold">Price</label>
+                            <input type="number" name="price" id="id_price" class="form-control" value="{{ product.price }}" step="0.01">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_image" class="form-group mb-3">
+                            <label for="id_image" class="form-label fw-bold">Image</label>
+                            <input type="file" name="image" id="id_image" class="form-control">
+                            <div id="image-guidance" class="guidance-text" style="display: none;">
+                                <small class="form-text text-muted">
+                                    Format: [product-name]-[color].webp<br>
+                                    Example: flying-orb-green.webp
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drone Specifications -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_color" class="form-group mb-3">
+                            <label for="id_color" class="form-label fw-bold">Color</label>
+                            <input type="text" name="color" id="id_color" class="form-control" value="{{ product.color }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_rotors" class="form-group mb-3">
+                            <label for="id_rotors" class="form-label fw-bold">Rotors</label>
+                            <input type="number" name="rotors" id="id_rotors" class="form-control" value="{{ product.rotors }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_speed" class="form-group mb-3">
+                            <label for="id_speed" class="form-label fw-bold">Speed</label>
+                            <input type="text" name="speed" id="id_speed" class="form-control" value="{{ product.speed }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_weight" class="form-group mb-3">
+                            <label for="id_weight" class="form-label fw-bold">Weight</label>
+                            <input type="text" name="weight" id="id_weight" class="form-control" value="{{ product.weight }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_flight_time" class="form-group mb-3">
+                            <label for="id_flight_time" class="form-label fw-bold">Flight Time</label>
+                            <input type="text" name="flight_time" id="id_flight_time" class="form-control" value="{{ product.flight_time }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_camera" class="form-group mb-3">
+                            <label for="id_camera" class="form-label fw-bold">Camera</label>
+                            <select name="camera" id="id_camera" class="form-select">
+                                <option value="Yes" {% if product.camera == "Yes" %}selected{% endif %}>Yes</option>
+                                <option value="No" {% if product.camera == "No" %}selected{% endif %}>No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Specifications -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_camera_quality" class="form-group mb-3">
+                            <label for="id_camera_quality" class="form-label fw-bold">Camera Quality</label>
+                            <input type="text" name="camera_quality" id="id_camera_quality" class="form-control" value="{{ product.camera_quality }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_control_range" class="form-group mb-3">
+                            <label for="id_control_range" class="form-label fw-bold">Control Range</label>
+                            <input type="text" name="control_range" id="id_control_range" class="form-control" value="{{ product.control_range }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Package Information -->
+                <div id="div_id_package_contents" class="form-group mb-3">
+                    <label for="id_package_contents" class="form-label fw-bold">Package Contents</label>
+                    <textarea name="package_contents" id="id_package_contents" class="form-control">{{ product.package_contents }}</textarea>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div id="div_id_warranty" class="form-group mb-3">
+                            <label for="id_warranty" class="form-label fw-bold">Warranty</label>
+                            <input type="text" name="warranty" id="id_warranty" class="form-control" value="{{ product.warranty }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_material" class="form-group mb-3">
+                            <label for="id_material" class="form-label fw-bold">Material</label>
+                            <input type="text" name="material" id="id_material" class="form-control" value="{{ product.material }}">
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Form Actions -->
                 <div class="d-flex justify-content-end gap-2 mt-4">
@@ -44,4 +196,38 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block postloadjs %}
+{{ block.super }}
+<!-- JavaScript for Custom Drones Guidance -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const productCategory = document.getElementById('product_category').value;
+    const mainGuidance = document.getElementById('custom-drones-main-guidance');
+    const skuGuidance = document.getElementById('sku-guidance');
+    const nameGuidance = document.getElementById('name-guidance');
+    const imageGuidance = document.getElementById('image-guidance');
+
+    // Check if the product is a Custom Drone (category ID 14)
+    function isCustomDrone() {
+        return productCategory === '14';
+    }
+
+    // Show/hide guidance based on category
+    function toggleGuidance() {
+        const showGuidance = isCustomDrone();
+        
+        // Toggle main guidance box
+        mainGuidance.style.display = showGuidance ? 'block' : 'none';
+        
+        // Toggle field-specific guidance
+        skuGuidance.style.display = showGuidance ? 'block' : 'none';
+        nameGuidance.style.display = showGuidance ? 'block' : 'none';
+        imageGuidance.style.display = showGuidance ? 'block' : 'none';
+    }
+
+    // Initial check when page loads
+    toggleGuidance();
+});
+</script>
 {% endblock %}

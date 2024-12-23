@@ -233,18 +233,9 @@
         </div>
     </div>
 </div>
-
-<!-- CSS for Field Display Control -->
-<style>
-    .form-group {
-        display: none;
-    }
-
-    .show-field {
-        display: block !important;
-    }
-</style>
-
+{% endblock %}
+{% block postloadjs %}
+{{ block.super }}
 <!-- JavaScript for Dynamic Display Logic -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -284,6 +275,63 @@ document.addEventListener('DOMContentLoaded', function() {
         'Custom Drones': ['color', 'rotors', 'speed', 'weight', 'flight_time', 'camera', 'camera_quality', 'collision_avoidance', 'gps', 'control_range', 'max_altitude', 'wind_resistance', 'material', 'remote_control', 'mobile_app_support', 'warranty']
     };
 
+    // Add Custom Drones Guidance Function
+    function addCustomDronesGuidance() {
+        // Remove any existing guidance
+        document.querySelectorAll('.custom-drones-guidance').forEach(el => el.remove());
+        document.querySelectorAll('.guidance-box').forEach(el => el.remove());
+
+        if (categorySelect.value === '14') {
+            // Add main guidance box after category selection
+            const mainGuidance = document.createElement('div');
+            mainGuidance.className = 'guidance-box custom-drones-guidance';
+            mainGuidance.innerHTML = `
+                <h6 class="fw-bold mb-3">Custom Drones Product Guidelines</h6>
+                <p class="mb-2">Please follow these guidelines when adding a custom drone product:</p>
+                <ul class="mb-0">
+                    <li>Maintain consistent naming and SKU formats</li>
+                    <li>Please ensure to add a different colored image for each drone color</li>
+                    <li>Available colors: Black, White, Blue, Green, Pink, Purple, Red, Yellow, Orange</li>
+                </ul>
+            `;
+            categorySelect.parentElement.appendChild(mainGuidance);
+            mainGuidance.style.display = 'block';
+
+            // Add field-specific guidance
+            const fields = {
+                'sku': {
+                    element: document.querySelector('#div_id_sku'),
+                    text: `Format: [product-name]-[next-sequential-number]-[color]<br>
+                          Example: flying-orb-10004-green<br>
+                          Next available number: 10005<br>
+                          Available colors: black, white, blue, green, pink, purple, red, yellow, orange`
+                },
+                'name': {
+                    element: document.querySelector('#div_id_name'),
+                    text: `Format: [Product Name] - [Color]<br>
+                          Example: Flying Orb - Green<br>
+                          Separate multiple words with hyphens`
+                },
+                'image': {
+                    element: document.querySelector('#div_id_image'),
+                    text: `Filename format: [product-name]-[color].webp<br>
+                          Example: flying-orb-green.webp<br>
+                          Separate multiple words with hyphens`
+                }
+            };
+
+            // Add guidance to each field
+            for (const [fieldId, info] of Object.entries(fields)) {
+                if (info.element) {
+                    const guidance = document.createElement('small');
+                    guidance.className = 'form-text text-muted custom-drones-guidance';
+                    guidance.innerHTML = info.text;
+                    info.element.appendChild(guidance);
+                }
+            }
+        }
+    }
+
     function toggleFields(selectedCategory, selectedSubcategory) {
         document.querySelectorAll('.form-group').forEach(field => field.classList.remove('show-field'));
 
@@ -315,11 +363,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         toggleFields(selectedCategory, selectedSubcategory);
+        addCustomDronesGuidance();
     }
 
     categorySelect.addEventListener('change', updateFormFields);
     subcategorySelect.addEventListener('change', updateFormFields);
     updateFormFields();
+
+    
 });
 </script>
 {% endblock %}
