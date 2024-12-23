@@ -760,6 +760,9 @@ The following diagram represents the database schema of the application:
 ### Facebook Mockup
 The image below showcases the design and layout of our Facebook promotional material for Icarus Drones. This mockup highlights our branding and marketing strategy to attract drone enthusiasts on social media platforms.
 
-<img src="{% static 'images/facebook_mockup.png' %}" alt="Facebook Mockup" style="width:100%; max-width:600px; display:block; margin: 20px auto;">
+
+![Mock Facebook](static/images/facebook_mockup.png)
+
+![Am I Responsive](static/images/amiresponsive.png)
 
 

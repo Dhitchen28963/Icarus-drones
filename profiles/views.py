@@ -277,27 +277,47 @@ def report_order_issue(request, order_number):
 
 @superuser_or_staff_required
 def manage_issues(request):
-    """View to list all order issues, repair requests, and contact messages."""
-    issues = OrderIssue.objects.filter(status='in_progress')
-    resolved_issues = OrderIssue.objects.filter(status='resolved')
+    """View to list unresponded and resolved communications."""
+    # Unresponded items
+    issues = OrderIssue.objects.filter(
+        status='in_progress', has_response=False
+    )
     unresolved_repair_requests = RepairRequest.objects.filter(
-        status='in_progress'
+        status='in_progress', has_response=False
     )
-    resolved_repair_requests = RepairRequest.objects.filter(status='resolved')
     unresolved_contact_messages = ContactMessage.objects.filter(
-        status='in_progress'
-    )
+        status='in_progress', has_response=False
+        )
+
+    # Resolved items
+    resolved_issues = OrderIssue.objects.filter(status='resolved')
+    resolved_repair_requests = RepairRequest.objects.filter(status='resolved')
     resolved_contact_messages = ContactMessage.objects.filter(
         status='resolved'
     )
 
+    # Responded items
+    responded_issues = OrderIssue.objects.filter(has_response=True)
+    responded_repair_requests = RepairRequest.objects.filter(has_response=True)
+    responded_contact_messages = ContactMessage.objects.filter(
+        has_response=True
+    )
+
+    # Combine unresolved and responded items
     unresolved_items = (
-        list(issues) + list(unresolved_repair_requests)
-        + list(unresolved_contact_messages)
+        list(issues) +
+        list(unresolved_repair_requests) +
+        list(unresolved_contact_messages)
     )
     resolved_items = (
-        list(resolved_issues) + list(resolved_repair_requests)
-        + list(resolved_contact_messages)
+        list(resolved_issues) +
+        list(resolved_repair_requests) +
+        list(resolved_contact_messages)
+    )
+    responded_items = (
+        list(responded_issues) +
+        list(responded_repair_requests) +
+        list(responded_contact_messages)
     )
 
     context = {
@@ -309,6 +329,7 @@ def manage_issues(request):
         'resolved_contact_messages': resolved_contact_messages,
         'unresolved_items': unresolved_items,
         'resolved_items': resolved_items,
+        'responded_items': responded_items,
     }
     return render(request, 'profiles/manage_issues.html', context)
 
@@ -321,6 +342,11 @@ def respond_to_issue(request, issue_id):
     if request.method == 'POST':
         form = OrderIssueResponseForm(request.POST, instance=issue)
         if form.is_valid():
+
+            # Set has_response to True and change status
+            issue.has_response = True
+            issue.responded_at = now()
+            issue.status = 'resolved'
             form.save()
             parent_message = UserMessage.objects.filter(
                 user=issue.user,
@@ -692,7 +718,10 @@ def respond_to_repair_request(request, request_id):
     if request.method == 'POST':
         form = RepairRequestResponseForm(request.POST, instance=repair_request)
         if form.is_valid():
-            repair_request.status = form.cleaned_data['status']
+            # Set has_response to True and change status
+            repair_request.has_response = True
+            repair_request.responded_at = now()
+            repair_request.status = 'resolved'
             repair_request.save()
 
             response_message = form.cleaned_data['response']
@@ -766,7 +795,10 @@ def respond_to_contact_message(request, message_id):
             instance=contact_message
         )
         if form.is_valid():
-            contact_message.status = form.cleaned_data['status']
+            # Set has_response to True and change status
+            contact_message.has_response = True
+            contact_message.responded_at = now()
+            contact_message.status = 'resolved'
             contact_message.save()
 
             response_message = form.cleaned_data['response']

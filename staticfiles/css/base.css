@@ -825,7 +825,7 @@ footer small.text-muted {
 /* Bag html styles */
 @media (max-width: 537px) {
     html body.home-page {
-        background-position: calc(50% - 155px) 80px;
+        background-position: calc(50% - 125px) 80px;
     }
 
     .table-responsive {
@@ -1089,6 +1089,21 @@ footer small.text-muted {
 
     .nav-link {
         padding: 0.25rem 0.5rem;
+    }
+
+    html body.home-page {
+        background-position: calc(50% - 50px) 80px;
+    }
+
+    .responsive-heading {
+        transform: translateY(50px);
+    }
+
+    .shop-now-button {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        line-height: 1;
+        height: auto;
     }
 }
 

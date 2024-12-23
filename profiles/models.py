@@ -165,6 +165,8 @@ class OrderIssue(models.Model):
         choices=STATUS_CHOICES,
         default='in_progress'
     )
+    has_response = models.BooleanField(default=False)
+    responded_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -224,6 +226,8 @@ class RepairRequest(models.Model):
         choices=STATUS_CHOICES,
         default='in_progress'
     )
+    has_response = models.BooleanField(default=False)
+    responded_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -249,6 +253,8 @@ class ContactMessage(models.Model):
         choices=STATUS_CHOICES,
         default='in_progress'
     )
+    has_response = models.BooleanField(default=False)
+    responded_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
