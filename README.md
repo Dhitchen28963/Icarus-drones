@@ -4,6 +4,14 @@ A comprehensive e-commerce platform for drone enthusiasts, offering advanced fea
 
 ---
 
+## Live Site
+
+Explore the live version of the Icarus Drones project here:
+
+[![Live Site](https://img.shields.io/badge/Live%20Site-Icarus%20Drones-blue)](https://dhitchen28963.github.io/Icarus-drones/)
+
+[Visit Icarus Drones Live Site](https://dhitchen28963.github.io/Icarus-drones/)
+
 ## Table of Contents
 
 1. [Overview](#overview)
@@ -766,3 +774,6 @@ The image below showcases the design and layout of our Facebook promotional mate
 ![Am I Responsive](static/images/amiresponsive.png)
 
 
+## Credits:
+Some of the design features were inspired by Boutique Ado.
+I used shutterstock for photos
