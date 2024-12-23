@@ -249,7 +249,7 @@ def report_order_issue(request, order_number):
                     f"Description: {issue.description}"
                 ),
                 from_email='support@icarusdrones.com',
-                recipient_list=['admin@icarusdrones.com'],
+                recipient_list=['hitchen28963@yahoo.com'],
             )
 
             messages.success(

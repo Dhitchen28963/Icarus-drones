@@ -7,9 +7,28 @@
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="{% block meta_description %}Buy customizable drones, drone accessories, and explore advanced drone comparison tools.{% endblock %}">
+      <meta name="keywords" content="{% block meta_keywords %}drones, custom drones, drone repair, drone accessories, drone comparison, drone loyalty points{% endblock %}">
+      <meta name="author" content="Icarus Drones">
+      <meta name="robots" content="index, follow">
     {% endblock %}
 
     {% block extra_meta %}
+      <!-- Open Graph Metadata for Social Media Sharing -->
+      <meta property="og:title" content="{% block og_title %}Icarus Drones - Customizable Drones and Accessories{% endblock %}">
+      <meta property="og:description" content="{% block og_description %}Explore Icarus Drones for the best drones, customization options, and loyalty rewards.{% endblock %}">
+      <meta property="og:image" content="{% block og_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+      <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+      <meta property="og:type" content="website">
+
+      <!-- Twitter Card Metadata -->
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="{% block twitter_title %}Icarus Drones - Your Drone Marketplace{% endblock %}">
+      <meta name="twitter:description" content="{% block twitter_description %}Shop drones, customize them, and earn loyalty points with Icarus Drones.{% endblock %}">
+      <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/twitter-card.jpg' %}{% endblock %}">
+      
+      <!-- Canonical Link -->
+      <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
     {% endblock %}
 
     {% block corecss %}
