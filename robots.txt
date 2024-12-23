@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /accounts/
+Disallow: /bag/
+Sitemap: https://icarus-drones-d492afe10809.herokuapp.com/sitemap.xml

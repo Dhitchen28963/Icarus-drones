@@ -1,0 +1,2512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/signup/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/login/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/bag/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/customize/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?sort=price&amp;direction=asc</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?sort=rating&amp;direction=desc</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?sort=category&amp;direction=asc</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=carry_cases</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=battery_packs</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=propellors_blades</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=cameras</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=carry_cases,battery_packs,propellors_blades,remotes,cameras,lenses,vr_goggles,drone_spare_parts</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/login/?next=/profile/repairs/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/login/?next=/profile/contact/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=new_arrivals</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=deals</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=bundles</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/password/reset/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/1</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/2</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/3</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/4</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/5</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/6</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/7</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/8</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/9</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/10</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/11</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/12</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/13</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/14</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/15</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/16</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/17</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/18</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/19</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=2&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=3&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=4&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=5&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=6&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=7&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=8&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=9&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=10&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=11&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=12&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=13&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=14&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=15&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=16&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=2&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=3&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=4&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=5&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=6&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=7&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=8&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=9&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/181</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/187</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/188</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/194</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/195</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/196</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/197</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/198</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/205</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/206</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/207</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/211</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/235</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/178</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/185</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/191</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/192</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/199</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/200</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/201</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/202</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/203</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/204</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/208</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/209</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/210</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/223</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/174</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/221</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/225</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/176</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/218</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/219</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=remotes</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=lenses</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=vr_goggles</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drone_spare_parts</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/175</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/179</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/180</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/182</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/183</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/184</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/186</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/189</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/190</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/193</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=carry_cases,battery_packs,propellors_blades,remotes,cameras,lenses,vr_goggles,drone_spare_parts&amp;page=2&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=carry_cases,battery_packs,propellors_blades,remotes,cameras,lenses,vr_goggles,drone_spare_parts&amp;page=3&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=carry_cases,battery_packs,propellors_blades,remotes,cameras,lenses,vr_goggles,drone_spare_parts&amp;page=4&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/signup/?next=%2Fprofile%2Frepairs%2F</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/signup/?next=%2Fprofile%2Fcontact%2F</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/275</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/276</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/277</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/278</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/271</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/272</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/273</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/274</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/237</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/238</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/239</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/240</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/241</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/242</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/243</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/244</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/245</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/246</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/247</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/248</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/249</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/250</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/251</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/252</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/253</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/254</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/255</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/256</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=bundles&amp;page=2&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/1/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/2/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/3/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/4/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/5/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/6/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/7/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/8/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/9/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/10/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/11/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/12/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/13/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/14/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/15/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/16/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/17/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/18/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/19/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/20/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/21</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/22</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/23</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/24</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/25</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/26</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/27</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/28</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/29</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/30</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/31</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/32</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/33</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/34</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/35</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/36</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/37</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/38</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/39</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/40</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?page=1&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/41</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/42</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/43</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/44</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/45</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/46</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/47</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/48</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/49</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/50</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/51</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/52</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/53</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/54</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/55</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/56</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/57</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/58</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/59</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/60</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/61</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/62</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/63</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/64</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/65</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/66</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/67</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/68</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/69</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/70</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/71</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/72</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/73</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/74</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/75</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/76</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/77</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/78</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/79</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/80</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/81</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/82</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/83</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/84</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/85</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/86</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/87</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/88</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/89</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/90</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/91</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/92</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/93</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/94</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/95</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/96</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/97</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/98</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/99</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/100</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/101</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/102</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/103</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/104</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/105</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/106</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/107</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/108</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/109</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/110</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/111</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/112</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/113</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/114</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/115</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/116</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/117</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/118</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/119</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/120</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/121</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/122</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/123</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/124</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/125</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/126</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/127</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/128</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/129</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/130</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/131</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/132</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/133</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/134</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/135</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/136</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/137</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/138</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/139</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/140</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/141</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/142</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/143</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/144</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/145</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/146</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/147</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/148</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/149</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/150</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/151</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/152</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/153</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/154</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/155</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/156</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/157</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/158</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/159</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/160</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/161</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/162</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/163</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/164</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/165</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/166</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/167</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/168</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/169</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/170</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/171</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/172</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/173</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/177</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=accessories</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/212</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/213</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/214</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/215</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/216</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/217</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/220</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/222</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/224</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/226</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/227</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/228</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/229</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/230</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/231</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/232</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/233</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/234</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/236</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/257</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/258</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/259</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/260</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/261</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/262</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/263</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/264</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/265</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/266</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/267</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/268</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/269</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/270</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/279</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=custom_drones</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/280</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/281</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/282</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/283</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/284</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/285</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/286</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/287</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/288</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/289</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/290</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/291</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/292</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/293</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/294</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/295</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/296</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/297</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/298</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/299</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/300</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/301</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/302</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/303</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/304</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/305</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/306</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/307</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/308</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/309</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/310</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/311</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/312</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/313</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/314</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/317</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=drones&amp;page=1&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=carry_cases,battery_packs,propellors_blades,remotes,cameras,lenses,vr_goggles,drone_spare_parts&amp;page=1&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/login/?next=%2Fprofile%2Frepairs%2F</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/accounts/login/?next=%2Fprofile%2Fcontact%2F</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/?category=bundles&amp;page=1&amp;per_page=20</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/21/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/22/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/23/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/24/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/25/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/26/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/27/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/28/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/29/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/30/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/31/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/32/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/33/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/34/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/35/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/36/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/37/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/38/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/39/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/40/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/41/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/42/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/43/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/44/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/45/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/46/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/47/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/48/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/49/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/50/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/51/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/52/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/53/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/54/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/55/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/56/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/57/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/58/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/59/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/60/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/61/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/62/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/63/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/64/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/65/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/66/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/67/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/68/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/69/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/70/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/71/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/72/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/73/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/74/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/75/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/76/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/77/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/78/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/79/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/80/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/81/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/82/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/83/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/84/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/85/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/86/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/87/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/88/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/89/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/90/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/91/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/92/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/93/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/94/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/95/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/96/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/97/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/98/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/99/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/100/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/101/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/102/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/103/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/104/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/105/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/106/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/107/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/108/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/109/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/110/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/111/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/112/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/113/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/114/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/115/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/116/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/117/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/118/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/119/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/120/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/121/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/122/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>https://icarus-drones-d492afe10809.herokuapp.com/products/compare/123/</loc>
+  <lastmod>2024-12-23T08:21:39+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+
+
+</urlset>
