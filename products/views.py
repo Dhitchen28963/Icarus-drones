@@ -1,4 +1,3 @@
-from django.utils.module_loading import import_string
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
@@ -6,21 +5,14 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.functions import Lower, Substr
-from django.core.files.storage import default_storage
 from custom_storages import MediaStorage
 from products.constants import ATTACHMENTS
-from .models import Product, Category, Attachment, ProductReview
-from .forms import ProductForm, AttachmentForm, ProductReviewForm
+from .models import Product, Category
+from .forms import ProductForm, ProductReviewForm
 from profiles.models import Wishlist, UserProfile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from decimal import Decimal, InvalidOperation
 import json
-from decimal import Decimal
-import decimal
-import os
-
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 # Helper function to check if the user is a staff member or superuser
@@ -210,47 +202,23 @@ def custom_product(request):
 @login_required
 def add_product(request):
     """Add a product to the store"""
-    logger.info("Add product view initiated.")
-    logger.info(f"Storage class: {default_storage.__class__.__name__}")
-
     # Move categories outside if/else to make it available in all code paths
     categories = list(Category.objects.values_list('friendly_name', flat=True))
-    logger.debug(f"Available categories: {categories}")
-
-    print(f"Default Storage: {default_storage.__class__.__name__}")
-
-    storage_class = import_string(settings.DEFAULT_FILE_STORAGE)
-    print(f"Active Storage Backend: {storage_class.__name__}")
-    logger.info(f"Active Storage Backend: {storage_class.__name__}")
 
     if request.method == 'POST':
-        logger.info("Received POST request.")
         form = ProductForm(request.POST, request.FILES)
-        logger.info("Processing product form submission.")
-        print(f"POST data: {request.POST}")
-        print(f"FILES data: {request.FILES}")
-
-        for file_field, file in request.FILES.items():
-            logger.debug(f"File field: {file_field}, File name: {file.name}")
 
         if form.is_valid():
-            logger.info("Form is valid, processing form data.")
             product = form.save(commit=False)
-            logger.debug(f"Product attributes before saving: {vars(product)}")
 
             if 'image' in request.FILES:
-                logger.info("Image file found in request.FILES.")
                 image = request.FILES['image']
-                logger.debug(f"Original image name: {image.name}")
 
                 try:
-                    logger.debug(f"Attempting to save image: {image.name}")
                     storage = MediaStorage()  # Use MediaStorage directly
                     file_name = storage.save(image.name, image)
-                    logger.debug(f"Image saved successfully to: {file_name}")
                     product.image = file_name
-                except Exception as e:
-                    logger.error(f"Error saving image to storage: {str(e)}")
+                except Exception:
                     messages.error(
                         request,
                         "Error uploading image. Please try again."
@@ -261,24 +229,19 @@ def add_product(request):
 
             try:
                 product.save()
-                logger.info(f"Product saved successfully: {product.name}")
                 messages.success(request, 'Successfully added product!')
                 return redirect(reverse('product_detail', args=[product.id]))
-            except Exception as e:
-                logger.error(f"Error saving product to the database: {str(e)}")
+            except Exception:
                 messages.error(
                     request, "Error saving product. Please try again."
                 )
         else:
-            logger.warning(f"Form is invalid. Errors: {form.errors}")
             messages.error(
                 request,
                 'Failed to add product. Please ensure the form is valid.'
             )
     else:
-        logger.info("Received GET request.")
         category_id = request.GET.get('category')
-        logger.debug(f"Category ID from GET request: {category_id}")
         initial_data = {'category': category_id} if category_id else {}
         form = ProductForm(initial=initial_data)
 
@@ -286,7 +249,6 @@ def add_product(request):
         'form': form,
         'categories': categories,
     }
-    logger.info(f"Rendering add_product.html with context: {context}")
     return render(request, 'products/add_product.html', context)
 
 
@@ -312,8 +274,8 @@ def edit_product(request, product_id):
                 if old_image and old_image != 'noimage.webp':
                     try:
                         storage.delete(old_image.name)
-                    except Exception as e:
-                        logger.warning(f"Failed to delete old image: {str(e)}")
+                    except Exception:
+                        pass
 
             elif 'image-clear' in request.POST:
                 # Clear the image
@@ -321,8 +283,8 @@ def edit_product(request, product_id):
                     try:
                         storage = MediaStorage()
                         storage.delete(old_image.name)
-                    except Exception as e:
-                        logger.warning(f"Failed to delete old image: {str(e)}")
+                    except Exception:
+                        pass
                 product.image = 'noimage.webp'
 
             form.save()

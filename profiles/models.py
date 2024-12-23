@@ -3,11 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_countries.fields import CountryField
-from django.utils.timezone import now
-from decimal import Decimal
-from django.db import transaction
 from products.models import Product
-import traceback
 
 
 class LoyaltyPointsTransaction(models.Model):
@@ -126,7 +122,7 @@ class UserProfile(models.Model):
 
             return points_deducted, points_added
 
-        except Exception as e:
+        except Exception:
             raise
 
 

@@ -7,22 +7,18 @@ from django.shortcuts import (
 )
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.conf import settings
 from decimal import Decimal
 import stripe
 import json
-import os
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 from products.models import Product
 from profiles.models import UserProfile
-from profiles.forms import UserProfileForm
 from products.constants import ATTACHMENTS
-from bag.contexts import bag_contents
 from utils.mailchimp_utils import Mailchimp
-from django.db import transaction
 
 
 # Helper functions for attachments
@@ -527,7 +523,7 @@ def checkout_success(request, order_number):
             except Exception:
                 pass
 
-        except Exception as e:
+        except Exception:
             messages.error(
                 request,
                 "There was an error updating your profile."
@@ -564,26 +560,22 @@ def update_payment_intent(request):
         # Set Stripe secret key
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
-        try:
-            # Retrieve the existing PaymentIntent
-            payment_intent = stripe.PaymentIntent.retrieve(pid)
+        # Retrieve and update the PaymentIntent
+        updated_intent = stripe.PaymentIntent.modify(
+            pid,
+            amount=new_amount
+        )
 
-            # Update the PaymentIntent
-            updated_intent = stripe.PaymentIntent.modify(
-                pid,
-                amount=new_amount
-            )
+        # Return the new client secret
+        return JsonResponse({
+            'client_secret': updated_intent.client_secret
+        })
 
-            # Return the new client secret
-            return JsonResponse({
-                'client_secret': updated_intent.client_secret
-            })
-
-        except stripe.error.StripeError:
-            return JsonResponse(
-                {'error': 'Payment processing error'},
-                status=400
-            )
+    except stripe.error.StripeError:
+        return JsonResponse(
+            {'error': 'Payment processing error'},
+            status=400
+        )
     except Exception:
         return JsonResponse(
             {'error': 'An unexpected error occurred'},

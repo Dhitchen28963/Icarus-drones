@@ -16,7 +16,7 @@ from django.core.mail import send_mail
 from .decorators import superuser_or_staff_required, superuser_required
 from utils.mailchimp_utils import Mailchimp
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse, Http404
 import json
 import re
 from django.template.loader import render_to_string

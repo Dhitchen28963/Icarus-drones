@@ -219,7 +219,7 @@ def remove_from_bag(request, item_id):
 
         if item_id in bag:
             item_data = bag[item_id]
-            
+
             # Use the stored name if available, otherwise fall back to SKU
             item_name = item_data.get('name') or item_data.get('sku', item_id)
             attachments = item_data.get('attachments', [])
@@ -234,7 +234,6 @@ def remove_from_bag(request, item_id):
                     f"({formatted_attachments}) from your bag."
                 )
             else:
-                # If it's a regular product, try to get the name from the database
                 product = (
                     get_object_or_404(Product, sku=item_data.get('sku'))
                     if item_data.get('sku') else None
@@ -252,5 +251,5 @@ def remove_from_bag(request, item_id):
         request.session['bag'] = bag
         return HttpResponse(status=200)
 
-    except Exception as e:
+    except Exception:
         return HttpResponse(status=500)

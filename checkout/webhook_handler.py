@@ -1,15 +1,12 @@
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from .models import Order, OrderLineItem
 from products.models import Product
-from profiles.models import UserProfile
 from utils.mailchimp_utils import Mailchimp
 import json
 import stripe
-import base64
 import time
 from decimal import Decimal
 from django.db import transaction
@@ -105,7 +102,7 @@ class StripeWH_Handler:
             )
             msg.attach_alternative(html_content, "text/html")
             msg.send()
-        except Exception as e:
+        except Exception:
             raise
 
     def handle_event(self, event):
@@ -127,7 +124,6 @@ class StripeWH_Handler:
             pid = intent.id
 
             loyalty_points_used = self._extract_loyalty_points(intent)
-            username = intent.metadata.get('username', 'AnonymousUser')
             bag = intent.metadata.get('bag', '{}')
 
             try:
