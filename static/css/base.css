@@ -12,6 +12,7 @@ body {
 html body.home-page {
     background: url('https://dhitchen28963-icarus-drones.s3.amazonaws.com/media/homepage_background.webp') no-repeat center center fixed;
     background-size: cover;
+    background-position: center 80px;
 }
 
 /* from Bulma */
@@ -823,6 +824,10 @@ footer small.text-muted {
 
 /* Bag html styles */
 @media (max-width: 537px) {
+    html body.home-page {
+        background-position: calc(50% - 155px) 80px;
+    }
+
     .table-responsive {
         overflow-x: auto;
     }
