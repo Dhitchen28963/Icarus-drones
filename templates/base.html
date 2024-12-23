@@ -40,7 +40,7 @@
             crossorigin="anonymous">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
       <link rel="stylesheet" href="{% static 'css/base.css' %}">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-d9t5yKRwYxzCWqh7aJ9tnOEpBwlQkN+OYhwlQjaFqHO7r3ylmDF0hE8BSijh3byxDjzqZkeJURwCBu5ObmDjBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-d9t5yKRwYxzCWqh7aJ9tnOEpBwlQkN+OYhwlQjaFqHO7r3ylmDF0hE8BSijh3byxDjzqZkeJURwCBu5ObmDjBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     {% endblock %}
 
     {% block extra_css %}
@@ -75,12 +75,17 @@
         <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
           <form method="GET" action="{% url 'products' %}">
             <div class="input-group w-100">
-              <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search our site">
+              <input 
+                class="form-control border border-black rounded-0" 
+                type="text" 
+                name="q" 
+                placeholder="Search our site">
               <div class="input-group-append">
-                <button class="form-control btn btn-black border border-black rounded-0" type="submit">
-                  <span class="icon" aria-label="search">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                  </span>
+                <button 
+                  class="form-control btn btn-black border border-black rounded-0" 
+                  type="submit" 
+                  aria-label="Search">
+                  <i class="fas fa-search" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
