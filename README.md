@@ -19,11 +19,17 @@ A comprehensive e-commerce platform for drone enthusiasts, offering advanced fea
 5. [Technologies Used](#technologies-used)
 6. [Installation](#installation)
 7. [Usage](#usage)
-8. [Testing](#testing)
-   - [Manual Testing](#manual-testing)
-9. [Deployment](#deployment)
-10. [Credits](#credits)
-11. [License](#license)
+8. [Database Schema](#database-schema)
+9. [Social Media Mockup](#social-media-mockup)
+   - [Facebook Mockup](#facebook-mockup)
+10. [Testing](#testing)
+    - [Manual Testing](#manual-testing)
+11. [SEO Keywords](#seo-keywords)
+    - [Short-Tail Keywords](#short-tail-keywords)
+    - [Long-Tail Keywords](#long-tail-keywords)
+12. [Deployment](#deployment)
+13. [Credits](#credits)
+14. [License](#license)
 
 ---
 
@@ -523,7 +529,15 @@ Icarus Drones operates as a B2C (Business to Consumer) e-commerce platform, spec
    ```bash
    git clone <repository-url>
 
+---
 
+## Database Schema
+
+The following diagram represents the database schema of the application:
+
+![Database Schema](static/images/database_schema.png)
+
+---
 
 ## Manual Testing
 
@@ -627,6 +641,7 @@ Icarus Drones operates as a B2C (Business to Consumer) e-commerce platform, spec
 | | View on tablet | Layout adjusts appropriately | As expected | Pass |
 | | View on desktop | Layout displays correctly | As expected | Pass |
 
+---
 
 ## SEO Keywords
 
@@ -737,4 +752,14 @@ Icarus Drones operates as a B2C (Business to Consumer) e-commerce platform, spec
 - Sign up for drone newsletter
 - Drone giveaways and promotions
 - Best drone deals and promotions online
+
+---
+
+## Social Media Mockup
+
+### Facebook Mockup
+The image below showcases the design and layout of our Facebook promotional material for Icarus Drones. This mockup highlights our branding and marketing strategy to attract drone enthusiasts on social media platforms.
+
+<img src="{% static 'images/facebook_mockup.png' %}" alt="Facebook Mockup" style="width:100%; max-width:600px; display:block; margin: 20px auto;">
+
 
