@@ -8,9 +8,13 @@ A comprehensive e-commerce platform for drone enthusiasts, offering advanced fea
 
 Explore the live version of the Icarus Drones project here:
 
-[![Live Site](https://img.shields.io/badge/Live%20Site-Icarus%20Drones-blue)](https://dhitchen28963.github.io/Icarus-drones/)
+[![Live Site](https://img.shields.io/badge/Live%20Site-Icarus%20Drones-blue)](https://icarus-drones-d492afe10809.herokuapp.com/)
 
-[Visit Icarus Drones Live Site](https://dhitchen28963.github.io/Icarus-drones/)
+[Visit Icarus Drones Live Site](https://icarus-drones-d492afe10809.herokuapp.com/)
+
+![Am I Responsive](static/images/amiresponsive.png)
+
+---
 
 ## Table of Contents
 
@@ -24,26 +28,34 @@ Explore the live version of the Icarus Drones project here:
    - [Staff Stories](#staff-stories)
    - [Superuser Stories](#superuser-stories)
 4. [E-commerce Business Model](#e-commerce-business-model)
-5. [Technologies Used](#technologies-used)
-6. [Installation](#installation)
-7. [Usage](#usage)
-8. [Database Schema](#database-schema)
-9. [Social Media Mockup](#social-media-mockup)
+5. [UX Design](#ux-design)
+6. [Technologies Used](#technologies-used)
+7. [Database Schema](#database-schema)
+8. [Social Media Mockup](#social-media-mockup)
    - [Facebook Mockup](#facebook-mockup)
-10. [Testing](#testing)
+9. [Testing](#testing)
     - [Manual Testing](#manual-testing)
-11. [SEO Keywords](#seo-keywords)
+10. [SEO Keywords](#seo-keywords)
     - [Short-Tail Keywords](#short-tail-keywords)
     - [Long-Tail Keywords](#long-tail-keywords)
-12. [Deployment](#deployment)
-13. [Credits](#credits)
-14. [License](#license)
+11. [Deployment](#deployment)
+12. [Credits](#credits)
 
 ---
 
 ## Overview
 
 Icarus Drones is an innovative e-commerce platform offering 314 drone-related products, including customizable drones, accessories, and cameras. Designed to meet the needs of both drone enthusiasts and staff, the website features loyalty programs, messaging systems, and advanced product management tools. Customers can personalize drones, compare specifications, and manage their profiles, while staff can handle inquiries, repairs, and orders efficiently.
+
+The platform's purpose is to provide an intuitive and engaging shopping experience tailored to drone enthusiasts of all levels. It ensures seamless product management for staff while offering customers an extensive range of drone-related products and services. The platform is designed to cater to multiple target audiences, including:
+
+- Recreational drone hobbyists
+
+- Professional drone users
+
+- Tech enthusiasts seeking customizable drones
+
+- Individuals in need of drone repairs and support
 
 ---
 
@@ -519,6 +531,43 @@ Icarus Drones operates as a B2C (Business to Consumer) e-commerce platform, spec
 
 ---
 
+## UX Design
+
+The design process of Icarus Drones followed a structured approach incorporating wireframes, mockups, and usability testing. Below are key design elements:
+
+### Wireframes and Mockups
+- Wireframes for homepage, product pages, and checkout were created to ensure a user-friendly layout.
+- Mockups were designed to validate the visual appeal and consistency of the UI.
+
+### Implementation of UX Design Principles
+- **Intuitive Navigation:** Ensuring users can easily find products and manage accounts.
+- **Consistent Aesthetic:** A visually appealing, professional design matching the brand identity.
+- **Mobile Responsiveness:** The site is fully responsive across all devices.
+- **Accessibility Compliance:** The platform is optimized for accessibility, making it easy for all users to navigate and interact with.
+
+### Wireframes
+
+![Wireframe - Customise drone](static/images/customise-drone.png)
+![Wireframe - Homepage](static/images/homepage.png)
+![Wireframe - Product Page (Unregistered user)](static/images/products-unregistered-user.png)
+![Wireframe - Drone repair request](static/images/drone-repair-request.png)
+![Wireframe - Product management](static/images/product-management.png)
+![Wireframe - Manage issues - Card View](static/images/manageissues-cardview.png)
+![Wireframe -  Manage issues - Table View](static/images/manageissues-tableview.png)
+![Wireframe - Home page - visible dropdown menu](static/images/homepage-dropdown.png)
+![Wireframe - Products page](static/images/products.png)
+![Wireframe - Contact us](static/images/contactus.png)
+![Wireframe - Manage staff](static/images/managestaff.png)
+![Wireframe - Profile page](static/images/profile.png)
+![Wireframe - Wishlist](static/images/wishlist.png)
+![Wireframe - Issues & Messages - Message tab](static/images/issues&messages-messages.png)
+![Wireframe - Issues & Messages - Unresolved issues tab](static/images/issues&messages-unresolvedissues.png)
+![Wireframe - Issues & Messages - Resolved issues tab](static/images/issues&messages-resolvedissues.png)
+![Wireframe - Issues & Messages - Repair requests tab](static/images/issues&messages-repairrequest.png)
+![Wireframe - Issues & Messages - Contact tab](static/images/issues&messages-contactmsg.png)
+![Wireframe - Compare drones](static/images/compare-drones.png)
+![Wireframe Product detail page](static/images/product-details.png)
+
 ## Technologies Used
 
 - **Languages:** Python, HTML, CSS, JavaScript.
@@ -531,19 +580,21 @@ Icarus Drones operates as a B2C (Business to Consumer) e-commerce platform, spec
 
 ---
 
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-
----
-
 ## Database Schema
 
 The following diagram represents the database schema of the application:
 
 ![Database Schema](static/images/database_schema.png)
+
+---
+
+## Social Media Mockup
+
+### Facebook Mockup
+The image below showcases the design and layout of our Facebook promotional material for Icarus Drones. This mockup highlights our branding and marketing strategy to attract drone enthusiasts on social media platforms.
+
+
+![Mock Facebook](static/images/facebook_mockup.png)
 
 ---
 
@@ -763,16 +814,25 @@ The following diagram represents the database schema of the application:
 
 ---
 
-## Social Media Mockup
+## Deployment
 
-### Facebook Mockup
-The image below showcases the design and layout of our Facebook promotional material for Icarus Drones. This mockup highlights our branding and marketing strategy to attract drone enthusiasts on social media platforms.
+The Icarus Drones site was deployed to **Heroku** following these steps:
 
+1. **Create a New App on Heroku**
+   - Log in to your Heroku account and click **"Create new app."**
+   - Enter your desired app name and select the appropriate region.
+   - Click **"Create app."**
 
-![Mock Facebook](static/images/facebook_mockup.png)
+2. **Configure the App Settings**
+   - Navigate to the app dashboard and click **"Settings."**
+   - Add the required **Config Vars** for the application.
 
-![Am I Responsive](static/images/amiresponsive.png)
+3. **Deploy the Application**
+   - Enable automatic deploys by clicking **"Enable Automatic Deploys."**
+   - Click **"Deploy Branch"** to deploy your app manually.
+   - Once the build is complete and you see **"Your app was successfully deployed,"** click **"View"** to access the live application.
 
+---
 
 ## Credits:
 Some of the design features were inspired by Boutique Ado.

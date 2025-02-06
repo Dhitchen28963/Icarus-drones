@@ -11,10 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '8000-dhitchen289-icarusdrone-5dxslm03s3y.'
+    '8000-dhitchen289-icarusdrone-lwawx5yun76.'
     'ws.codeinstitute-ide.net',
     'icarus-drones-d492afe10809.herokuapp.com',
     'localhost',
@@ -89,8 +89,8 @@ TEMPLATES = [
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-dhitchen289-icarusdrone-5dxs'
-    'lm03s3y.ws.codeinstitute-ide.net',
+    'https://8000-dhitchen289-icarusdrone-lwawx5yun76.'
+    'ws.codeinstitute-ide.net',
     'https://icarus-drones-d492afe10809.herokuapp.com',
     'http://localhost:8000',
 ]
