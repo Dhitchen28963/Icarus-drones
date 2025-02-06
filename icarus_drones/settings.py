@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '8000-dhitchen289-icarusdrone-lwawx5yun76.'
